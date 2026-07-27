@@ -801,20 +801,62 @@
     text-align: center;
     margin-bottom: 26px;
   }
-  .login-brand .brand-mark {
-    margin: 0 auto 12px;
+  
+  /* Ministry / School logo on login screen */
+  .login-school-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .login-ministry-logo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 16px rgba(201,162,39,0.35));
+    animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transition: transform 0.3s ease;
+  }
+  .login-ministry-logo:hover {
+    transform: scale(1.08) rotate(3deg);
+  }
+  .login-school-name {
+    font-size: 15px;
+    color: var(--gold-light);
+    font-weight: 800;
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+  }
+  .login-school-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 3px;
   }
   .login-brand h3 {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 800;
     letter-spacing: 0.5px;
     font-family: var(--font-display);
   }
-  .login-brand p {
-    font-size: 13px;
-    color: var(--gold-light);
-    margin-top: 4px;
-    font-weight: 600;
+  
+  /* Sidebar school logo */
+  .sidebar-school-logo-wrap {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: var(--shadow-sm);
+  }
+  .sidebar-school-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(201,162,39,0.2));
   }
 
   /* Background Decorations */
