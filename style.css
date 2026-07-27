@@ -806,27 +806,45 @@
   .login-school-header {
     display: flex;
     justify-content: center;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
   }
   .login-ministry-logo-wrap {
-    background: #fff;
-    border-radius: 20px;
-    padding: 12px 16px;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 18px 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 24px rgba(201,162,39,0.25), 0 0 0 2px rgba(201,162,39,0.2);
+    box-shadow:
+      0 6px 30px rgba(201,162,39,0.30),
+      0 0 0 3px rgba(201,162,39,0.25),
+      0 0 60px rgba(201,162,39,0.12);
     animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.35s ease;
+    position: relative;
+  }
+  /* Subtle gold glow ring animation */
+  .login-ministry-logo-wrap::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 28px;
+    border: 1.5px solid rgba(201,162,39,0.35);
+    animation: ring 2.8s ease-out infinite;
+    pointer-events: none;
   }
   .login-ministry-logo-wrap:hover {
-    transform: scale(1.06);
-    box-shadow: 0 8px 32px rgba(201,162,39,0.4), 0 0 0 3px rgba(201,162,39,0.35);
+    transform: scale(1.05) translateY(-3px);
+    box-shadow:
+      0 14px 40px rgba(201,162,39,0.40),
+      0 0 0 3px rgba(201,162,39,0.40),
+      0 0 80px rgba(201,162,39,0.18);
   }
   .login-ministry-logo {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     object-fit: contain;
+    display: block;
   }
   .login-school-name {
     font-size: 15px;
