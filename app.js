@@ -1299,3 +1299,92 @@ function updateDynamicClassesCounter() {
 initFloatingParticles();
 fetchStateHolidays();
 updateDynamicClassesCounter();
+
+// ---------- 11. Dynamic Current Date Logic ----------
+function updateCurrentDate() {
+  const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  const today = new Date();
+  const locale = currentLang === 'ar' ? 'ar-EG' : 'en-US';
+  const dateString = today.toLocaleDateString(locale, options);
+  
+  // Update in hero
+  const heroEyebrow = document.querySelector('.hero-eyebrow span[data-i18n="heroEyebrow"]');
+  if (heroEyebrow) {
+    heroEyebrow.textContent = dateString;
+  }
+  
+  // Update day number & month name in hero date badge
+  const heroDay = document.getElementById('heroDay');
+  if (heroDay) heroDay.textContent = today.getDate();
+  
+  const heroMonth = document.getElementById('heroMonth');
+  if (heroMonth) {
+    const monthOptions = { month: 'long', year: 'numeric' };
+    heroMonth.textContent = today.toLocaleDateString(locale, monthOptions);
+  }
+  
+  // Update calendar headers or attend labels
+  const attendLabel = document.getElementById('attendDateLabel');
+  if (attendLabel) {
+    attendLabel.textContent = `${currentLang === 'ar' ? 'اليوم:' : 'Today:'} ${today.toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'long' })}`;
+  }
+}
+
+// ---------- 12. Fetch Live Qatari Weather (Open-Meteo API) ----------
+async function fetchLiveWeather() {
+  const tempSpan = document.getElementById('weatherTemp');
+  const iconSpan = document.getElementById('weatherIcon');
+  if (!tempSpan) return;
+  
+  try {
+    const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=25.2854&longitude=51.5310&current_weather=true');
+    if (!response.ok) throw new Error('Weather API error');
+    
+    const data = await response.json();
+    const temp = Math.round(data.current_weather.temperature);
+    const code = data.current_weather.weathercode;
+    
+    tempSpan.textContent = `الدوحة، ${temp}°م`;
+    if (currentLang !== 'ar') tempSpan.textContent = `Doha, ${temp}°C`;
+    
+    // Update icon based on WMO Weather interpretation codes
+    let svgIcon = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>`; // sunny default
+    if (code >= 1 && code <= 3) {
+      // partly cloudy
+      svgIcon = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`;
+    } else if (code >= 51) {
+      // rainy / storm
+      svgIcon = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25M8 16v6M12 16v6M16 16v6"/></svg>`;
+    }
+    iconSpan.innerHTML = svgIcon;
+  } catch (err) {
+    console.warn("Weather API fallback:", err);
+    tempSpan.textContent = currentLang === 'ar' ? 'الدوحة، 38°م' : 'Doha, 38°C';
+  }
+}
+
+// ---------- 13. School Custom Theme Customizer ----------
+function setSchoolTheme(primary, light, dark) {
+  document.documentElement.style.setProperty('--maroon', primary);
+  document.documentElement.style.setProperty('--maroon-light', light);
+  document.documentElement.style.setProperty('--maroon-dark', dark);
+  
+  localStorage.setItem('themePrimary', primary);
+  localStorage.setItem('themeLight', light);
+  localStorage.setItem('themeDark', dark);
+}
+
+function loadSchoolTheme() {
+  const primary = localStorage.getItem('themePrimary');
+  const light = localStorage.getItem('themeLight');
+  const dark = localStorage.getItem('themeDark');
+  
+  if (primary && light && dark) {
+    setSchoolTheme(primary, light, dark);
+  }
+}
+
+// Load and run new dynamic services
+updateCurrentDate();
+fetchLiveWeather();
+loadSchoolTheme();
