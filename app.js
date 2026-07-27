@@ -172,11 +172,35 @@ document.querySelectorAll('.sidebar .nav-item').forEach(item => {
       document.getElementById('quizTab').classList.add('active');
     } else if (tab === 'plan') {
       document.getElementById('planTab').classList.add('active');
+    } else if (tab === 'slides') {
+      document.getElementById('slidesTab').classList.add('active');
+    } else if (tab === 'reports') {
+      document.getElementById('reportsTab').classList.add('active');
+      renderReports();
+    } else if (tab === 'ai') {
+      document.getElementById('aiTab').classList.add('active');
+    } else if (tab === 'calendar') {
+      document.getElementById('calendarTab').classList.add('active');
+      renderCalendar();
+    } else if (tab === 'notif') {
+      document.getElementById('notifTab').classList.add('active');
+      renderNotifications();
+    } else if (tab === 'settings') {
+      document.getElementById('settingsTab').classList.add('active');
+      loadSettings();
     } else {
       alert(currentLang === 'ar' ? 'هذه الميزة ستكون متوفرة قريباً!' : 'This feature will be available soon!');
     }
   });
 });
+
+const fabBtn = document.querySelector('.fab');
+if (fabBtn) {
+  fabBtn.addEventListener('click', () => {
+    const aiNavItem = document.querySelector('.sidebar .nav-item[data-tab="ai"]');
+    if (aiNavItem) aiNavItem.click();
+  });
+}
 
 // ---------- Modals Open / Close ----------
 function openModal(id) {
@@ -827,3 +851,347 @@ buildHeatmap();
 animateCounters();
 applyI18n();
 updateGlobalStatistics();
+
+// ---------- 1. Login Logic ----------
+function handleLogin() {
+  const user = document.getElementById('loginUser').value;
+  const pass = document.getElementById('loginPass').value;
+  
+  if (user.trim() !== "" && pass.trim() !== "") {
+    localStorage.setItem('loggedIn', 'true');
+    localStorage.setItem('teacherName', user);
+    
+    // Smooth transition
+    const loginView = document.getElementById('loginView');
+    loginView.style.transition = 'opacity 0.5s ease';
+    loginView.style.opacity = '0';
+    
+    setTimeout(() => {
+      loginView.style.display = 'none';
+      document.getElementById('appContainer').style.display = 'flex';
+      
+      // Update displayed teacher name
+      document.querySelectorAll('[data-i18n="teacherName"]').forEach(el => el.textContent = user);
+    }, 500);
+  }
+}
+
+// Auto Login check on load
+(function checkLoginStatus() {
+  if (localStorage.getItem('loggedIn') === 'true') {
+    document.getElementById('loginView').style.display = 'none';
+    document.getElementById('appContainer').style.display = 'flex';
+    
+    const savedName = localStorage.getItem('teacherName') || "إسماعيل محبوبة";
+    document.querySelectorAll('[data-i18n="teacherName"]').forEach(el => el.textContent = savedName);
+  }
+})();
+
+// ---------- 2. Interactive Presentation Slides Logic ----------
+let currentSlideIndex = 0;
+let generatedSlidesData = [];
+
+function generateSlides() {
+  const topic = document.getElementById('slideTopic').value.trim();
+  const count = parseInt(document.getElementById('slideCount').value) || 3;
+  
+  if (!topic) return;
+
+  // Simple template generation based on topic
+  generatedSlidesData = [];
+  for (let i = 1; i <= count; i++) {
+    generatedSlidesData.push({
+      title: `الشريحة ${i}: ${topic}`,
+      content: `شرح تفصيلي ومفاهيم توضيحية حول موضوع <strong>(${topic})</strong> في مادة العلوم العامة. يتضمن هذا المبحث أهم القوانين، الملاحظات، والتطبيقات العلمية في حياتنا اليومية.`
+    });
+  }
+
+  currentSlideIndex = 0;
+  document.getElementById('slidesPlaceholder').style.display = 'none';
+  document.getElementById('slidesPreviewArea').style.display = 'block';
+  
+  renderCurrentSlide();
+}
+
+function renderCurrentSlide() {
+  const contentDiv = document.getElementById('slideContent');
+  const indicator = document.getElementById('slideIndicator');
+  
+  if (generatedSlidesData.length > 0) {
+    const slide = generatedSlidesData[currentSlideIndex];
+    contentDiv.innerHTML = `
+      <h3 style="font-size: 20px; font-weight: 800; color: var(--gold-light); margin-bottom: 14px;">${slide.title}</h3>
+      <p style="font-size: 14px; line-height: 1.8;">${slide.content}</p>
+    `;
+    indicator.textContent = `${currentSlideIndex + 1} / ${generatedSlidesData.length}`;
+  }
+}
+
+function nextSlide() {
+  if (currentSlideIndex < generatedSlidesData.length - 1) {
+    currentSlideIndex++;
+    renderCurrentSlide();
+  }
+}
+
+function prevSlide() {
+  if (currentSlideIndex > 0) {
+    currentSlideIndex--;
+    renderCurrentSlide();
+  }
+}
+
+// ---------- 3. Smart Reports Logic ----------
+let reportsClass = '9-A';
+
+function switchReportsClass(cls) {
+  reportsClass = cls;
+  renderReports();
+}
+
+function renderReports() {
+  const tbody = document.getElementById('reportsTableBody');
+  if (!tbody) return;
+
+  const classStudents = studentsDb.filter(s => s.className === reportsClass);
+  if (classStudents.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-3); padding:24px;">لا يوجد طلاب في هذا الصف.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = classStudents.map((s, idx) => {
+    const avg = Math.round(((s.grade1 || 0) + (s.grade2 || 0) + (s.grade3 || 0)) / 3);
+    const statusText = s.status === 'absent' ? 'غياب متكرر' : 'حضور منتظم';
+    const statusColor = s.status === 'absent' ? 'var(--danger)' : 'var(--success)';
+    
+    return `
+      <tr>
+        <td style="font-family:var(--font-mono);">${idx + 1}</td>
+        <td style="font-weight:700;">${s.name}</td>
+        <td style="font-family:var(--font-mono); font-weight:700;">${avg}%</td>
+        <td style="color:${statusColor}; font-weight:700;">${statusText}</td>
+        <td>
+          <button class="btn-primary" style="padding:6px 12px; font-size:12px;" onclick="showReportCard(${s.id})">توليد البطاقة</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function showReportCard(studentId) {
+  const student = studentsDb.find(s => s.id === studentId);
+  if (!student) return;
+
+  const avg = Math.round(((student.grade1 || 0) + (student.grade2 || 0) + (student.grade3 || 0)) / 3);
+  
+  const evalGrade = (g) => {
+    if (g >= 90) return 'ممتاز';
+    if (g >= 80) return 'جيد جداً';
+    if (g >= 70) return 'جيد';
+    if (g >= 50) return 'مقبول';
+    return 'ضعيف';
+  };
+
+  document.getElementById('repStudentName').textContent = student.name;
+  document.getElementById('repStudentClass').textContent = student.className;
+  document.getElementById('repStudentGrade1').textContent = `${student.grade1 || 0}%`;
+  document.getElementById('repGradeEval1').textContent = evalGrade(student.grade1 || 0);
+  document.getElementById('repStudentGrade2').textContent = `${student.grade2 || 0}%`;
+  document.getElementById('repGradeEval2').textContent = evalGrade(student.grade2 || 0);
+  document.getElementById('repStudentGrade3').textContent = `${student.grade3 || 0}%`;
+  document.getElementById('repGradeEval3').textContent = evalGrade(student.grade3 || 0);
+  document.getElementById('repStudentAvg').textContent = `${avg}%`;
+  document.getElementById('repStudentEvalAvg').textContent = evalGrade(avg);
+  
+  document.getElementById('repStudentAttendance').textContent = student.status === 'absent' ? 'غياب متكرر (يحتاج لمتابعة)' : 'حضور ممتاز وملتزم';
+  document.getElementById('repStudentComment').textContent = avg >= 80 ? 'طالب متميز ومشارك فعال في حصص العلوم.' : 'يحتاج الطالب إلى مراجعة بعض المفاهيم الإضافية لتحسين أدائه.';
+
+  openModal('reportCardModal');
+}
+
+// ---------- 4. AI Chat Assistant Logic ----------
+function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const chatMessages = document.getElementById('chatMessages');
+  
+  // User message
+  const userBubble = document.createElement('div');
+  userBubble.className = 'ai-chat-bubble user';
+  userBubble.textContent = text;
+  chatMessages.appendChild(userBubble);
+  
+  input.value = '';
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  // Bot response simulation
+  setTimeout(() => {
+    let reply = "شكراً لطرحك هذا السؤال! بصفتي مساعد العلوم الذكي، يسعدني إعلامك أن هذا الموضوع يندرج تحت المنهج الدراسي المقرر ويمكنني إعداد ورقة عمل شاملة أو تجربة معملية تفصيلية لك بضغطة زر.";
+    
+    if (text.includes("نيوتن") || text.includes("حركة")) {
+      reply = "تتحدث قوانين نيوتن عن حركة الأجسام. القانون الثالث ينص على أن: 'لكل فعل رد فعل، مساوٍ له في المقدار ومعاكس له في الاتجاه'. يمكنك شرح ذلك للطلاب عبر تجربة تفاعل البالون المندفع بالهواء كنشاط صفي بسيط.";
+    } else if (text.includes("خلية") || text.includes("أحياء")) {
+      reply = "الخلية هي وحدة البناء والوظيفة في الكائنات الحية. لشرح الفروقات بين الخلايا النباتية والحيوانية، يفضل عرض البلاستيدات الخضراء والجدار الخلوي كميزات حصرية للخلية النباتية في معمل العلوم.";
+    }
+    
+    const botBubble = document.createElement('div');
+    botBubble.className = 'ai-chat-bubble system';
+    botBubble.innerHTML = reply;
+    chatMessages.appendChild(botBubble);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }, 1000);
+}
+
+// ---------- 5. Teacher Calendar Logic ----------
+let calendarEvents = JSON.parse(localStorage.getItem('calendarEvents')) || [
+  { id: 1, title: 'اختبار العلوم العملي', date: '2026-07-28', type: 'exam' },
+  { id: 2, title: 'اجتماع قسم العلوم', date: '2026-07-30', type: 'meeting' }
+];
+
+function renderCalendar() {
+  const grid = document.getElementById('calendarDaysGrid');
+  const eventsList = document.getElementById('calendarEventsList');
+  if (!grid || !eventsList) return;
+
+  // Static Calendar for July 2026 (starts on Wednesday, 31 days)
+  const totalDays = 31;
+  const startOffset = 3; // Wednesday offset (Sunday=0, Mon=1, Tue=2, Wed=3)
+  
+  let daysHtml = '';
+  
+  // Empty blocks for offset
+  for (let i = 0; i < startOffset; i++) {
+    daysHtml += `<div class="calendar-day-cell other-month"></div>`;
+  }
+  
+  for (let day = 1; day <= totalDays; day++) {
+    const dateStr = `2026-07-${day < 10 ? '0' + day : day}`;
+    const dayEvents = calendarEvents.filter(e => e.date === dateStr);
+    
+    let dotHtml = '';
+    if (dayEvents.length > 0) {
+      const typeColors = { exam: '#EF4444', session: '#22C55E', meeting: '#8A1538' };
+      dotHtml = `<div class="calendar-day-dot" style="background:${typeColors[dayEvents[0].type] || '#ccc'}"></div>`;
+    }
+
+    const isToday = day === 26 ? 'today' : '';
+    daysHtml += `
+      <div class="calendar-day-cell ${isToday}" onclick="selectCalendarDate('${dateStr}')">
+        <span class="calendar-day-num">${day}</span>
+        ${dotHtml}
+      </div>
+    `;
+  }
+  
+  grid.innerHTML = daysHtml;
+
+  // Render events list
+  eventsList.innerHTML = calendarEvents.map(e => {
+    const typeLabel = { exam: 'اختبار', session: 'حصة', meeting: 'اجتماع' }[e.type];
+    return `
+      <div class="calendar-event-row">
+        <span style="font-weight:700; font-family:var(--font-mono);">${e.date}</span>
+        <span class="material-tag" style="font-size:10px;">${typeLabel}</span>
+        <span style="flex:1;">${e.title}</span>
+        <button class="action-btn btn-delete" style="width:24px; height:24px; padding:0;" onclick="deleteCalendarEvent(${e.id})">&times;</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function selectCalendarDate(dateStr) {
+  document.getElementById('calEventDate').value = dateStr;
+}
+
+function addCalendarEvent() {
+  const title = document.getElementById('calEventTitle').value.trim();
+  const date = document.getElementById('calEventDate').value;
+  const type = document.getElementById('calEventType').value;
+  
+  if (!title) return;
+
+  calendarEvents.push({
+    id: Date.now(),
+    title,
+    date,
+    type
+  });
+
+  localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents));
+  document.getElementById('calEventTitle').value = '';
+  renderCalendar();
+}
+
+function deleteCalendarEvent(id) {
+  calendarEvents = calendarEvents.filter(e => e.id !== id);
+  localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents));
+  renderCalendar();
+}
+
+// ---------- 6. Notifications & Warnings Logic ----------
+let systemNotifications = [
+  { id: 1, title: 'إنذار غياب متكرر للطالبة ريم عبد الله', time: 'قبل ساعتين', icon: '⚠️', bg: 'rgba(245,158,11,0.1)' },
+  { id: 2, title: 'موعد تسليم درجات اختبار العلوم العملي غداً', time: 'اليوم، 09:00', icon: '📅', bg: 'rgba(59,130,246,0.1)' },
+  { id: 3, title: 'مساعد الذكاء الاصطناعي أعد ورقة العمل المطلوبة', time: 'أمس', icon: '✨', bg: 'rgba(16,185,129,0.1)' }
+];
+
+function renderNotifications() {
+  const list = document.getElementById('notificationsList');
+  if (!list) return;
+
+  if (systemNotifications.length === 0) {
+    list.innerHTML = `<div class="no-materials">لا توجد إشعارات نشطة حالياً.</div>`;
+    return;
+  }
+
+  list.innerHTML = systemNotifications.map(n => `
+    <div class="notif-card">
+      <div class="notif-icon" style="background:${n.bg}">${n.icon}</div>
+      <div class="notif-body">
+        <div class="notif-title">${n.title}</div>
+        <div class="notif-time">${n.time}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function clearAllNotifications() {
+  systemNotifications = [];
+  renderNotifications();
+}
+
+// ---------- 7. System Settings Logic ----------
+function loadSettings() {
+  const savedName = localStorage.getItem('teacherName') || "إسماعيل محبوبة";
+  document.getElementById('setTeacherName').value = savedName;
+  document.getElementById('setSchoolName').value = localStorage.getItem('schoolName') || "مدرسة الدوحة النموذجية";
+  document.getElementById('setSpecialty').value = localStorage.getItem('specialty') || "معلّم العلوم";
+}
+
+function saveTeacherSettings() {
+  const name = document.getElementById('setTeacherName').value.trim();
+  const school = document.getElementById('setSchoolName').value.trim();
+  const specialty = document.getElementById('setSpecialty').value.trim();
+  
+  if (!name || !school || !specialty) return;
+
+  localStorage.setItem('teacherName', name);
+  localStorage.setItem('schoolName', school);
+  localStorage.setItem('specialty', specialty);
+
+  // Update in UI footer
+  document.querySelectorAll('[data-i18n="teacherName"]').forEach(el => el.textContent = name);
+  const footerRole = document.querySelector('.sidebar-footer .sf-role');
+  if (footerRole) footerRole.textContent = `${specialty} • ${school}`;
+
+  alert(currentLang === 'ar' ? 'تم حفظ الإعدادات بنجاح!' : 'Settings saved successfully!');
+}
+
+function resetDatabaseFull() {
+  if (confirm(currentLang === 'ar' ? 'هل أنت متأكد من رغبتك في مسح كافة البيانات المسجلة والملفات؟ لا يمكن التراجع عن هذا الإجراء!' : 'Are you sure you want to clear all data? This cannot be undone.')) {
+    localStorage.clear();
+    location.reload();
+  }
+}

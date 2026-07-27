@@ -765,6 +765,243 @@
   /* Print specific styles */
   @media print {
     body * { visibility: hidden; }
-    .quiz-sheet, .quiz-sheet * { visibility: visible; }
-    .quiz-sheet { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+    .quiz-sheet, .quiz-sheet *, #reportCardPrintArea, #reportCardPrintArea * { visibility: visible; }
+    .quiz-sheet, #reportCardPrintArea { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+  }
+
+  /* ---------- Login Page & Educational Animations ---------- */
+  .login-view {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: radial-gradient(circle at 50% 50%, var(--plum) 0%, var(--maroon-dark) 60%, #08060c 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow: hidden;
+  }
+  .login-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    max-width: 420px;
+    border-radius: var(--radius-lg);
+    padding: 36px 30px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+    z-index: 10;
+    color: #fff;
+    animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .login-brand {
+    text-align: center;
+    margin-bottom: 26px;
+  }
+  .login-brand .brand-mark {
+    margin: 0 auto 12px;
+  }
+  .login-brand h3 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    font-family: var(--font-display);
+  }
+  .login-brand p {
+    font-size: 13px;
+    color: var(--gold-light);
+    margin-top: 4px;
+    font-weight: 600;
+  }
+
+  /* Background Decorations */
+  .login-bg-decorations {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .decor-flask {
+    position: absolute;
+    bottom: 12%;
+    left: 15%;
+    font-size: 64px;
+    opacity: 0.15;
+    animation: floatFlask 6s ease-in-out infinite;
+  }
+  .decor-star {
+    position: absolute;
+    font-size: 24px;
+    opacity: 0.3;
+    animation: pulseStar 3s ease-in-out infinite;
+  }
+
+  /* 3D Rotating Atom Animation */
+  .decor-atom {
+    position: absolute;
+    top: 15%;
+    right: 15%;
+    width: 100px;
+    height: 100px;
+    opacity: 0.2;
+    transform-style: preserve-3d;
+    animation: spinAtom 20s linear infinite;
+  }
+  .decor-atom .nucleus {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--gold-light);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px var(--gold);
+  }
+  .decor-atom .ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #fff;
+    border-radius: 50%;
+  }
+  .decor-atom .ring:nth-child(1) {
+    transform: rotateX(70deg) rotateY(20deg);
+  }
+  .decor-atom .ring:nth-child(2) {
+    transform: rotateX(70deg) rotateY(140deg);
+  }
+  .decor-atom .ring:nth-child(3) {
+    transform: rotateX(150deg) rotateY(60deg);
+  }
+
+  @keyframes spinAtom {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes floatFlask {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(8deg); }
+  }
+  @keyframes pulseStar {
+    0%, 100% { opacity: 0.2; transform: scale(0.9); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+  }
+
+  /* ---------- AI Chat bubble styling ---------- */
+  .ai-chat-bubble {
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    max-width: 80%;
+  }
+  .ai-chat-bubble.system {
+    background: var(--bg-alt);
+    color: var(--text-1);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .ai-chat-bubble.user {
+    background: linear-gradient(135deg, var(--maroon), var(--plum));
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  /* ---------- Calendar Styling ---------- */
+  .calendar-day-cell {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    min-height: 54px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .calendar-day-cell:hover {
+    background: var(--bg-alt);
+    border-color: var(--border-strong);
+  }
+  .calendar-day-cell.today {
+    background: rgba(201, 162, 39, 0.1);
+    border-color: var(--gold);
+  }
+  .calendar-day-cell.other-month {
+    opacity: 0.35;
+  }
+  .calendar-day-num {
+    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+  }
+  .calendar-day-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin: 4px auto 0;
+  }
+  .calendar-event-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg-alt);
+    border-radius: 10px;
+    font-size: 12.5px;
+    border: 1px solid var(--border);
+  }
+
+  /* ---------- Notifications Card ---------- */
+  .notif-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s;
+  }
+  .notif-card:hover {
+    transform: translateY(-1px);
+    border-color: var(--border-strong);
+  }
+  .notif-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .notif-body {
+    flex: 1;
+    min-width: 0;
+  }
+  .notif-title {
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .notif-time {
+    font-size: 10.5px;
+    color: var(--text-3);
+    font-family: var(--font-mono);
+    margin-top: 1px;
+  }
+  .notif-badge {
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--border-strong);
+    padding: 2px 6px;
+    border-radius: 5px;
   }
