@@ -2,11 +2,10 @@
     --maroon:#8A1538; --maroon-light:#A8264D; --maroon-dark:#6B0F2A;
     --plum:#5E2750; --gold:#C9A227; --gold-light:#E4C158;
     --success:#22C55E; --warning:#F59E0B; --danger:#EF4444; --info:#3B82F6;
-    --bg:#F3F5F9; --bg-alt:#EAEEF5;
-    --surface:rgba(255,255,255,0.72); --surface-solid:#FFFFFF;
-    --border:rgba(17,24,39,0.08); --border-strong:rgba(17,24,39,0.14);
-    --text-1:#12121A; --text-2:#5B5D6E; --text-3:#95970;
-    --text-3:#9497A6;
+    --bg:#F3F5F9; --bg-alt:rgba(234, 238, 245, 0.45);
+    --surface:rgba(255,255,255,0.42); --surface-solid:#FFFFFF;
+    --border:rgba(255,255,255,0.32); --border-strong:rgba(17,24,39,0.14);
+    --text-1:#12121A; --text-2:#5B5D6E; --text-3:#9497A6;
     --shadow-sm:0 1px 2px rgba(18,18,26,.04), 0 1px 1px rgba(18,18,26,.03);
     --shadow-md:0 10px 30px rgba(18,18,26,.07), 0 2px 8px rgba(18,18,26,.04);
     --shadow-lg:0 24px 60px rgba(18,18,26,.14), 0 6px 16px rgba(18,18,26,.06);
@@ -17,9 +16,9 @@
     --sidebar-w:272px;
   }
   html[data-theme="dark"]{
-    --bg:#0B0E16; --bg-alt:#10131D;
-    --surface:rgba(24,27,38,0.66); --surface-solid:#161927;
-    --border:rgba(255,255,255,0.08); --border-strong:rgba(255,255,255,0.14);
+    --bg:#0B0E16; --bg-alt:rgba(22, 25, 39, 0.45);
+    --surface:rgba(18,22,35,0.42); --surface-solid:#161927;
+    --border:rgba(255,255,255,0.10); --border-strong:rgba(255,255,255,0.14);
     --text-1:#F3F4F8; --text-2:#B3B5C6; --text-3:#787C93;
     --shadow-sm:0 1px 2px rgba(0,0,0,.3);
     --shadow-md:0 10px 30px rgba(0,0,0,.45);
@@ -58,8 +57,8 @@
   /* ---------- Sidebar ---------- */
   .sidebar{
     width:var(--sidebar-w); flex-shrink:0; position:sticky; top:0; height:100vh;
-    background:var(--surface); backdrop-filter:blur(24px) saturate(160%);
-    -webkit-backdrop-filter:blur(24px) saturate(160%);
+    background:var(--surface); backdrop-filter:blur(28px) saturate(180%);
+    -webkit-backdrop-filter:blur(28px) saturate(180%);
     border-inline-end:1px solid var(--border);
     display:flex; flex-direction:column; padding:24px 18px;
     z-index:20;
@@ -183,12 +182,18 @@
   /* ---------- Stat grid ---------- */
   .grid-4{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px;}
   .card{
-    background:var(--surface); backdrop-filter:blur(20px) saturate(160%);
+    background:var(--surface);
+    backdrop-filter:blur(28px) saturate(180%);
+    -webkit-backdrop-filter:blur(28px) saturate(180%);
     border:1px solid var(--border); border-radius:var(--radius-md);
     box-shadow:var(--shadow-sm); transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
     opacity:0; transform:translateY(16px); animation:rise .55s ease forwards;
   }
-  .card:hover{transform:translateY(-4px); box-shadow:var(--shadow-md); border-color:var(--border-strong);}
+  .card:hover{
+    transform:translateY(-6px);
+    box-shadow: 0 20px 40px rgba(18, 18, 26, 0.12);
+    border-color: rgba(255, 255, 255, 0.65);
+  }
   .stat{padding:20px 20px 18px;}
   .stat-top{display:flex; align-items:flex-start; justify-content:space-between;}
   .stat-icon{
