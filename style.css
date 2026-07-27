@@ -1236,16 +1236,20 @@
     .sidebar-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0);
       z-index: 1040;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.3s ease, background 0.3s ease, backdrop-filter 0.3s ease;
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
     }
     .sidebar-overlay.active {
       opacity: 1;
+      background: rgba(0, 0, 0, 0.4);
       pointer-events: auto;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
     }
     
     /* Mobile Topbar & Search menu */
@@ -1255,10 +1259,25 @@
       background: var(--bg);
       padding: 10px 0;
       z-index: 999;
-      gap: 8px;
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 10px !important;
     }
     .mobile-menu-toggle {
       display: flex !important;
+      order: 1 !important;
+    }
+    .lang-toggle {
+      order: 2 !important;
+      margin-inline-start: auto !important; /* Push buttons to the left/right end */
+    }
+    #themeBtn {
+      order: 2 !important;
+    }
+    .search {
+      order: 3 !important;
+      width: 100% !important;
+      flex: none !important;
     }
     
     /* Grids to single column */
