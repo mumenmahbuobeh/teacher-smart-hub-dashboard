@@ -1005,3 +1005,68 @@
     padding: 2px 6px;
     border-radius: 5px;
   }
+
+  /* ---------- Floating Particles Backdrop & Card Lift Animation ---------- */
+  .floating-particles-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(201, 162, 39, 0.25);
+    pointer-events: none;
+    animation: floatParticle 12s linear infinite;
+  }
+  @keyframes floatParticle {
+    0% {
+      transform: translateY(105vh) translateX(0) scale(0.8);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.5;
+    }
+    90% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateY(-10vh) translateX(50px) scale(1.2);
+      opacity: 0;
+    }
+  }
+
+  /* Card hover micro-animations & tilts */
+  .card, .panel {
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s;
+  }
+  .card:hover, .panel:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Holiday row card style */
+  .holiday-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: var(--bg-alt);
+    border-radius: 10px;
+    border-inline-start: 4px solid var(--gold);
+    animation: rise 0.4s ease forwards;
+  }
+  .holiday-date {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--maroon-light);
+  }
+  html[data-theme="dark"] .holiday-date {
+    color: var(--gold-light);
+  }
+  .holiday-name {
+    font-weight: 600;
+    flex: 1;
+  }

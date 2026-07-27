@@ -1195,3 +1195,107 @@ function resetDatabaseFull() {
     location.reload();
   }
 }
+
+// ---------- 8. Floating Particles Background Animation ----------
+function initFloatingParticles() {
+  const container = document.getElementById('particlesContainer');
+  if (!container) return;
+
+  const particleCount = 20;
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    
+    // Random sizes, positions and delays
+    const size = Math.random() * 8 + 4;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.left = `${Math.random() * 100}vw`;
+    
+    const duration = Math.random() * 8 + 8;
+    particle.style.animationDuration = `${duration}s`;
+    
+    const delay = Math.random() * -12;
+    particle.style.animationDelay = `${delay}s`;
+    
+    container.appendChild(particle);
+  }
+}
+
+// ---------- 9. Fetch Live Qatari Public Holidays l 2026 ----------
+async function fetchStateHolidays() {
+  const listContainer = document.getElementById('stateHolidaysList');
+  if (!listContainer) return;
+
+  const fallbackHolidays = [
+    { date: '2026-02-10', localName: 'اليوم الرياضي للدولة', name: 'National Sports Day' },
+    { date: '2026-03-20', localName: 'عيد الفطر المبارك', name: 'Eid al-Fitr' },
+    { date: '2026-05-27', localName: 'عيد الأضحى المبارك', name: 'Eid al-Adha' },
+    { date: '2026-12-18', localName: 'اليوم الوطني لقطر', name: 'Qatar National Day' }
+  ];
+
+  try {
+    // API Call to Nager.Date for Qatari Public Holidays 2026
+    const res = await fetch('https://date.nager.at/api/v3/PublicHolidays/2026/QA');
+    if (!res.ok) throw new Error('API request failed');
+    
+    const holidays = await res.json();
+    renderHolidays(holidays.slice(0, 5));
+  } catch (err) {
+    console.warn("Using offline state holidays fallback:", err);
+    renderHolidays(fallbackHolidays);
+  }
+}
+
+function renderHolidays(holidays) {
+  const listContainer = document.getElementById('stateHolidaysList');
+  if (!listContainer) return;
+
+  listContainer.innerHTML = holidays.map(h => {
+    const title = currentLang === 'ar' ? h.localName : h.name;
+    return `
+      <div class="holiday-row">
+        <div class="holiday-date">${h.date}</div>
+        <div class="holiday-name">${title}</div>
+        <span class="nav-badge" style="background:rgba(201,162,39,0.12); color:var(--gold); font-size:10px;">عطلة رسمية</span>
+      </div>
+    `;
+  }).join('');
+}
+
+// ---------- 10. Dynamic Daily Classes Timetable Counter ----------
+function updateDynamicClassesCounter() {
+  const day = new Date().getDay(); // 0: Sunday, 1: Monday, 2: Tuesday, etc.
+  
+  // Schedule map: days to classes count
+  const scheduleCount = {
+    0: 4, // Sunday
+    1: 3, // Monday
+    2: 4, // Tuesday
+    3: 3, // Wednesday
+    4: 4, // Thursday
+    5: 0, // Friday (Weekend)
+    6: 0  // Saturday (Weekend)
+  };
+
+  const todayClasses = scheduleCount[day] !== undefined ? scheduleCount[day] : 4;
+  
+  // If it's a weekend, show a friendly message or default to 4 classes simulator
+  const displayClasses = todayClasses === 0 ? 4 : todayClasses;
+  
+  const classesStatVal = document.querySelector('.grid-4 .card.stat:nth-child(1) .stat-value');
+  if (classesStatVal) {
+    classesStatVal.textContent = displayClasses;
+    classesStatVal.setAttribute('data-count', displayClasses);
+  }
+  
+  const trendSpan = document.querySelector('.grid-4 .card.stat:nth-child(1) .stat-trend span');
+  if (trendSpan) {
+    trendSpan.textContent = displayClasses;
+  }
+}
+
+// Run Startup functions
+initFloatingParticles();
+fetchStateHolidays();
+updateDynamicClassesCounter();
