@@ -292,8 +292,8 @@ function renderStudents() {
       <td>${s.className}</td>
       <td style="font-family:var(--font-mono);font-weight:700;">${calculateStudentAverage(s)}%</td>
       <td>
-        <span style="font-weight:700;color:${s.status === 'absent' ? 'var(--danger)' : 'var(--success)'}">
-          ${s.status === 'absent' ? (currentLang === 'ar' ? 'غياب' : 'Absent') : (currentLang === 'ar' ? 'حاضر' : 'Present')}
+        <span style="font-weight:700;color:${s.status === 'absent' ? 'var(--danger)' : (s.status === 'late' || s.status === 'متأخر' ? 'var(--gold)' : 'var(--success)')}">
+          ${s.status === 'absent' ? (currentLang === 'ar' ? 'غياب' : 'Absent') : (s.status === 'late' || s.status === 'متأخر' ? (currentLang === 'ar' ? 'متأخر' : 'Late') : (currentLang === 'ar' ? 'حاضر' : 'Present'))}
         </span>
       </td>
       <td>
@@ -914,23 +914,28 @@ function renderAttendance() {
 
   const classStudents = studentsDb.filter(s => s.className === activeClass);
   if(classStudents.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--text-3);padding:24px;">لا يوجد طلاب في هذا الصف.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--text-3);padding:24px;">${currentLang === 'ar' ? 'لا يوجد طلاب في هذا الصف.' : 'No students in this class.'}</td></tr>`;
     return;
   }
 
-  tbody.innerHTML = classStudents.map(s => `
+  tbody.innerHTML = classStudents.map(s => {
+    const isPresent = s.status === 'present';
+    const isAbsent = s.status === 'absent';
+    const isLate = s.status === 'late' || s.status === 'متأخر';
+
+    return `
     <tr>
       <td style="font-weight:700;">${s.name}</td>
       <td>${s.className}</td>
       <td>
         <div class="attend-btn-group">
-          <button class="attend-btn p-btn ${s.status === 'present' ? 'active' : ''}" onclick="setAttend(${s.id}, 'present')">${currentLang === 'ar' ? 'حاضر' : 'Present'}</button>
-          <button class="attend-btn a-btn ${s.status === 'absent' ? 'active' : ''}" onclick="setAttend(${s.id}, 'absent')">${currentLang === 'ar' ? 'غياب' : 'Absent'}</button>
-          <button class="attend-btn l-btn ${s.status === 'late' ? 'active' : ''}" onclick="setAttend(${s.id}, 'متأخر')">${currentLang === 'ar' ? 'متأخر' : 'Late'}</button>
+          <button class="attend-btn p-btn ${isPresent ? 'active' : ''}" onclick="setAttend(${s.id}, 'present')">${currentLang === 'ar' ? 'حاضر' : 'Present'}</button>
+          <button class="attend-btn a-btn ${isAbsent ? 'active' : ''}" onclick="setAttend(${s.id}, 'absent')">${currentLang === 'ar' ? 'غياب' : 'Absent'}</button>
+          <button class="attend-btn l-btn ${isLate ? 'active' : ''}" onclick="setAttend(${s.id}, 'late')">${currentLang === 'ar' ? 'متأخر' : 'Late'}</button>
         </div>
       </td>
     </tr>
-  `).join('');
+  `}).join('');
 }
 
 function setAttend(id, status) {
@@ -939,6 +944,7 @@ function setAttend(id, status) {
     student.status = status;
     saveStudentsDb();
     renderAttendance();
+    renderStudents();
   }
 }
 
@@ -4493,6 +4499,187 @@ function deleteQuestionFromBank(qId) {
     qbSelectedQuestions = qbSelectedQuestions.filter(id => id !== qId);
     renderQuestionBank();
   }
+}
+
+// =========================================================================
+// SMART STUDENT ANALYTICS DASHBOARD & GRADE ANALYZER
+// =========================================================================
+let distChartInstance = null;
+let classCompChartInstance = null;
+
+function renderGradeAnalyzer() {
+  const studentList = studentsDb || [];
+  if (studentList.length === 0) return;
+
+  // 1. Calculate grade distribution metrics
+  let excellent = 0, vGood = 0, good = 0, average = 0, weak = 0, vWeak = 0;
+  let totalGradeSum = 0;
+  let totalCount = studentList.length;
+
+  const classAverages = {};
+  classesDb.forEach(c => { classAverages[c.name] = { sum: 0, count: 0 }; });
+
+  studentList.forEach(s => {
+    const avg = calculateStudentAverage(s);
+    totalGradeSum += avg;
+
+    if (avg >= 90) excellent++;
+    else if (avg >= 80) vGood++;
+    else if (avg >= 70) good++;
+    else if (avg >= 60) average++;
+    else if (avg >= 50) weak++;
+    else vWeak++;
+
+    if (s.className && classAverages[s.className]) {
+      classAverages[s.className].sum += avg;
+      classAverages[s.className].count += 1;
+    }
+  });
+
+  // Update tier counters in UI
+  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setEl('countExcellent', excellent);
+  setEl('countVeryGood', vGood);
+  setEl('countGood', good);
+  setEl('countAverage', average);
+  setEl('countWeak', weak);
+  setEl('countVeryWeak', vWeak);
+
+  // 2. Render / Update Distribution Pie/Doughnut Chart
+  const distCanvas = document.getElementById('gradeDistributionChart');
+  if (distCanvas && typeof Chart !== 'undefined') {
+    if (distChartInstance) distChartInstance.destroy();
+    distChartInstance = new Chart(distCanvas, {
+      type: 'doughnut',
+      data: {
+        labels: currentLang === 'ar' 
+          ? ['ممتاز (90+)', 'جيد جداً (80-89)', 'جيد (70-79)', 'مقبول (60-69)', 'ضعيف (50-59)', 'ضعيف جداً (<50)']
+          : ['Excellent (90+)', 'Very Good (80-89)', 'Good (70-79)', 'Average (60-69)', 'Weak (50-59)', 'Very Weak (<50)'],
+        datasets: [{
+          data: [excellent, vGood, good, average, weak, vWeak],
+          backgroundColor: ['#10B981', '#8BD12E', '#B1C423', '#F59E0B', '#F97316', '#EF4444'],
+          borderWidth: 2,
+          borderColor: 'var(--surface-solid)'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { family: 'Cairo, Inter, sans-serif', size: 11 } } }
+        }
+      }
+    });
+  }
+
+  // 3. Render / Update Class Comparison Bar Chart
+  const classCompCanvas = document.getElementById('gradeClassComparisonChart');
+  if (classCompCanvas && typeof Chart !== 'undefined') {
+    const labels = Object.keys(classAverages);
+    const dataVals = labels.map(lbl => {
+      const item = classAverages[lbl];
+      return item.count > 0 ? Math.round(item.sum / item.count) : 0;
+    });
+
+    if (classCompChartInstance) classCompChartInstance.destroy();
+    classCompChartInstance = new Chart(classCompCanvas, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: currentLang === 'ar' ? 'متوسط درجات الصف (%)' : 'Class Average Grade (%)',
+          data: dataVals,
+          backgroundColor: 'rgba(201, 162, 39, 0.75)',
+          borderColor: 'var(--gold)',
+          borderWidth: 1.5,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true, max: 100 }
+        },
+        plugins: {
+          legend: { labels: { font: { family: 'Cairo, Inter, sans-serif', size: 11 } } }
+        }
+      }
+    });
+  }
+
+  // 4. Populate Weak Students Select for Remedial Plan
+  const weakSelect = document.getElementById('weakStudentsSelect');
+  if (weakSelect) {
+    const weakList = studentList.filter(s => calculateStudentAverage(s) < 65);
+    weakSelect.innerHTML = '';
+    
+    if (weakList.length === 0) {
+      const opt = document.createElement('option');
+      opt.value = '';
+      opt.textContent = currentLang === 'ar' ? '🎉 جميع الطلاب في هذا الصف ممتازون (لا يوجد طلاب ضعاف)' : '🎉 All students have good performance';
+      weakSelect.appendChild(opt);
+      const content = document.getElementById('remedialPlanContent');
+      if (content) content.style.display = 'none';
+    } else {
+      weakList.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = `${s.name} (${s.className}) — المعدل: ${calculateStudentAverage(s)}%`;
+        weakSelect.appendChild(opt);
+      });
+      loadRemedialPlanForStudent(weakList[0].id);
+    }
+  }
+}
+
+function loadRemedialPlanForStudent(studentId) {
+  if (!studentId) return;
+  const s = studentsDb.find(item => item.id == studentId);
+  if (!s) return;
+
+  const content = document.getElementById('remedialPlanContent');
+  if (content) content.style.display = 'block';
+
+  const nameEl = document.getElementById('remStudentName');
+  if (nameEl) nameEl.textContent = `${currentLang === 'ar' ? 'طالب:' : 'Student:'} ${s.name} (${s.className}) — ${calculateStudentAverage(s)}%`;
+
+  let plansDb = JSON.parse(localStorage.getItem('remedialPlansDb')) || {};
+  const plan = plansDb[studentId] || {
+    weeklyGoals: '• رفع مستوى الفهم في مفاهيم الخلية الأساسية.\n• إنجاز ورقة العمل العلاجية رقم 1.',
+    monthlyGoals: '• اجتياز اختبار الوحدة القادمة بنسبة لا تقل عن 70%.\n• تحسين الانتظام والمشاركة الصفية.',
+    activities: '• مراجعة ملخص الدرس يومياً لمدة 15 دقيقة.\n• أداء التمارين التفاعلية عبر منصة المعلم الذكية.',
+    parentRecs: '• متابعة حل الواجبات اليومية في المنزل.\n• التواصل الأسبوعي مع معلم العلوم عبر المنصة.',
+    teacherRecs: '• تقديم دعم فردي لمدة 10 دقائق في حصة النشاط.\n• إشراكه مع مجموعة متفوقة للتعلم بالأقران.',
+    schedule: '• تقييم أسبوعي كل يوم خميس.\n• مراجعة الخطة بنهاية الشهر الحالي.'
+  };
+
+  const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+  setVal('remWeeklyGoals', plan.weeklyGoals);
+  setVal('remMonthlyGoals', plan.monthlyGoals);
+  setVal('remActivities', plan.activities);
+  setVal('remParentRecs', plan.parentRecs);
+  setVal('remTeacherRecs', plan.teacherRecs);
+  setVal('remSchedule', plan.schedule);
+}
+
+function saveCurrentRemedialPlan() {
+  const weakSelect = document.getElementById('weakStudentsSelect');
+  if (!weakSelect || !weakSelect.value) return;
+  const studentId = weakSelect.value;
+
+  let plansDb = JSON.parse(localStorage.getItem('remedialPlansDb')) || {};
+  plansDb[studentId] = {
+    weeklyGoals: document.getElementById('remWeeklyGoals')?.value || '',
+    monthlyGoals: document.getElementById('remMonthlyGoals')?.value || '',
+    activities: document.getElementById('remActivities')?.value || '',
+    parentRecs: document.getElementById('remParentRecs')?.value || '',
+    teacherRecs: document.getElementById('remTeacherRecs')?.value || '',
+    schedule: document.getElementById('remSchedule')?.value || ''
+  };
+
+  localStorage.setItem('remedialPlansDb', JSON.stringify(plansDb));
+  alert(currentLang === 'ar' ? 'تم حفظ تعديلات الخطة العلاجية بنجاح! 💾' : 'Remedial plan saved successfully! 💾');
 }
 
 // =========================================================================
