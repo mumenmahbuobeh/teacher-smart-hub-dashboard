@@ -1255,29 +1255,61 @@
     /* Mobile Topbar & Search menu */
     .topbar {
       position: sticky;
-      top: 0;
-      background: var(--bg);
-      padding: 10px 0;
+      top: 10px;
+      background: rgba(243, 245, 249, 0.42) !important;
+      backdrop-filter: blur(25px) saturate(170%) !important;
+      -webkit-backdrop-filter: blur(25px) saturate(170%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      border-radius: 20px !important;
+      padding: 8px 12px !important;
+      margin: 10px 0 20px 0 !important;
       z-index: 999;
       display: flex !important;
-      flex-wrap: wrap !important;
-      gap: 10px !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 8px !important;
+      box-shadow: 0 8px 32px 0 rgba(138, 21, 56, 0.04), 0 0 15px rgba(201, 162, 39, 0.15) !important; /* Maroon & Gold glow */
+      transition: all 0.3s ease;
+    }
+    html[data-theme="dark"] .topbar {
+      background: rgba(11, 14, 22, 0.42) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25), 0 0 15px rgba(201, 162, 39, 0.15) !important;
     }
     .mobile-menu-toggle {
       display: flex !important;
-      order: 1 !important;
+      flex-shrink: 0 !important;
+      margin: 0 !important;
     }
     .lang-toggle {
-      order: 2 !important;
-      margin-inline-start: auto !important; /* Push buttons to the left/right end */
+      flex-shrink: 0 !important;
+      margin: 0 !important;
     }
     #themeBtn {
-      order: 2 !important;
+      flex-shrink: 0 !important;
+      margin: 0 !important;
     }
     .search {
-      order: 3 !important;
-      width: 100% !important;
-      flex: none !important;
+      flex: 1 !important;
+      width: auto !important;
+      min-width: 0 !important;
+      padding: 8px 12px !important;
+      border-radius: 14px !important;
+      background: rgba(255, 255, 255, 0.35) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+    html[data-theme="dark"] .search {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    }
+    .search input {
+      font-size: 12.5px !important;
+      padding: 0 !important;
+    }
+    .search svg {
+      width: 14px !important;
+      height: 14px !important;
     }
     
     /* Grids to single column */
