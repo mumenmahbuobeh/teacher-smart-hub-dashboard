@@ -1456,6 +1456,135 @@ function loadLayoutPreferences() {
 
   const savedStyle = localStorage.getItem('sidebarStyle') || 'normal';
   updateSidebarStyle(savedStyle);
+  
+  // Load rearranged card positions
+  loadCardOrder();
+}
+
+// ---------- 15. Calendar Date Picker Handlers ----------
+let customDateState = null;
+
+function openDatePickerModal() {
+  const picker = document.getElementById('customDatePicker');
+  if (!picker) return;
+  
+  const today = customDateState || new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  picker.value = `${year}-${month}-${day}`;
+  
+  document.getElementById('datePickerModal').classList.add('active');
+}
+
+function handleDatePickerSubmit() {
+  const val = document.getElementById('customDatePicker').value;
+  if (!val) return;
+  
+  customDateState = new Date(val);
+  
+  // Apply date overrides
+  updateCurrentDateOverride(customDateState);
+  updateDynamicClassesCounterOverride(customDateState);
+  
+  closeModal('datePickerModal');
+}
+
+function updateCurrentDateOverride(date) {
+  const weekdaysAr = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+  const weekdaysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  
+  const monthsAr = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+  const monthsEn = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  
+  const dayName = currentLang === 'ar' ? weekdaysAr[date.getDay()] : weekdaysEn[date.getDay()];
+  const monthName = currentLang === 'ar' ? monthsAr[date.getMonth()] : monthsEn[date.getMonth()];
+  const dayNum = date.getDate();
+  const yearNum = date.getFullYear();
+  
+  let dateString = currentLang === 'ar' ? `${dayName}، ${dayNum} ${monthName} ${yearNum}` : `${dayName}, ${dayNum} ${monthName} ${yearNum}`;
+  
+  const heroEyebrow = document.querySelector('.hero-eyebrow span[data-i18n="heroEyebrow"]');
+  if (heroEyebrow) heroEyebrow.textContent = dateString;
+  
+  const heroDay = document.getElementById('heroDay');
+  if (heroDay) heroDay.textContent = dayNum;
+  
+  const heroMonth = document.getElementById('heroMonth');
+  if (heroMonth) heroMonth.textContent = `${monthName} ${yearNum}`;
+  
+  const attendLabel = document.getElementById('attendDateLabel');
+  if (attendLabel) {
+    attendLabel.textContent = `${currentLang === 'ar' ? 'اليوم:' : 'Today:'} ${dayName} ${dayNum} ${monthName}`;
+  }
+}
+
+function updateDynamicClassesCounterOverride(date) {
+  const day = date.getDay();
+  const scheduleCount = { 0: 4, 1: 3, 2: 4, 3: 3, 4: 4, 5: 0, 6: 0 };
+  const todayClasses = scheduleCount[day] !== undefined ? scheduleCount[day] : 4;
+  const displayClasses = todayClasses === 0 ? 4 : todayClasses;
+  
+  const classesStatVal = document.querySelector('.grid-4 .card.stat:nth-child(1) .stat-value');
+  if (classesStatVal) {
+    classesStatVal.textContent = displayClasses;
+    classesStatVal.setAttribute('data-count', displayClasses);
+  }
+  
+  const trendSpan = document.querySelector('.grid-4 .card.stat:nth-child(1) .stat-trend span');
+  if (trendSpan) trendSpan.textContent = displayClasses;
+}
+
+// ---------- 16. Panel Reordering Logic (DOM Swap) ----------
+function moveCardUp(id) {
+  const card = document.getElementById(id);
+  if (!card) return;
+  
+  const prev = card.previousElementSibling;
+  if (prev && prev.classList.contains('panel')) {
+    card.parentNode.insertBefore(card, prev);
+    saveCardOrder();
+  }
+}
+
+function moveCardDown(id) {
+  const card = document.getElementById(id);
+  if (!card) return;
+  
+  const next = card.nextElementSibling;
+  if (next && next.classList.contains('panel')) {
+    card.parentNode.insertBefore(next, card);
+    saveCardOrder();
+  }
+}
+
+function saveCardOrder() {
+  const container = document.getElementById('dashboardCardsContainer');
+  if (!container) return;
+  
+  const order = Array.from(container.children)
+    .filter(el => el.classList.contains('panel'))
+    .map(el => el.id);
+    
+  localStorage.setItem('dashboardCardsOrder', JSON.stringify(order));
+}
+
+function loadCardOrder() {
+  const container = document.getElementById('dashboardCardsContainer');
+  const saved = localStorage.getItem('dashboardCardsOrder');
+  if (!container || !saved) return;
+  
+  try {
+    const order = JSON.parse(saved);
+    order.forEach(id => {
+      const card = document.getElementById(id);
+      if (card) {
+        container.appendChild(card);
+      }
+    });
+  } catch (e) {
+    console.warn("Error loading card order:", e);
+  }
 }
 
 // Load and run new dynamic services

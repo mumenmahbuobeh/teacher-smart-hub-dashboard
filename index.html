@@ -168,13 +168,13 @@
             </div>
           </div>
           <div class="hero-side">
-            <div class="hero-date">
+            <div class="hero-date" id="heroDateBadge" style="cursor:pointer;" onclick="openDatePickerModal()" title="انقر لتعديل التاريخ وتحديد موعد مخصص">
               <div class="d1" id="heroDay">26</div>
-              <div class="d2" data-i18n="heroMonth">يوليو 2026</div>
+              <div class="d2" id="heroMonth" data-i18n="heroMonth">يوليو 2026</div>
             </div>
-            <div class="hero-weather">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
-              <span>الدوحة، 38°</span>
+            <div class="hero-weather" id="liveWeatherContainer">
+              <span id="weatherIcon"><svg class="spin-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg></span>
+              <span id="weatherTemp">الدوحة، جاري التحميل...</span>
             </div>
           </div>
         </div>
@@ -227,11 +227,15 @@
         </div>
       </div>
 
-      <div class="grid-2">
+      <div class="grid-2" id="dashboardCardsContainer">
         <div class="card panel" id="heatmapPanel">
           <div class="panel-head">
             <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
               <div><div data-i18n="heatTitle">خريطة الحضور الحرارية</div><div class="panel-sub" data-i18n="heatSub">آخر 14 أسبوعاً</div></div>
+            </div>
+            <div class="card-reorder-actions">
+              <button onclick="moveCardUp('heatmapPanel')" class="reorder-btn" title="تحريك لأعلى">▲</button>
+              <button onclick="moveCardDown('heatmapPanel')" class="reorder-btn" title="تحريك لأسفل">▼</button>
             </div>
             <div class="pill-tab"><span class="on" data-i18n="tabWeek">أسبوعي</span><span data-i18n="tabMonth">شهري</span></div>
           </div>
@@ -252,6 +256,10 @@
             <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
               <div><div data-i18n="classesTitle">حصص اليوم</div><div class="panel-sub" data-i18n="classesSub">الأحد، 26 يوليو</div></div>
             </div>
+            <div class="card-reorder-actions">
+              <button onclick="moveCardUp('classesPanel')" class="reorder-btn" title="تحريك لأعلى">▲</button>
+              <button onclick="moveCardDown('classesPanel')" class="reorder-btn" title="تحريك لأسفل">▼</button>
+            </div>
           </div>
           <div class="row-list" id="classesList"></div>
 
@@ -262,13 +270,15 @@
           </div>
           <div class="row-list" id="examsList"></div>
         </div>
-      </div>
 
-      <div class="grid-2">
         <div class="card panel" id="aiSuggestionsPanel">
           <div class="panel-head">
             <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></span>
               <div><div data-i18n="aiTitle">اقتراحات المساعد الذكي</div><div class="panel-sub" data-i18n="aiSub">مبنية على أداء الطلاب هذا الأسبوع</div></div>
+            </div>
+            <div class="card-reorder-actions">
+              <button onclick="moveCardUp('aiSuggestionsPanel')" class="reorder-btn" title="تحريك لأعلى">▲</button>
+              <button onclick="moveCardDown('aiSuggestionsPanel')" class="reorder-btn" title="تحريك لأسفل">▼</button>
             </div>
           </div>
           <div class="ai-card">
@@ -289,6 +299,10 @@
           <div class="panel-head">
             <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
               <div><div data-i18n="activityTitle">سجل النشاط الأخير</div></div>
+            </div>
+            <div class="card-reorder-actions">
+              <button onclick="moveCardUp('activityTimelinePanel')" class="reorder-btn" title="تحريك لأعلى">▲</button>
+              <button onclick="moveCardDown('activityTimelinePanel')" class="reorder-btn" title="تحريك لأسفل">▼</button>
             </div>
           </div>
           <div class="timeline" id="activityList"></div>
@@ -1093,7 +1107,25 @@
       <button class="btn-primary" onclick="closeModal('reportCardModal')" style="background:var(--bg-alt); color:var(--text-1); border:1px solid var(--border);">إغلاق</button>
     </div>
   </div>
-</div>
+  <!-- Modal: Date Picker -->
+  <div class="modal-overlay" id="datePickerModal">
+    <div class="modal-box" style="max-width:380px;">
+      <div class="modal-head">
+        <h3>التقويم التفاعلي — اختر موعداً</h3>
+        <button class="modal-close" onclick="closeModal('datePickerModal')">&times;</button>
+      </div>
+      <form onsubmit="event.preventDefault(); handleDatePickerSubmit();" class="upload-form">
+        <div class="form-group">
+          <label for="customDatePicker">حدد التاريخ اليومي للمنصة</label>
+          <input type="date" id="customDatePicker" class="form-control" required style="font-family:var(--font-mono);" />
+        </div>
+        <div style="font-size:12px; color:var(--text-3); margin-bottom:14px; line-height:1.5;">
+          ملاحظة: اختيار تاريخ جديد سيقوم بتحديث عدّاد الحصص اليومي وجداول الحضور والتقويم ديناميكياً ليطابق اليوم المحدد.
+        </div>
+        <button type="submit" class="btn-primary">تحديث تاريخ المنصة</button>
+      </form>
+    </div>
+  </div>
 
   <!-- Modal: Add Student -->
   <div class="modal-overlay" id="addStudentModal">

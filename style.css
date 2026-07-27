@@ -1109,10 +1109,13 @@
   .sidebar.slim .brand {
     justify-content: center !important;
   }
+  .sidebar.slim .brand-text,
   .sidebar.slim .brand-title,
   .sidebar.slim .brand-sub,
+  .sidebar.slim .nav-label,
   .sidebar.slim .nav-section-title,
-  .sidebar.slim .nav-item span {
+  .sidebar.slim .nav-item span,
+  .sidebar.slim .nav-item .nav-badge {
     display: none !important;
   }
   .sidebar.slim .nav-item {
@@ -1133,4 +1136,30 @@
   }
   .app.align-right {
     flex-direction: row !important;
+  }
+
+  /* ---------- 16. Panel Reorder buttons styling ---------- */
+  .card-reorder-actions {
+    display: flex;
+    gap: 4px;
+    margin-inline-start: auto;
+    margin-inline-end: 12px;
+  }
+  .reorder-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-3);
+    cursor: pointer;
+    font-size: 10px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: color 0.2s, background 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .reorder-btn:hover {
+    color: var(--gold);
+    background: var(--bg-alt);
+    transform: scale(1.2);
   }
