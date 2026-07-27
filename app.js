@@ -1991,6 +1991,28 @@ function initLoginCardTilt() {
   });
 }
 
+// ---------- 20. Mobile Menu Navigation Logic ----------
+function toggleMobileSidebar(isOpen) {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (!sidebar || !overlay) return;
+  
+  if (isOpen) {
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+  } else {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+  }
+}
+
+// Add click listener to all nav items to close sidebar on click on mobile
+document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    toggleMobileSidebar(false);
+  });
+});
+
 // Load and run new dynamic services
 updateCurrentDate();
 fetchLiveWeather();

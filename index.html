@@ -132,11 +132,14 @@
         <div class="sf-name" data-i18n="teacherName">إسماعيل محبوبة</div>
         <div class="sf-role" data-i18n="teacherRole">معلّم • مدرسة الدوحة النموذجية</div>
       </div>
-    </div>
   </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar(false)"></div>
 
   <main class="main">
     <div class="topbar">
+      <button class="icon-btn mobile-menu-toggle" id="mobileMenuToggleBtn" onclick="toggleMobileSidebar(true)" title="القائمة" style="display:none; justify-content:center; align-items:center; flex-shrink:0;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:20px; height:20px;"><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+      </button>
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input type="text" data-i18n-ph="searchPh" placeholder="ابحث عن طالب، صف، أو تقرير...">
