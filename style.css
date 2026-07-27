@@ -1203,6 +1203,8 @@
     /* Layout structural changes */
     .app {
       flex-direction: column !important;
+      width: 100vw !important;
+      overflow-x: hidden !important;
     }
     
     /* Mobile slide-out sidebar drawer */
@@ -1265,14 +1267,18 @@
       gap: 16px !important;
     }
     
-    /* Adjust Main margins */
+    /* Adjust Main margins and prevent layout overflow */
     .main {
       padding: 12px 16px 40px !important;
+      width: 100% !important;
+      max-width: 100vw !important;
+      overflow-x: hidden !important;
     }
     
     /* Hero Section margins */
     .hero {
       padding: 20px !important;
+      width: 100% !important;
     }
     .hero-inner {
       flex-direction: column !important;
@@ -1281,6 +1287,29 @@
     .hero-side {
       width: 100% !important;
       margin-top: 12px;
+    }
+    .hero-ai {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box;
+    }
+    .hero-ai input {
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+    
+    /* Heatmap scrollable wrapper to prevent page stretching */
+    .heatmap {
+      display: flex !important;
+      overflow-x: auto !important;
+      gap: 6px !important;
+      padding-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .hcell {
+      flex-shrink: 0 !important;
+      width: 22px !important;
+      height: 22px !important;
     }
     
     /* Stat cards sizing */
@@ -1291,5 +1320,34 @@
     /* Quiz options grid */
     .quiz-options-list {
       grid-template-columns: 1fr !important;
+    }
+
+    /* Scrollable responsive login view */
+    .login-view {
+      overflow-y: auto !important;
+      align-items: flex-start !important;
+      padding: 40px 16px !important;
+      -webkit-overflow-scrolling: touch;
+    }
+    .login-card {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: auto 0 !important;
+      padding: 24px 20px !important;
+    }
+    
+    /* Floating reorder buttons and tabs spacing */
+    .panel-head {
+      flex-direction: column !important;
+      align-items: stretch !important;
+      gap: 10px;
+    }
+    .card-reorder-actions {
+      margin-inline-start: 0 !important;
+      margin-inline-end: 0 !important;
+      justify-content: flex-end;
+    }
+    .pill-tab {
+      align-self: flex-start;
     }
   }
