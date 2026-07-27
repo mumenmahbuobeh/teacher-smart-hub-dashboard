@@ -438,7 +438,7 @@ const quizQuestionBank = {
   ]
 };
 
-function generateQuiz() {
+function generateQuizLegacy() {
   const topic = document.getElementById('quizTopic').value;
   const count = parseInt(document.getElementById('quizCount').value) || 5;
   const level = document.getElementById('quizLevel').value;
@@ -1622,121 +1622,204 @@ function generateQuiz() {
   placeholder.style.display = 'none';
   outputCard.style.display = 'block';
   if (printBtn) printBtn.style.display = 'block';
-  
-  const scienceDatabase = {
-    cell: [
-      {
-        type: 'mcq',
-        question: 'ما هي العضية الخلوية المسؤولة عن إنتاج الطاقة (ATP) في الخلايا الحية؟',
-        options: ['الميتوكوندريا (Mitochondria)', 'أجسام جولجي (Golgi bodies)', 'الريبوسومات (Ribosomes)', 'النواة (Nucleus)'],
-        correct: 0,
-        explanation: 'الميتوكوندريا هي مصنع الطاقة للخلية وتنتج ATP من التنفس الخلوي.',
-        svg: `<svg viewBox="0 0 160 100" width="160" height="100">
-          <ellipse cx="80" cy="50" rx="60" ry="30" fill="rgba(201,162,39,0.1)" stroke="var(--gold)" stroke-width="2"/>
-          <path d="M40,50 Q50,35 60,50 Q70,65 80,50 Q90,35 100,50 Q110,65 120,50" fill="none" stroke="var(--maroon)" stroke-width="2" stroke-dasharray="3,3"/>
-          <text x="80" y="54" fill="var(--text-1)" font-size="10" text-anchor="middle">Mitochondria</text>
-        </svg>`
-      },
-      {
-        type: 'solve',
-        question: 'مسألة: إذا فُحصت خلية تحت مجهر ضوئي بقوة تكبير عدسة عينية 10x وقوة تكبير عدسة شيئية 40x، احسب التكبير الكلي للخلية الملاحظة موضحاً خطوات الحل.',
-        steps: [
-          'التكبير الكلي = قوة العدسة العينية × قوة العدسة الشيئية',
-          'التكبير الكلي = 10 × 40',
-          'التكبير الكلي = 400x (أي تظهر الخلية أكبر بـ 400 مرة من حجمها الحقيقي).'
-        ]
-      },
-      {
-        type: 'mcq',
-        question: 'أي العضيات التالية تتميز بها الخلايا النباتية عن الخلايا الحيوانية؟',
-        options: ['الجدار الخلوي والبلاستيدات الخضراء', 'الغشاء البلازمي والنواة', 'الشبكة الإندوبلازمية', 'الجسم المركزي (Centrosome)'],
-        correct: 0,
-        explanation: 'تتميز الخلايا النباتية بوجود جدار خلوي يعطيها الصلابة وبلاستيدات خضراء للبناء الضوئي.',
-        svg: `<svg viewBox="0 0 120 100" width="120" height="100">
-          <rect x="20" y="10" width="80" height="80" rx="10" fill="none" stroke="var(--success)" stroke-width="3"/>
-          <rect x="25" y="15" width="70" height="70" rx="8" fill="rgba(34,197,94,0.1)" stroke="var(--success)" stroke-width="1"/>
-          <circle cx="50" cy="45" r="12" fill="var(--success)" opacity="0.4"/>
-          <text x="60" y="80" fill="var(--success)" font-size="9" text-anchor="middle">الجدار الخلوي</text>
-        </svg>`
-      }
-    ],
-    atoms: [
-      {
-        type: 'mcq',
-        question: 'ما هو الجسيم دون الذري الذي يحمل شحنة سالبة ويدور في مدارات حول النواة؟',
-        options: ['الإلكترون (Electron)', 'البروتون (Proton)', 'النيوترون (Neutron)', 'البوزيترون (Positron)'],
-        correct: 0,
-        explanation: 'الإلكترونات سالبة الشحنة وتدور حول النواة الموجبة.',
-        svg: `<svg viewBox="0 0 120 100" width="120" height="100">
-          <circle cx="60" cy="50" r="8" fill="var(--maroon)"/>
-          <ellipse cx="60" cy="50" rx="35" ry="12" fill="none" stroke="var(--text-3)" stroke-width="1"/>
-          <ellipse cx="60" cy="50" rx="12" ry="35" fill="none" stroke="var(--text-3)" stroke-width="1"/>
-          <circle cx="95" cy="50" r="3" fill="var(--gold)"/>
-          <circle cx="60" cy="85" r="3" fill="var(--gold)"/>
-        </svg>`
-      },
-      {
-        type: 'solve',
-        question: 'مسألة: احسب الكتلة المولية لجزيء الماء (H₂O) علماً بأن الكتل الذرية التقريبية هي: الهيدروجين H = 1، الأكسجين O = 16.',
-        steps: [
-          'الصيغة الجزيئية تحتوي ذرتين هيدروجين وذرة أكسجين واحدة.',
-          'الكتلة المولية = (2 × كتلة H) + (1 × كتلة O)',
-          'الكتلة المولية = (2 × 1) + 16 = 18 جم/مول.'
-        ]
-      }
-    ],
-    motion: [
-      {
-        type: 'mcq',
-        question: 'بحسب القانون الأول لنيوتن في الحركة، يميل الجسم الساكن إلى البقاء ساكناً بسبب:',
-        options: ['القصور الذاتي (Inertia)', 'الاحتكاك (Friction)', 'الجاذبية (Gravity)', 'التسارع (Acceleration)'],
-        correct: 0,
-        explanation: 'القصور الذاتي هو مقاومة الجسم لتغيير حالته الحركية.',
-        svg: `<svg viewBox="0 0 160 80" width="160" height="80">
-          <line x1="20" y1="60" x2="140" y2="60" stroke="var(--text-3)" stroke-width="2"/>
-          <rect x="60" y="30" width="40" height="30" fill="rgba(201,162,39,0.1)" stroke="var(--gold)" stroke-width="2"/>
-          <path d="M100,45 L130,45" stroke="var(--danger)" stroke-width="2"/>
-          <text x="80" y="48" fill="var(--text-1)" font-size="10" text-anchor="middle">Body</text>
-        </svg>`
-      },
-      {
-        type: 'solve',
-        question: 'مسألة: انطلقت سيارة تجارب عملية من السكون بتسارع ثابت مقداره 4 م/ث². احسب السرعة النهائية للسيارة بعد مرور 5 ثوانٍ.',
-        steps: [
-          'المعادلة الأولى للحركة: السرعة النهائية (ع) = السرعة الابتدائية (ع.) + (التسارع × الزمن)',
-          'بما أن الانطلاق من السكون: ع. = 0',
-          'السرعة النهائية = 0 + (4 × 5)',
-          'السرعة النهائية = 20 م/ث.'
-        ]
-      }
+
+  // Check for Gemini API key
+  const apiKey = localStorage.getItem('geminiApiKey');
+  if (apiKey) {
+    outputCard.innerHTML = `
+      <div style="text-align:center; padding:50px;">
+        <svg class="spin-sun" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+          <path d="M12 2v2m0 16v2m-8-8H2m16 0h2"/>
+        </svg>
+        <p style="margin-top:16px; font-weight:700; color:var(--text-1); font-size:14px;">جاري توليد أسئلة فريدة ورسومات بيانية ذكية مباشرة عبر Gemini API...</p>
+      </div>
+    `;
+    
+    const prompt = `أنشئ ورقة اختبار لمادة العلوم باللغة العربية.
+الموضوع: ${topic}
+المقرر المرفوع: ${source}
+عدد الأسئلة المطلوبة: ${count}
+المطلوب إنشاء أسئلة فريدة وجديدة ومنوعة في كل مرة (ليست مكررة).
+يجب أن ترجع لي مصفوفة JSON فقط بالشكل التالي، بدون علامات ماركداون وبدون نصوص قبلها أو بعدها:
+[
+  {
+    "type": "mcq",
+    "question": "نص السؤال الاختياري",
+    "options": ["ألف", "باء", "جيم", "دال"],
+    "correct": 0,
+    "explanation": "لماذا هذا الخيار صحيح؟",
+    "svg": "<svg viewBox='0 0 100 80' width='100' height='80'><circle cx='50' cy='40' r='10' fill='gold'/></svg>" // اختياري، رسم علمي توضيحي ملائم للموضوع بصيغة SVG خفيفة
+  },
+  {
+    "type": "solve",
+    "question": "نص المسألة الحسابية أو العلمية المفتوحة والحل",
+    "steps": [
+      "الخطوة الأولى للتعويض والحل",
+      "الخطوة النهائية"
     ]
-  };
-  
-  const sourcePool = scienceDatabase[topic] || scienceDatabase.cell;
-  let selectedQ = [];
-  
-  const mcqs = sourcePool.filter(q => q.type === 'mcq');
-  const solves = sourcePool.filter(q => q.type === 'solve');
-  
-  if (hasMcq && hasSolve) {
-    selectedQ = [...mcqs, ...solves];
-  } else if (hasMcq) {
-    selectedQ = mcqs;
-  } else {
-    selectedQ = solves;
   }
+]`;
+
+    fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { responseMimeType: "application/json" }
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      let text = data.candidates[0].content.parts[0].text.trim();
+      if (text.startsWith("```json")) {
+        text = text.substring(7);
+      }
+      if (text.endsWith("```")) {
+        text = text.substring(0, text.length - 3);
+      }
+      const questions = JSON.parse(text.trim());
+      renderQuizSheet(questions, source);
+    })
+    .catch(err => {
+      console.error("Gemini Generation failed, falling back to local randomized generator", err);
+      generateQuizLocally(topic, source, count, hasMcq, hasSolve);
+    });
+  } else {
+    generateQuizLocally(topic, source, count, hasMcq, hasSolve);
+  }
+}
+
+function generateQuizLocally(topic, source, count, hasMcq, hasSolve) {
+  const questions = [];
   
-  selectedQ = selectedQ.slice(0, count);
+  for (let i = 0; i < count; i++) {
+    const qType = (hasMcq && hasSolve) ? (Math.random() > 0.5 ? 'mcq' : 'solve') : (hasMcq ? 'mcq' : 'solve');
+    
+    if (topic === 'cell') {
+      if (qType === 'mcq') {
+        const randId = Math.floor(Math.random() * 3);
+        if (randId === 0) {
+          questions.push({
+            type: 'mcq',
+            question: `ما هو اسم العضية التي تمثل مركز التحكم وبها المادة الوراثية في الخلية؟ (توليد عشوائي #${Math.floor(Math.random()*900+100)})`,
+            options: ['النواة (Nucleus)', 'السيتوبلازم (Cytoplasm)', 'الميتوكوندريا (Mitochondria)', 'الريبوسوم (Ribosome)'],
+            correct: 0,
+            explanation: 'النواة تحتوي على الحمض النووي الصبغي وتدير سائر الوظائف الخلوية.',
+            svg: `<svg viewBox="0 0 100 100" width="100" height="100"><circle cx="50" cy="50" r="40" fill="none" stroke="var(--gold)" stroke-width="2"/><circle cx="50" cy="50" r="16" fill="var(--maroon)" opacity="0.6"/><text x="50" y="54" fill="#fff" font-size="8" text-anchor="middle">Nucleus</text></svg>`
+          });
+        } else if (randId === 1) {
+          questions.push({
+            type: 'mcq',
+            question: `تتكون الشبكة الإندوبلازمية الخشنة من حبيبات دقيقة تسمى: (توليد عشوائي #${Math.floor(Math.random()*900+100)})`,
+            options: ['الريبوسومات (Ribosomes)', 'الليسوميات (Lysosomes)', 'البلاستيدات (Plastids)', 'الفجوات (Vacuoles)'],
+            correct: 0,
+            explanation: 'الريبوسومات تلتصق بالشبكة الخشنة لتقوم ببناء سلاسل البروتين.',
+            svg: `<svg viewBox="0 0 100 100" width="100" height="100"><path d="M10,50 Q30,30 50,50 T90,50" fill="none" stroke="var(--gold)" stroke-width="2"/><circle cx="30" cy="40" r="2.5" fill="var(--maroon)"/><circle cx="50" cy="50" r="2.5" fill="var(--maroon)"/><circle cx="70" cy="40" r="2.5" fill="var(--maroon)"/></svg>`
+          });
+        } else {
+          questions.push({
+            type: 'mcq',
+            question: `أي العضيات التالية تقوم بعملية البناء الضوئي في خلايا أوراق النبات؟ (توليد عشوائي #${Math.floor(Math.random()*900+100)})`,
+            options: ['البلاستيدات الخضراء (Chloroplasts)', 'الأجسام المحللة (Lysosomes)', 'النواة', 'الغشاء الخلوي'],
+            correct: 0,
+            explanation: 'البلاستيدات تحتوي على صبغة الكلوروفيل التي تمتص الضوء وتصنع الغذاء.',
+            svg: `<svg viewBox="0 0 100 100" width="100" height="100"><rect x="15" y="20" width="70" height="60" rx="8" fill="rgba(34,197,94,0.1)" stroke="var(--success)" stroke-width="2"/><ellipse cx="50" cy="50" rx="20" ry="10" fill="var(--success)" opacity="0.5"/></svg>`
+          });
+        }
+      } else {
+        const eyepiece = Math.floor(Math.random() * 2 === 0 ? 10 : 15);
+        const objective = Math.floor(Math.random() * 2 === 0 ? 40 : 100);
+        questions.push({
+          type: 'solve',
+          question: `مسألة عملية: قام الأستاذ إسماعيل بتوجيه الطلاب لفحص شريحة بصل تحت المجهر الضوئي. إذا استخدم الطلاب عدسة عينية بقوة تكبير [${eyepiece}x] وعدسة شيئية بقوة تكبير [${objective}x]، فما هي قوة التكبير الكلية للميكروسكوب؟ احسبها بالخطوات.`,
+          steps: [
+            `قانون التكبير الكلي = قوة العدسة العينية × قوة العدسة الشيئية`,
+            `التكبير الكلي = ${eyepiece} × ${objective}`,
+            `التكبير الكلي = ${eyepiece * objective}x`
+          ]
+        });
+      }
+    } else if (topic === 'atoms') {
+      if (qType === 'mcq') {
+        const compounds = [
+          { name: 'الأكسجين (O)', num: 8, conf: '2, 6' },
+          { name: 'النيتروجين (N)', num: 7, conf: '2, 5' },
+          { name: 'الكربون (C)', num: 6, conf: '2, 4' },
+          { name: 'الصوديوم (Na)', num: 11, conf: '2, 8, 1' }
+        ];
+        const comp = compounds[Math.floor(Math.random() * compounds.length)];
+        questions.push({
+          type: 'mcq',
+          question: `ما هو التوزيع الإلكتروني الصحيح لذرة عنصر [${comp.name}] الذي عدده الذري (${comp.num})؟`,
+          options: [comp.conf, '2, 8', '2, 2', '2, 8, 8'],
+          correct: 0,
+          explanation: `يتوزع العدد الذري ${comp.num} في مستويات الطاقة بحيث يمتلئ المستوى الأول بـ 2 والمستويات التالية بالباقي بالتناوب.`,
+          svg: `<svg viewBox="0 0 100 100" width="100" height="100"><circle cx="50" cy="50" r="6" fill="var(--maroon)"/><circle cx="50" cy="50" r="22" fill="none" stroke="var(--border)" stroke-width="1"/><circle cx="50" cy="50" r="38" fill="none" stroke="var(--border)" stroke-width="1"/></svg>`
+        });
+      } else {
+        const substances = [
+          { name: 'ثاني أكسيد الكربون (CO₂)', atoms: 'ذرة كربون (C=12) وذرتي أكسجين (O=16)', total: 44 },
+          { name: 'الماء (H₂O)', atoms: 'ذرتي هيدروجين (H=1) وذرة أكسجين (O=16)', total: 18 },
+          { name: 'أكسيد الكالسيوم (CaO)', atoms: 'ذرة كالسيوم (Ca=40) وذرة أكسجين (O=16)', total: 56 }
+        ];
+        const sub = substances[Math.floor(Math.random() * substances.length)];
+        questions.push({
+          type: 'solve',
+          question: `مسألة كيميائية: احسب الكتلة الجزيئية / المولية لمركب [${sub.name}] علماً بأن الصيغة تتكون من ${sub.atoms}.`,
+          steps: [
+            `الكتلة المولية = مجموع الكتل الذرية للذرات المكونة للجزيء`,
+            `الكتلة المولية لـ ${sub.name} = ${sub.total} جم/مول.`
+          ]
+        });
+      }
+    } else { // motion
+      if (qType === 'mcq') {
+        const randLaw = Math.floor(Math.random() * 3 + 1);
+        const laws = {
+          1: { text: 'القانون الأول لنيوتن', ans: 'القصور الذاتي ومقاومة التغيير' },
+          2: { text: 'القانون الثاني لنيوتن', ans: 'القوة تساوي الكتلة ضرب التسارع (F = m.a)' },
+          3: { text: 'القانون الثالث لنيوتن', ans: 'لكل فعل رد فعل مساوٍ له في المقدار ومعاكس له في الاتجاه' }
+        };
+        questions.push({
+          type: 'mcq',
+          question: `ينص [${laws[randLaw].text}] للحركة في الفيزياء على مفهوم أساسي وهو:`,
+          options: [laws[randLaw].ans, 'تغير الحجم الكلي للمادة', 'مبدأ حفظ الطاقة الميكانيكية', 'تبخر السوائل بالحرارة'],
+          correct: 0,
+          explanation: `هذا هو التعريف الفيزيائي لقانون نيوتن المختار للحركة.`,
+          svg: `<svg viewBox="0 0 100 60" width="100" height="60"><line x1="10" y1="50" x2="90" y2="50" stroke="var(--border)" stroke-width="2"/><rect x="35" y="25" width="30" height="25" fill="rgba(201,162,39,0.1)" stroke="var(--gold)" stroke-width="1"/><path d="M65,37 L85,37" stroke="var(--danger)" stroke-width="2"/></svg>`
+        });
+      } else {
+        const dist = Math.floor(Math.random() * 80 + 40);
+        const time = Math.floor(Math.random() * 8 + 3);
+        questions.push({
+          type: 'solve',
+          question: `مسألة فيزيائية: تقطع سيارة تجارب علمية في معمل مدرسة الدوحة مسافة قدرها [${dist} متر] خلال زمن قدره [${time} ثوانٍ]. احسب السرعة المتوسطة لهذه السيارة بالخطوات المعتمدة.`,
+          steps: [
+            `السرعة المتوسطة = المسافة الكلية ÷ الزمن الكلي`,
+            `السرعة = ${dist} ÷ ${time}`,
+            `السرعة = ${(dist / time).toFixed(2)} م/ث (متر لكل ثانية).`
+          ]
+        });
+      }
+    }
+  }
+
+  renderQuizSheet(questions, source);
+}
+
+function renderQuizSheet(questions, source) {
+  const outputCard = document.getElementById('quizOutputCard');
   
   let html = `
     <div class="card panel" style="border: 2px solid var(--border); padding: 30px; border-radius: 12px; background: var(--bg-card); text-align: right; direction: rtl;">
       <div style="text-align: center; border-bottom: 2px dashed var(--border); padding-bottom: 15px; margin-bottom: 25px;">
-        <h3 style="margin-bottom: 8px;">مدرسة الدوحة النموذجية — اختبار مادة العلوم</h3>
-        <p style="font-size: 13px; color: var(--text-2);">مستنتج ذكياً من المقرر: <b>${source === 'default' ? 'منهاج العلوم العام' : source}</b> | تاريخ الامتحان: ${new Date().toLocaleDateString('ar-EG')}</p>
+        <h3 style="margin-bottom: 8px;">مدرسة الدوحة النموذجية — اختبار العلوم الذكي</h3>
+        <p style="font-size: 13px; color: var(--text-2);">مصدر الأسئلة: <b>${source === 'default' ? 'منهاج العلوم العام' : source}</b> | التاريخ: ${new Date().toLocaleDateString('ar-EG')}</p>
       </div>
   `;
   
-  selectedQ.forEach((q, idx) => {
+  questions.forEach((q, idx) => {
     html += `
       <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light);">
         <h4 style="margin-bottom: 12px; font-weight: 700; font-size:14.5px;">السؤال ${idx + 1}: ${q.question}</h4>

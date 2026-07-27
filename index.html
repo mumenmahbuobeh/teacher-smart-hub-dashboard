@@ -13,7 +13,7 @@
 <body>
   <div class="floating-particles-container" id="particlesContainer"></div>
   <!-- Login View -->
-  <div id="loginView" class="login-view" style="position:relative; overflow:hidden;">
+  <div id="loginView" class="login-view">
     <canvas id="loginParticlesCanvas" style="position:absolute; inset:0; pointer-events:none; z-index:0;"></canvas>
     <div class="login-bg-decorations" style="z-index:1; pointer-events:none;">
       <div class="decor-atom">
@@ -988,6 +988,10 @@
             <div class="form-group">
               <label>التخصص الدراسي</label>
               <input type="text" id="setSpecialty" class="form-control" required value="معلّم العلوم" />
+            </div>
+            <div class="form-group">
+              <label>مفتاح Gemini API للتوليد اللا نهائي (اختياري)</label>
+              <input type="password" id="setGeminiApiKey" class="form-control" placeholder="AIzaSy..." value="" />
             </div>
             <button type="submit" class="btn-primary">حفظ الإعدادات</button>
           </form>
