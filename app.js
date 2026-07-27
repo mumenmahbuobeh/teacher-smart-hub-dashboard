@@ -122,6 +122,8 @@ function applyI18n(){
   renderStudents();
   renderAttendance();
   renderGrades();
+  if (typeof updateCurrentDate === 'function') updateCurrentDate();
+  if (typeof fetchLiveWeather === 'function') fetchLiveWeather();
 }
 
 document.getElementById('langBtn').addEventListener('click', ()=>{
@@ -1587,8 +1589,329 @@ function loadCardOrder() {
   }
 }
 
+// ---------- 17. Quiz Generator from Curriculum Files (Interactive & Visual) ----------
+function handleQuizSourceChange(filename) {
+  const topicSelect = document.getElementById('quizTopic');
+  if (!topicSelect) return;
+  if (filename.includes('cell')) {
+    topicSelect.value = 'cell';
+  } else if (filename.includes('periodic') || filename.includes('table')) {
+    topicSelect.value = 'atoms';
+  } else if (filename.includes('motion') || filename.includes('laws')) {
+    topicSelect.value = 'motion';
+  }
+}
+
+function generateQuiz() {
+  const source = document.getElementById('quizSourceFile').value;
+  const topic = document.getElementById('quizTopic').value;
+  const count = parseInt(document.getElementById('quizCount').value) || 3;
+  
+  const hasMcq = document.getElementById('quizTypeMcq').checked;
+  const hasSolve = document.getElementById('quizTypeSolve').checked;
+  
+  const placeholder = document.getElementById('quizOutputPlaceholder');
+  const outputCard = document.getElementById('quizOutputCard');
+  const printBtn = document.getElementById('printQuizBtn');
+  
+  if (!hasMcq && !hasSolve) {
+    alert(currentLang === 'ar' ? 'يرجى اختيار نوع واحد على الأقل من الأسئلة!' : 'Please select at least one question type!');
+    return;
+  }
+  
+  placeholder.style.display = 'none';
+  outputCard.style.display = 'block';
+  if (printBtn) printBtn.style.display = 'block';
+  
+  const scienceDatabase = {
+    cell: [
+      {
+        type: 'mcq',
+        question: 'ما هي العضية الخلوية المسؤولة عن إنتاج الطاقة (ATP) في الخلايا الحية؟',
+        options: ['الميتوكوندريا (Mitochondria)', 'أجسام جولجي (Golgi bodies)', 'الريبوسومات (Ribosomes)', 'النواة (Nucleus)'],
+        correct: 0,
+        explanation: 'الميتوكوندريا هي مصنع الطاقة للخلية وتنتج ATP من التنفس الخلوي.',
+        svg: `<svg viewBox="0 0 160 100" width="160" height="100">
+          <ellipse cx="80" cy="50" rx="60" ry="30" fill="rgba(201,162,39,0.1)" stroke="var(--gold)" stroke-width="2"/>
+          <path d="M40,50 Q50,35 60,50 Q70,65 80,50 Q90,35 100,50 Q110,65 120,50" fill="none" stroke="var(--maroon)" stroke-width="2" stroke-dasharray="3,3"/>
+          <text x="80" y="54" fill="var(--text-1)" font-size="10" text-anchor="middle">Mitochondria</text>
+        </svg>`
+      },
+      {
+        type: 'solve',
+        question: 'مسألة: إذا فُحصت خلية تحت مجهر ضوئي بقوة تكبير عدسة عينية 10x وقوة تكبير عدسة شيئية 40x، احسب التكبير الكلي للخلية الملاحظة موضحاً خطوات الحل.',
+        steps: [
+          'التكبير الكلي = قوة العدسة العينية × قوة العدسة الشيئية',
+          'التكبير الكلي = 10 × 40',
+          'التكبير الكلي = 400x (أي تظهر الخلية أكبر بـ 400 مرة من حجمها الحقيقي).'
+        ]
+      },
+      {
+        type: 'mcq',
+        question: 'أي العضيات التالية تتميز بها الخلايا النباتية عن الخلايا الحيوانية؟',
+        options: ['الجدار الخلوي والبلاستيدات الخضراء', 'الغشاء البلازمي والنواة', 'الشبكة الإندوبلازمية', 'الجسم المركزي (Centrosome)'],
+        correct: 0,
+        explanation: 'تتميز الخلايا النباتية بوجود جدار خلوي يعطيها الصلابة وبلاستيدات خضراء للبناء الضوئي.',
+        svg: `<svg viewBox="0 0 120 100" width="120" height="100">
+          <rect x="20" y="10" width="80" height="80" rx="10" fill="none" stroke="var(--success)" stroke-width="3"/>
+          <rect x="25" y="15" width="70" height="70" rx="8" fill="rgba(34,197,94,0.1)" stroke="var(--success)" stroke-width="1"/>
+          <circle cx="50" cy="45" r="12" fill="var(--success)" opacity="0.4"/>
+          <text x="60" y="80" fill="var(--success)" font-size="9" text-anchor="middle">الجدار الخلوي</text>
+        </svg>`
+      }
+    ],
+    atoms: [
+      {
+        type: 'mcq',
+        question: 'ما هو الجسيم دون الذري الذي يحمل شحنة سالبة ويدور في مدارات حول النواة؟',
+        options: ['الإلكترون (Electron)', 'البروتون (Proton)', 'النيوترون (Neutron)', 'البوزيترون (Positron)'],
+        correct: 0,
+        explanation: 'الإلكترونات سالبة الشحنة وتدور حول النواة الموجبة.',
+        svg: `<svg viewBox="0 0 120 100" width="120" height="100">
+          <circle cx="60" cy="50" r="8" fill="var(--maroon)"/>
+          <ellipse cx="60" cy="50" rx="35" ry="12" fill="none" stroke="var(--text-3)" stroke-width="1"/>
+          <ellipse cx="60" cy="50" rx="12" ry="35" fill="none" stroke="var(--text-3)" stroke-width="1"/>
+          <circle cx="95" cy="50" r="3" fill="var(--gold)"/>
+          <circle cx="60" cy="85" r="3" fill="var(--gold)"/>
+        </svg>`
+      },
+      {
+        type: 'solve',
+        question: 'مسألة: احسب الكتلة المولية لجزيء الماء (H₂O) علماً بأن الكتل الذرية التقريبية هي: الهيدروجين H = 1، الأكسجين O = 16.',
+        steps: [
+          'الصيغة الجزيئية تحتوي ذرتين هيدروجين وذرة أكسجين واحدة.',
+          'الكتلة المولية = (2 × كتلة H) + (1 × كتلة O)',
+          'الكتلة المولية = (2 × 1) + 16 = 18 جم/مول.'
+        ]
+      }
+    ],
+    motion: [
+      {
+        type: 'mcq',
+        question: 'بحسب القانون الأول لنيوتن في الحركة، يميل الجسم الساكن إلى البقاء ساكناً بسبب:',
+        options: ['القصور الذاتي (Inertia)', 'الاحتكاك (Friction)', 'الجاذبية (Gravity)', 'التسارع (Acceleration)'],
+        correct: 0,
+        explanation: 'القصور الذاتي هو مقاومة الجسم لتغيير حالته الحركية.',
+        svg: `<svg viewBox="0 0 160 80" width="160" height="80">
+          <line x1="20" y1="60" x2="140" y2="60" stroke="var(--text-3)" stroke-width="2"/>
+          <rect x="60" y="30" width="40" height="30" fill="rgba(201,162,39,0.1)" stroke="var(--gold)" stroke-width="2"/>
+          <path d="M100,45 L130,45" stroke="var(--danger)" stroke-width="2"/>
+          <text x="80" y="48" fill="var(--text-1)" font-size="10" text-anchor="middle">Body</text>
+        </svg>`
+      },
+      {
+        type: 'solve',
+        question: 'مسألة: انطلقت سيارة تجارب عملية من السكون بتسارع ثابت مقداره 4 م/ث². احسب السرعة النهائية للسيارة بعد مرور 5 ثوانٍ.',
+        steps: [
+          'المعادلة الأولى للحركة: السرعة النهائية (ع) = السرعة الابتدائية (ع.) + (التسارع × الزمن)',
+          'بما أن الانطلاق من السكون: ع. = 0',
+          'السرعة النهائية = 0 + (4 × 5)',
+          'السرعة النهائية = 20 م/ث.'
+        ]
+      }
+    ]
+  };
+  
+  const sourcePool = scienceDatabase[topic] || scienceDatabase.cell;
+  let selectedQ = [];
+  
+  const mcqs = sourcePool.filter(q => q.type === 'mcq');
+  const solves = sourcePool.filter(q => q.type === 'solve');
+  
+  if (hasMcq && hasSolve) {
+    selectedQ = [...mcqs, ...solves];
+  } else if (hasMcq) {
+    selectedQ = mcqs;
+  } else {
+    selectedQ = solves;
+  }
+  
+  selectedQ = selectedQ.slice(0, count);
+  
+  let html = `
+    <div class="card panel" style="border: 2px solid var(--border); padding: 30px; border-radius: 12px; background: var(--bg-card); text-align: right; direction: rtl;">
+      <div style="text-align: center; border-bottom: 2px dashed var(--border); padding-bottom: 15px; margin-bottom: 25px;">
+        <h3 style="margin-bottom: 8px;">مدرسة الدوحة النموذجية — اختبار مادة العلوم</h3>
+        <p style="font-size: 13px; color: var(--text-2);">مستنتج ذكياً من المقرر: <b>${source === 'default' ? 'منهاج العلوم العام' : source}</b> | تاريخ الامتحان: ${new Date().toLocaleDateString('ar-EG')}</p>
+      </div>
+  `;
+  
+  selectedQ.forEach((q, idx) => {
+    html += `
+      <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light);">
+        <h4 style="margin-bottom: 12px; font-weight: 700; font-size:14.5px;">السؤال ${idx + 1}: ${q.question}</h4>
+    `;
+    
+    if (q.svg) {
+      html += `
+        <div class="quiz-diagram-box">
+          ${q.svg}
+        </div>
+      `;
+    }
+    
+    if (q.type === 'mcq') {
+      html += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;">`;
+      q.options.forEach((opt, oIdx) => {
+        html += `
+          <button class="btn-primary" onclick="checkOption(this, ${oIdx === q.correct}, '${q.explanation}')" style="background: var(--bg-alt); color: var(--text-1); border: 1px solid var(--border); text-align: right; font-size: 13px; font-weight: 500; justify-content: flex-start; padding: 10px 14px;">
+            ${String.fromCharCode(65 + oIdx)}. ${opt}
+          </button>
+        `;
+      });
+      html += `</div><div class="quiz-feedback" style="display:none; margin-top:10px; font-size:12.5px; padding:8px 12px; border-radius:6px;"></div>`;
+    } else {
+      html += `
+        <div style="margin-top: 12px;">
+          <button class="btn-primary" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';" style="background:var(--maroon-light); color:var(--text-1); border:none; width:auto; font-size:12px; padding:6px 12px;">إظهار نموذج وخطوات الحل</button>
+          <div style="display:none; padding:12px; background:rgba(34,197,94,0.08); border-inline-start:4px solid var(--success); border-radius:6px; font-size:13px; color:var(--text-1); line-height:1.6;">
+            <strong style="color:var(--success);">خطوات الحل المعتمدة:</strong>
+            <ol style="margin-top:6px; margin-inline-start:20px; list-style-type: decimal;">
+              ${q.steps.map(s => `<li>${s}</li>`).join('')}
+            </ol>
+          </div>
+        </div>
+      `;
+    }
+    
+    html += `</div>`;
+  });
+  
+  html += `</div>`;
+  outputCard.innerHTML = html;
+}
+
+function checkOption(btn, isCorrect, explanation) {
+  const parent = btn.parentNode;
+  const feedback = parent.nextElementSibling;
+  
+  parent.querySelectorAll('button').forEach(b => b.disabled = true);
+  
+  if (isCorrect) {
+    btn.style.background = 'rgba(34,197,94,0.15)';
+    btn.style.borderColor = 'var(--success)';
+    btn.style.color = 'var(--success)';
+    feedback.style.background = 'rgba(34,197,94,0.08)';
+    feedback.style.color = 'var(--success)';
+    feedback.innerHTML = `🟢 <b>إجابة صحيحة!</b> ${explanation}`;
+  } else {
+    btn.style.background = 'rgba(239,68,68,0.15)';
+    btn.style.borderColor = 'var(--danger)';
+    btn.style.color = 'var(--danger)';
+    feedback.style.background = 'rgba(239,68,68,0.08)';
+    feedback.style.color = 'var(--danger)';
+    feedback.innerHTML = `❌ <b>إجابة خاطئة!</b> ${explanation}`;
+  }
+  feedback.style.display = 'block';
+}
+
+// ---------- 18. Interactive Canvas Particles Background ----------
+function initInteractiveCanvasParticles() {
+  const canvas = document.getElementById('loginParticlesCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  
+  let particles = [];
+  let mouse = { x: null, y: null, radius: 100 };
+  
+  function resize() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  
+  window.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+  
+  window.addEventListener('mouseleave', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+  
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 4 + 1.5;
+      this.speedX = Math.random() * 1 - 0.5;
+      this.speedY = Math.random() * 1 - 0.5;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+      if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      
+      if (mouse.x !== null && mouse.y !== null) {
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.hypot(dx, dy);
+        if (distance < mouse.radius) {
+          let force = (mouse.radius - distance) / mouse.radius;
+          let angle = Math.atan2(dy, dx);
+          this.x -= Math.cos(angle) * force * 4;
+          this.y -= Math.sin(angle) * force * 4;
+        }
+      }
+    }
+    draw() {
+      ctx.fillStyle = 'rgba(201, 162, 39, 0.35)';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  
+  function init() {
+    particles = [];
+    const count = 40;
+    for (let i = 0; i < count; i++) {
+      particles.push(new Particle());
+    }
+  }
+  init();
+  
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+// ---------- 19. 3D Login Card Tilt Effect ----------
+function initLoginCardTilt() {
+  const loginView = document.getElementById('loginView');
+  const card = document.getElementById('loginCard');
+  if (!loginView || !card) return;
+  
+  loginView.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const cardX = rect.left + rect.width / 2;
+    const cardY = rect.top + rect.height / 2;
+    
+    const angleX = -(e.clientY - cardY) / 18;
+    const angleY = (e.clientX - cardX) / 18;
+    
+    card.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+  });
+  
+  loginView.addEventListener('mouseleave', () => {
+    card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+  });
+}
+
 // Load and run new dynamic services
 updateCurrentDate();
 fetchLiveWeather();
 loadSchoolTheme();
 loadLayoutPreferences();
+initInteractiveCanvasParticles();
+initLoginCardTilt();
