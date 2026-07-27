@@ -1070,3 +1070,67 @@
     font-weight: 600;
     flex: 1;
   }
+
+  /* ---------- 14. Weather Animations & Date Pulse ---------- */
+  .spin-sun {
+    animation: sun-rotate 12s linear infinite;
+    transform-origin: center;
+    display: inline-block;
+  }
+  @keyframes sun-rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .bob-cloud {
+    animation: cloud-bob 4s ease-in-out infinite;
+    display: inline-block;
+  }
+  @keyframes cloud-bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  .hero-date {
+    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+  }
+  .hero-date:hover {
+    transform: scale(1.08) rotate(3deg);
+    box-shadow: 0 8px 24px rgba(201, 162, 39, 0.25);
+  }
+
+  /* ---------- 15. Slim Sidebar Layout Styles ---------- */
+  .sidebar.slim {
+    width: 80px !important;
+    min-width: 80px !important;
+    padding: 16px 8px !important;
+  }
+  .sidebar.slim .brand {
+    justify-content: center !important;
+  }
+  .sidebar.slim .brand-title,
+  .sidebar.slim .brand-sub,
+  .sidebar.slim .nav-section-title,
+  .sidebar.slim .nav-item span {
+    display: none !important;
+  }
+  .sidebar.slim .nav-item {
+    justify-content: center !important;
+    padding: 12px !important;
+    border-radius: 12px !important;
+  }
+  .sidebar.slim .profile-info {
+    display: none !important;
+  }
+  .sidebar.slim .profile-avatar {
+    margin: 0 auto !important;
+  }
+
+  /* Flex Direction Swapping for Sidebar Alignments */
+  .app.align-left {
+    flex-direction: row-reverse !important;
+  }
+  .app.align-right {
+    flex-direction: row !important;
+  }

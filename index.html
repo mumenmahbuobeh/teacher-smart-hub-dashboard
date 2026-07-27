@@ -228,7 +228,7 @@
       </div>
 
       <div class="grid-2">
-        <div class="card panel">
+        <div class="card panel" id="heatmapPanel">
           <div class="panel-head">
             <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
               <div><div data-i18n="heatTitle">خريطة الحضور الحرارية</div><div class="panel-sub" data-i18n="heatSub">آخر 14 أسبوعاً</div></div>
@@ -247,7 +247,7 @@
           <div style="height:190px; margin-top:18px;"><canvas id="gradeChart" role="img" aria-label="خط بياني يوضح متوسط الدرجات خلال الأسابيع"></canvas></div>
         </div>
 
-        <div class="card panel">
+        <div class="card panel" id="classesPanel">
           <div class="panel-head">
             <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
               <div><div data-i18n="classesTitle">حصص اليوم</div><div class="panel-sub" data-i18n="classesSub">الأحد، 26 يوليو</div></div>
@@ -265,7 +265,7 @@
       </div>
 
       <div class="grid-2">
-        <div class="card panel">
+        <div class="card panel" id="aiSuggestionsPanel">
           <div class="panel-head">
             <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></span>
               <div><div data-i18n="aiTitle">اقتراحات المساعد الذكي</div><div class="panel-sub" data-i18n="aiSub">مبنية على أداء الطلاب هذا الأسبوع</div></div>
@@ -273,7 +273,7 @@
           </div>
           <div class="ai-card">
             <div class="ai-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></div>
-            <div class="ai-text" data-i18n="aiTip1"><b>3 طلاب</b> في صف 9-B تراجع أداؤهم في الرياضيات — يقترح إنشاء ورقة تقوية مخصصة.</div>
+            <div class="ai-text" data-i18n="aiTip1"><b>3 الطلاب</b> في صف 9-B تراجع أداؤهم في الرياضيات — يقترح إنشاء ورقة تقوية مخصصة.</div>
           </div>
           <div class="ai-card">
             <div class="ai-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></div>
@@ -285,7 +285,7 @@
           </div>
         </div>
 
-        <div class="card panel">
+        <div class="card panel" id="activityTimelinePanel">
           <div class="panel-head">
             <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
               <div><div data-i18n="activityTitle">سجل النشاط الأخير</div></div>
@@ -970,6 +970,55 @@
             <button class="color-preset-btn" onclick="setSchoolTheme('#14532d', '#22c55e', '#052e16')" style="background:#14532d; width:34px; height:34px; border:2px solid transparent; border-radius:50%; cursor:pointer; box-shadow:var(--shadow-sm);" title="الأخضر التعليمي"></button>
             <button class="color-preset-btn" onclick="setSchoolTheme('#7c2d12', '#ea580c', '#431407')" style="background:#7c2d12; width:34px; height:34px; border:2px solid transparent; border-radius:50%; cursor:pointer; box-shadow:var(--shadow-sm);" title="البرتقالي الدافئ"></button>
             <button class="color-preset-btn" onclick="setSchoolTheme('#581c87', '#a855f7', '#3b0764')" style="background:#581c87; width:34px; height:34px; border:2px solid transparent; border-radius:50%; cursor:pointer; box-shadow:var(--shadow-sm);" title="البنفسجي الإبداعي"></button>
+          </div>
+        </div>
+
+        <div class="card panel">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M21 12H3M9 3v18"/></svg></span>
+              <div>تخصيص تخطيط المنصة والجانبية</div>
+            </div>
+          </div>
+          <p style="font-size:12.5px; color:var(--text-2); margin-bottom:14px;">حدد الألواح التي تود إظهارها في لوحة التحكم وتفضيلات الشريط الجانبي:</p>
+          
+          <div class="form-group" style="margin-bottom:16px;">
+            <label style="font-weight:700; margin-bottom:8px; display:block;">إظهار وإخفاء ألواح التحكم الرئيسية:</label>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+                <input type="checkbox" id="toggleHeatmap" checked onchange="toggleDashboardPanel('heatmapPanel', this.checked)" />
+                <span>خريطة الحضور الحرارية والدرجات</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+                <input type="checkbox" id="toggleClasses" checked onchange="toggleDashboardPanel('classesPanel', this.checked)" />
+                <span>حصص اليوم والاختبارات القادمة</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+                <input type="checkbox" id="toggleAISuggestions" checked onchange="toggleDashboardPanel('aiSuggestionsPanel', this.checked)" />
+                <span>اقتراحات المساعد الذكي AI</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+                <input type="checkbox" id="toggleActivity" checked onchange="toggleDashboardPanel('activityTimelinePanel', this.checked)" />
+                <span>سجل النشاط الأخير للمنصة</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="grid-2" style="grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:0;">
+            <div class="form-group">
+              <label for="sidebarAlignSelect" style="font-weight:700;">موقع القائمة الجانبية</label>
+              <select id="sidebarAlignSelect" onchange="updateSidebarAlignment(this.value)" class="form-control" style="padding:8px 12px; font-size:12.5px;">
+                <option value="right">اليمين (الافتراضي للعربية)</option>
+                <option value="left">اليسار (النمط الغربي)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="sidebarStyleSelect" style="font-weight:700;">حجم ونمط القائمة</label>
+              <select id="sidebarStyleSelect" onchange="updateSidebarStyle(this.value)" class="form-control" style="padding:8px 12px; font-size:12.5px;">
+                <option value="normal">عريض (أيقونات + أسماء)</option>
+                <option value="slim">نحيف / مضغوط (أيقونات فقط)</option>
+              </select>
+            </div>
           </div>
         </div>
 

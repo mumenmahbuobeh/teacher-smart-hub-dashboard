@@ -1302,10 +1302,25 @@ updateDynamicClassesCounter();
 
 // ---------- 11. Dynamic Current Date Logic ----------
 function updateCurrentDate() {
-  const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
   const today = new Date();
-  const locale = currentLang === 'ar' ? 'ar-EG' : 'en-US';
-  const dateString = today.toLocaleDateString(locale, options);
+  
+  const weekdaysAr = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+  const weekdaysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  
+  const monthsAr = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+  const monthsEn = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  
+  const dayName = currentLang === 'ar' ? weekdaysAr[today.getDay()] : weekdaysEn[today.getDay()];
+  const monthName = currentLang === 'ar' ? monthsAr[today.getMonth()] : monthsEn[today.getMonth()];
+  const dayNum = today.getDate();
+  const yearNum = today.getFullYear();
+  
+  let dateString = '';
+  if (currentLang === 'ar') {
+    dateString = `${dayName}، ${dayNum} ${monthName} ${yearNum}`;
+  } else {
+    dateString = `${dayName}, ${dayNum} ${monthName} ${yearNum}`;
+  }
   
   // Update in hero
   const heroEyebrow = document.querySelector('.hero-eyebrow span[data-i18n="heroEyebrow"]');
@@ -1315,18 +1330,17 @@ function updateCurrentDate() {
   
   // Update day number & month name in hero date badge
   const heroDay = document.getElementById('heroDay');
-  if (heroDay) heroDay.textContent = today.getDate();
+  if (heroDay) heroDay.textContent = dayNum;
   
   const heroMonth = document.getElementById('heroMonth');
   if (heroMonth) {
-    const monthOptions = { month: 'long', year: 'numeric' };
-    heroMonth.textContent = today.toLocaleDateString(locale, monthOptions);
+    heroMonth.textContent = `${monthName} ${yearNum}`;
   }
   
   // Update calendar headers or attend labels
   const attendLabel = document.getElementById('attendDateLabel');
   if (attendLabel) {
-    attendLabel.textContent = `${currentLang === 'ar' ? 'اليوم:' : 'Today:'} ${today.toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'long' })}`;
+    attendLabel.textContent = `${currentLang === 'ar' ? 'اليوم:' : 'Today:'} ${dayName} ${dayNum} ${monthName}`;
   }
 }
 
@@ -1347,14 +1361,14 @@ async function fetchLiveWeather() {
     tempSpan.textContent = `الدوحة، ${temp}°م`;
     if (currentLang !== 'ar') tempSpan.textContent = `Doha, ${temp}°C`;
     
-    // Update icon based on WMO Weather interpretation codes
-    let svgIcon = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>`; // sunny default
+    // Update icon with animated weather SVG classes
+    let svgIcon = `<svg class="spin-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>`; // sunny default
     if (code >= 1 && code <= 3) {
       // partly cloudy
-      svgIcon = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`;
+      svgIcon = `<svg class="bob-cloud" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`;
     } else if (code >= 51) {
       // rainy / storm
-      svgIcon = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25M8 16v6M12 16v6M16 16v6"/></svg>`;
+      svgIcon = `<svg class="bob-cloud" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25M8 16v6M12 16v6M16 16v6"/></svg>`;
     }
     iconSpan.innerHTML = svgIcon;
   } catch (err) {
@@ -1384,7 +1398,68 @@ function loadSchoolTheme() {
   }
 }
 
+// ---------- 14. Layout Visibility and Positioning Customizer ----------
+function toggleDashboardPanel(id, visible) {
+  const panel = document.getElementById(id);
+  if (panel) {
+    panel.style.display = visible ? 'block' : 'none';
+  }
+  localStorage.setItem(`layout_visible_${id}`, visible);
+}
+
+function updateSidebarAlignment(align) {
+  const appContainer = document.getElementById('appContainer');
+  if (appContainer) {
+    if (align === 'left') {
+      appContainer.classList.remove('align-right');
+      appContainer.classList.add('align-left');
+    } else {
+      appContainer.classList.remove('align-left');
+      appContainer.classList.add('align-right');
+    }
+  }
+  localStorage.setItem('sidebarAlignment', align);
+  const select = document.getElementById('sidebarAlignSelect');
+  if (select) select.value = align;
+}
+
+function updateSidebarStyle(style) {
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar) {
+    if (style === 'slim') {
+      sidebar.classList.add('slim');
+    } else {
+      sidebar.classList.remove('slim');
+    }
+  }
+  localStorage.setItem('sidebarStyle', style);
+  const select = document.getElementById('sidebarStyleSelect');
+  if (select) select.value = style;
+}
+
+function loadLayoutPreferences() {
+  const panels = ['heatmapPanel', 'classesPanel', 'aiSuggestionsPanel', 'activityTimelinePanel'];
+  const toggles = ['toggleHeatmap', 'toggleClasses', 'toggleAISuggestions', 'toggleActivity'];
+  
+  panels.forEach((id, idx) => {
+    const saved = localStorage.getItem(`layout_visible_${id}`);
+    const toggleEl = document.getElementById(toggles[idx]);
+    if (saved !== null) {
+      const visible = saved === 'true';
+      toggleDashboardPanel(id, visible);
+      if (toggleEl) toggleEl.checked = visible;
+    }
+  });
+
+  const savedAlign = localStorage.getItem('sidebarAlignment') || 'right';
+  updateSidebarAlignment(savedAlign);
+
+  const savedStyle = localStorage.getItem('sidebarStyle') || 'normal';
+  updateSidebarStyle(savedStyle);
+}
+
 // Load and run new dynamic services
 updateCurrentDate();
 fetchLiveWeather();
 loadSchoolTheme();
+loadLayoutPreferences();
