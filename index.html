@@ -1004,95 +1004,130 @@
       <div id="quizTab" class="tab-content">
         <div class="materials-header">
           <h2>مولّد الأسئلة والاختبارات الذكي</h2>
-          <p>أنشئ اختبارات علوم مخصصة لطلابك في ثوانٍ</p>
+          <p>أسرع صفحة لتوليد أسئلة مخصصة من الملف أو الدرس اليدوي مع معاينة فورية ودليل إجابة جاهز.</p>
         </div>
 
-        <div class="grid-2">
-          <div class="card panel">
+        <div class="grid-2 quiz-generator-grid">
+          <div class="card panel quiz-preview-panel">
+            <div class="panel-head" style="flex-wrap: wrap; gap: 12px; align-items: flex-start;">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M3 6h18M3 12h18M3 18h18" />
+                  </svg></span>
+                <div>معاينة ورقة الاختبار</div>
+              </div>
+              <div class="quiz-export-toolbar">
+                <button type="button" class="btn-primary btn-secondary" id="quizTeacherModeBtn" onclick="toggleTeacherMode()">عرض واجهة المعلم</button>
+                <button type="button" class="btn-primary" id="quizExportPdfBtn" onclick="exportQuizToPDF()" disabled>🖨️ تصدير PDF</button>
+                <button type="button" class="btn-primary" id="quizExportWordBtn" onclick="exportQuizToWord()" disabled>📝 تصدير Word</button>
+              </div>
+            </div>
+
+            <div id="quizStatusBanner" class="quiz-status-card">
+              <strong>جاهز للتوليد</strong> ارفع ملفاً أو أكمل بيانات الدرس ثم اضغط على زر التوليد.
+            </div>
+
+            <div id="quizPreviewOverview" class="quiz-overview-grid">
+              <div><strong id="quizPreviewSource">الدرس اليدوي</strong><br /><small id="quizPreviewSourceHint">سيساعد الملف المرفوع في توجيه الأسئلة</small></div>
+              <div><strong id="quizPreviewTime">0 دقيقة</strong><br /><small>زمن الحل المتوقع</small></div>
+              <div><strong id="quizPreviewDifficulty">متوسط</strong><br /><small>مستوى الصعوبة</small></div>
+              <div><strong id="quizPreviewBloom">فهم</strong><br /><small>تصنيف بلوم</small></div>
+            </div>
+
+            <div id="quizOutputPlaceholder" class="quiz-output-empty">
+              ابدأ بالتوليد لرؤية العرض المباشر لورقة الاختبار هنا.
+            </div>
+
+            <div id="quizOutputCard" class="quiz-output-card" style="display:none;"></div>
+
+            <div id="quizQuestionsPanel" class="quiz-output-card" style="display:none;">
+              <div class="panel-head">
+                <div class="panel-title">
+                  <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M5 7h14M5 12h14M5 17h8" />
+                    </svg></span>
+                  <div>الأسئلة المولدة</div>
+                </div>
+              </div>
+              <ol id="quizQuestionsList" class="quiz-questions-list"></ol>
+            </div>
+
+            <div id="quizAnswerKeyPanel" class="quiz-output-card" style="display:none;">
+              <div class="panel-head">
+                <div class="panel-title">
+                  <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M5 12l5 5L20 7" />
+                    </svg></span>
+                  <div>دليل الإجابة</div>
+                </div>
+              </div>
+              <div id="quizAnswerKeyList" class="quiz-answer-key"></div>
+            </div>
+          </div>
+
+          <div class="card panel quiz-settings-panel">
             <div class="panel-head">
               <div class="panel-title">
                 <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                    <path d="M12 8v8m-4-4h8" />
+                    <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" />
                   </svg></span>
-                <div>إعدادات الاختبار</div>
+                <div>إعدادات ورقة الاختبار</div>
               </div>
             </div>
-            <form class="upload-form" id="quizGeneratorForm" onsubmit="event.preventDefault(); generateQuiz();"
-              style="text-align: right; direction: rtl;">
+
+            <form class="upload-form" id="quizGeneratorForm" onsubmit="event.preventDefault(); generateQuiz();">
               <div class="form-group">
-                <label for="quizSourceFile">اختر المقرر الدراسي المرفوع</label>
-                <select id="quizSourceFile" class="form-control" onchange="handleQuizSourceChange(this.value)">
-                  <option value="default">— اختر من المستندات المرفوعة (توليد ذكي) —</option>
-                  <option value="cell_structure.pdf">مستند: تركيب الخلية ووظائفها.pdf</option>
-                  <option value="periodic_table.docx">ورقة عمل: الجدول الدوري والعناصر.docx</option>
-                  <option value="motion_laws.pdf">ملخص: قوانين الحركة والسرعة.pdf</option>
-                </select>
+                <label for="quizFileInput">تحميل ملف المقرر الدراسي</label>
+                <div class="file-upload-box" onclick="document.getElementById('quizFileInput').click()" ondrop="handleQuizFileDrop(event)" ondragover="event.preventDefault()">
+                  <div>
+                    <strong id="quizFileLabel">اسحب الملف هنا أو انقر للتصفح</strong>
+                    <p id="quizFileHint">PDF، DOCX، TXT</p>
+                  </div>
+                  <span class="file-upload-action">رفع</span>
+                </div>
+                <input type="file" id="quizFileInput" accept=".pdf,.docx,.txt" style="display:none;" onchange="handleQuizFileInput(event)" />
+                <div id="quizFileMeta" class="file-meta" style="display:none;">
+                  <span id="quizFileName"></span>
+                  <button type="button" class="action-btn" onclick="clearQuizFile()" style="padding:4px 10px;">مسح</button>
+                </div>
               </div>
 
-              <div class="form-grid-columns"
-                style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+              <div class="form-grid-columns">
                 <div class="form-group">
                   <label for="quizSubject">المادة</label>
                   <input type="text" id="quizSubject" class="form-control" value="العلوم العامة" />
                 </div>
                 <div class="form-group">
+                  <label for="quizLessonName">عنوان الدرس</label>
+                  <input type="text" id="quizLessonName" class="form-control"
+                    placeholder="مثال: تركيب الخلية ووظائفها" />
+                </div>
+              </div>
+
+              <div class="form-grid-columns">
+                <div class="form-group">
                   <label for="quizGrade">الصف الدراسي</label>
                   <select id="quizGrade" class="form-control">
-                    <option value="9">الصف التاسع</option>
-                    <option value="10">الصف العاشر</option>
                     <option value="7">الصف السابع</option>
                     <option value="8">الصف الثامن</option>
+                    <option value="9" selected>الصف التاسع</option>
+                    <option value="10">الصف العاشر</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="quizClass">الشعبة</label>
+                  <select id="quizClass" class="form-control">
+                    <option value="9-A">9-A</option>
+                    <option value="9-B">9-B</option>
+                    <option value="10-A">10-A</option>
+                    <option value="10-B">10-B</option>
                   </select>
                 </div>
               </div>
 
-              <div class="form-grid-columns"
-                style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+              <div class="form-grid-columns">
                 <div class="form-group">
-                  <label for="quizTopic">حقيبة الاختبار العامة</label>
-                  <select id="quizTopic" class="form-control"
-                    onchange="document.getElementById('quizLessonName').value = this.options[this.selectedIndex].text">
-                    <option value="cell">الخلية الحية ووظائفها</option>
-                    <option value="atoms">الذرة والعناصر الكيميائية</option>
-                    <option value="reactions">التفاعلات الكيميائية</option>
-                    <option value="motion">قوانين الحركة والسرعة</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="quizLessonName">اسم الدرس بالتحديد</label>
-                  <input type="text" id="quizLessonName" class="form-control"
-                    placeholder="مثال: الانقسام الخلوي أو الروابط الكيميائية" value="الخلية الحية ووظائفها" />
-                </div>
-              </div>
-
-              <div class="form-grid-columns"
-                style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-                <div class="form-group">
-                  <label for="quizLevel">مستوى الصعوبة</label>
-                  <select id="quizLevel" class="form-control">
-                    <option value="easy">سهل / Easy</option>
-                    <option value="medium" selected>متوسط / Medium</option>
-                    <option value="hard">صعب / Hard</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="quizBloomLevel">تصنيف بلوم المستهدف (Bloom's)</label>
-                  <select id="quizBloomLevel" class="form-control">
-                    <option value="تذكر">تذكر (Remembering)</option>
-                    <option value="فهم" selected>فهم (Understanding)</option>
-                    <option value="تطبيق">تطبيق (Applying)</option>
-                    <option value="تحليل">تحليل (Analyzing)</option>
-                    <option value="تقييم">تقييم (Evaluating)</option>
-                    <option value="ابتكار">ابتكار (Creating)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-grid-columns"
-                style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-                <div class="form-group">
-                  <label for="quizCount">عدد الأسئلة المطلوب</label>
+                  <label for="quizCount">عدد الأسئلة</label>
                   <select id="quizCount" class="form-control">
                     <option value="5">5 أسئلة</option>
                     <option value="10" selected>10 أسئلة</option>
@@ -1103,118 +1138,82 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="quizLanguage">لغة ورقة الاختبار</label>
+                  <label for="quizLevel">الصعوبة</label>
+                  <select id="quizLevel" class="form-control">
+                    <option value="easy">سهل</option>
+                    <option value="medium" selected>متوسط</option>
+                    <option value="hard">صعب</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-grid-columns">
+                <div class="form-group">
+                  <label for="quizBloomLevel">تصنيف بلوم</label>
+                  <select id="quizBloomLevel" class="form-control">
+                    <option value="تذكر">تذكر</option>
+                    <option value="فهم" selected>فهم</option>
+                    <option value="تطبيق">تطبيق</option>
+                    <option value="تحليل">تحليل</option>
+                    <option value="تقييم">تقييم</option>
+                    <option value="ابتكار">ابتكار</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="quizLanguage">لغة الاختبار</label>
                   <select id="quizLanguage" class="form-control">
-                    <option value="ar">اللغة العربية</option>
-                    <option value="en">English Language</option>
+                    <option value="ar" selected>العربية</option>
+                    <option value="en">English</option>
                   </select>
                 </div>
               </div>
 
               <div class="form-group">
-                <label style="font-weight:700; margin-bottom:8px; display:block;">أنواع الأسئلة المطلوب توليدها</label>
-                <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:8px;">
-                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                <label style="font-weight:700; margin-bottom:8px; display:block;">أنواع الأسئلة</label>
+                <div class="quiz-types-grid">
+                  <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
                     <input type="checkbox" id="qTypeMcq" checked />
-                    <span>اختيار من متعدد (MCQ)</span>
+                    <span>اختيار من متعدد</span>
                   </label>
-                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                  <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
                     <input type="checkbox" id="qTypeTF" checked />
-                    <span>صح أم خطأ (T / F)</span>
+                    <span>صح أم خطأ</span>
                   </label>
-                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                  <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
                     <input type="checkbox" id="qTypeBlank" checked />
-                    <span>إكمال الفراغ (Fill in the Blank)</span>
+                    <span>إكمال الفراغ</span>
                   </label>
-                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                  <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
                     <input type="checkbox" id="qTypeMatch" checked />
-                    <span>سؤال المطابقة (Matching)</span>
+                    <span>مطابقة</span>
                   </label>
-                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                  <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
                     <input type="checkbox" id="qTypeShort" checked />
-                    <span>إجابة قصيرة (Short Answer)</span>
+                    <span>إجابة قصيرة</span>
                   </label>
-                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                  <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
                     <input type="checkbox" id="qTypeEssay" />
-                    <span>سؤال مقالي (Essay)</span>
+                    <span>مقالي</span>
                   </label>
-                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                  <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
                     <input type="checkbox" id="qTypeOrder" />
-                    <span>سؤال الترتيب (Ordering)</span>
+                    <span>ترتيب</span>
                   </label>
-                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                  <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
                     <input type="checkbox" id="qTypeClassify" />
-                    <span>سؤال التصنيف (Classification)</span>
+                    <span>تصنيف</span>
                   </label>
                 </div>
               </div>
 
-              <button type="submit" class="btn-primary"
-                style="background: linear-gradient(145deg, var(--gold), var(--gold-light)); color:#2b2205; font-weight: 800; width: 100%;">
+              <button type="submit" id="quizGenerateBtn" class="btn-primary" style="width:100%; font-weight:800;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                   style="color: #2b2205; margin-inline-end: 6px;">
-                  <path
-                    d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" />
+                  <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" />
                 </svg>
-                <span>توليد ورقة الاختبار الذكية ⚡</span>
+                توليد ورقة الاختبار الذكية ⚡
               </button>
             </form>
-          </div>
-
-          <div class="card panel" style="text-align: right; direction: rtl;">
-            <div class="panel-head" style="flex-wrap: wrap; gap: 8px;">
-              <div class="panel-title">
-                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <path d="M14 2v6h6" />
-                  </svg></span>
-                <div>معاينة ورقة الاختبار والمخرجات</div>
-              </div>
-
-              <!-- Quick Export & Options Toolbar -->
-              <div style="display: none; gap: 6px; flex-wrap: wrap; align-items: center;" id="quizActionsToolbar">
-                <button onclick="shuffleQuizQuestions()" class="action-btn"
-                  style="padding:4px 10px; font-size:11px; width:auto; background:var(--bg-alt); color:var(--text-1);">🔀
-                  خلط الأسئلة</button>
-                <button onclick="shuffleQuizAnswers()" class="action-btn"
-                  style="padding:4px 10px; font-size:11px; width:auto; background:var(--bg-alt); color:var(--text-1);">🔄
-                  خلط الإجابات</button>
-                <select onchange="createQuizVersion(this.value)" class="form-control"
-                  style="width:100px; padding:2px 8px; font-size:11px; height:auto; display:inline-block;"
-                  id="quizVersionSelect">
-                  <option value="A">نموذج A</option>
-                  <option value="B">نموذج B</option>
-                  <option value="C">نموذج C</option>
-                </select>
-                <button onclick="saveQuizToBank()" class="action-btn"
-                  style="padding:4px 10px; font-size:11px; width:auto; background:rgba(217,119,6,0.1); color:var(--gold); border:1px solid var(--gold);">💾
-                  حفظ لبنك الأسئلة</button>
-                <button onclick="exportQuizToWord()" class="action-btn"
-                  style="padding:4px 10px; font-size:11px; width:auto; background:var(--info); color:#fff;">📝 تصدير
-                  Word</button>
-                <button onclick="window.print()" class="action-btn"
-                  style="padding:4px 10px; font-size:11px; width:auto; background:var(--success); color:#fff;">🖨️ طباعة
-                  / PDF</button>
-              </div>
-            </div>
-
-            <div id="quizOutputPlaceholder"
-              style="text-align: center; padding: 40px 20px; color: var(--text-3); font-size: 13.5px; border: 1px dashed var(--border); border-radius: var(--radius-md);">
-              قم بتعبئة الخيارات والنقر على توليد لمعاينة ورقة الاختبار هنا
-            </div>
-
-            <!-- Quick stats and estimated solving time -->
-            <div id="quizMetadataPanel"
-              style="display: none; padding: 12px; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--border); font-size: 12px; gap: 15px; justify-content: space-around; flex-wrap: wrap; direction: rtl;">
-              <div>⏱️ زمن الحل المقدر: <strong id="quizEstTime">0 دقيقة</strong></div>
-              <div>📊 توزيع الصعوبة: <strong id="quizDiffDist">سهل: 0%، متوسط: 0%، صعب: 0%</strong></div>
-              <div>🏷️ تصنيف بلوم: <strong id="quizBloomTag">تذكر</strong></div>
-            </div>
-
-            <div id="quizOutputCard" class="quiz-output-card"
-              style="display: none; padding: 0; background:none; border:none; box-shadow:none;">
-              <!-- Quiz sheet template -->
-            </div>
           </div>
         </div>
       </div>

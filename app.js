@@ -212,6 +212,7 @@ document.querySelectorAll('.sidebar .nav-item').forEach(item => {
       renderQuestionBank();
     } else if (tab === 'quiz') {
       document.getElementById('quizTab').classList.add('active');
+      initQuizPage();
     } else if (tab === 'plan') {
       document.getElementById('planTab').classList.add('active');
     } else if (tab === 'slides') {
@@ -2314,484 +2315,613 @@ function updateSidebarStyle(style) {
   localStorage.setItem('sidebarStyle', style);
   const select = document.getElementById('sidebarStyleSelect');
   if (select) select.value = style;
-}let activeGeneratedQuiz = null;
+}
+let activeGeneratedQuiz = null;
+let quizPageInitialized = false;
+const quizGeneratorState = {
+  sourceName: '',
+  sourceType: '',
+  sourceText: '',
+  loading: false,
+  lastError: '',
+  lastGenerateConfig: null,
+  teacherMode: false
+};
+const quizHelperScripts = {
+  jszip: 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
+  pdfjs: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.8.162/pdf.min.js'
+};
 
-function generateQuiz() {
-  const source = document.getElementById('quizSourceFile').value;
-  const topic = document.getElementById('quizTopic').value;
-  const count = parseInt(document.getElementById('quizCount').value) || 5;
-  const grade = document.getElementById('quizGrade').value;
-  const subject = document.getElementById('quizSubject').value;
-  const lessonName = document.getElementById('quizLessonName').value.trim();
-  const difficulty = document.getElementById('quizLevel').value;
-  const bloomLevel = document.getElementById('quizBloomLevel').value;
-  const language = document.getElementById('quizLanguage').value;
-  
-  const selectedTypes = [];
-  if (document.getElementById('qTypeMcq').checked) selectedTypes.push('mcq');
-  if (document.getElementById('qTypeTF').checked) selectedTypes.push('tf');
-  if (document.getElementById('qTypeBlank').checked) selectedTypes.push('blank');
-  if (document.getElementById('qTypeMatch').checked) selectedTypes.push('match');
-  if (document.getElementById('qTypeShort').checked) selectedTypes.push('short');
-  if (document.getElementById('qTypeEssay').checked) selectedTypes.push('essay');
-  if (document.getElementById('qTypeOrder').checked) selectedTypes.push('order');
-  if (document.getElementById('qTypeClassify').checked) selectedTypes.push('classify');
-  
-  if (selectedTypes.length === 0) {
-    alert(currentLang === 'ar' ? 'يرجى اختيار نوع واحد على الأقل من الأسئلة!' : 'Please select at least one question type!');
-    return;
-  }
-  
+
+function renderQuizSheet() {
   const placeholder = document.getElementById('quizOutputPlaceholder');
   const outputCard = document.getElementById('quizOutputCard');
-  const toolbar = document.getElementById('quizActionsToolbar');
-  const metaPanel = document.getElementById('quizMetadataPanel');
-  
+  const questionsPanel = document.getElementById('quizQuestionsPanel');
+  const answerPanel = document.getElementById('quizAnswerKeyPanel');
+  const previewSource = document.getElementById('quizPreviewSource');
+  const previewHint = document.getElementById('quizPreviewSourceHint');
+  const previewTime = document.getElementById('quizPreviewTime');
+  const previewDifficulty = document.getElementById('quizPreviewDifficulty');
+  const previewBloom = document.getElementById('quizPreviewBloom');
+  const exportPdfBtn = document.getElementById('quizExportPdfBtn');
+  const exportWordBtn = document.getElementById('quizExportWordBtn');
+  const publishButtons = [exportPdfBtn, exportWordBtn];
+
+  if (!activeGeneratedQuiz || !activeGeneratedQuiz.questions || activeGeneratedQuiz.questions.length === 0) {
+    if (placeholder) {
+      placeholder.style.display = 'block';
+      placeholder.textContent = 'ابدأ بالتوليد لرؤية العرض المباشر لورقة الاختبار هنا.';
+    }
+    if (outputCard) outputCard.style.display = 'none';
+    if (questionsPanel) questionsPanel.style.display = 'none';
+    if (answerPanel) answerPanel.style.display = 'none';
+    publishButtons.forEach(btn => { if (btn) btn.disabled = true; });
+    return;
+  }
+
+  const qList = activeGeneratedQuiz.questions;
+  const totalMinutes = Math.round(qList.reduce((minutes, q) => {
+    if (q.type === 'mcq') return minutes + 1.5;
+    if (q.type === 'tf') return minutes + 1;
+    if (q.type === 'blank') return minutes + 1.5;
+    if (q.type === 'match') return minutes + 3;
+    if (q.type === 'short') return minutes + 2.5;
+    if (q.type === 'essay') return minutes + 5;
+    if (q.type === 'order') return minutes + 3;
+    if (q.type === 'classify') return minutes + 3.5;
+    return minutes + 2;
+  }, 0));
+
+  const difficultyCounts = qList.reduce((acc, q) => {
+    const diff = (q.difficulty || activeGeneratedQuiz.difficulty || 'medium').toLowerCase();
+    if (diff === 'easy') acc.easy++;
+    else if (diff === 'hard') acc.hard++;
+    else acc.medium++;
+    return acc;
+  }, { easy: 0, medium: 0, hard: 0 });
+
+  const typeLabel = activeGeneratedQuiz.sourceName ? activeGeneratedQuiz.sourceName : `درس ${activeGeneratedQuiz.lessonName || activeGeneratedQuiz.subject}`;
+  if (previewSource) previewSource.textContent = typeLabel;
+  if (previewHint) previewHint.textContent = activeGeneratedQuiz.sourceName ? `تم استخدام المحتوى من ${activeGeneratedQuiz.sourceName}` : 'سيتم استخدام عنوان الدرس لتوليد الأسئلة';
+  if (previewTime) previewTime.textContent = `${totalMinutes} دقيقة`;
+  if (previewDifficulty) previewDifficulty.textContent = activeGeneratedQuiz.difficulty || 'متوسط';
+  if (previewBloom) previewBloom.textContent = activeGeneratedQuiz.bloomLevel || 'فهم';
+
   if (placeholder) placeholder.style.display = 'none';
   if (outputCard) outputCard.style.display = 'block';
-  if (toolbar) toolbar.style.display = 'flex';
-  if (metaPanel) metaPanel.style.display = 'flex';
-  
-  outputCard.innerHTML = `
-    <div style="text-align:center; padding:50px;">
-      <svg class="spin-sun" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2">
-        <circle cx="12" cy="12" r="5"/>
-        <path d="M12 2v2m0 16v2m-8-8H2m16 0h2"/>
-      </svg>
-      <p style="margin-top:16px; font-weight:700; color:var(--text-1); font-size:14px;">جاري توليد ورقة أسئلة فريدة ورسومات بيانية مباشرة عبر Gemini API...</p>
+  if (questionsPanel) questionsPanel.style.display = 'block';
+  if (answerPanel) answerPanel.style.display = 'block';
+  publishButtons.forEach(btn => { if (btn) btn.disabled = false; });
+
+  const sheetHtml = `
+    <div class="quiz-print-area" style="border:1px solid var(--border); border-radius:18px; padding:22px; background:var(--surface);">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px; margin-bottom:24px; align-items:flex-start;">
+        <div>
+          <h3 style="margin:0 0 6px 0; font-size:18px;">ورقة اختبار: ${activeGeneratedQuiz.subject}</h3>
+          <div style="font-size:13px; color:var(--text-2);">الدرس: ${activeGeneratedQuiz.lessonName || 'غير محدد'}</div>
+        </div>
+        <div style="text-align:left; min-width:160px; color:var(--text-3); font-size:13px; line-height:1.6;">
+          <div>الصف: ${activeGeneratedQuiz.grade}</div>
+          <div>الشعبة: ${activeGeneratedQuiz.className || 'غير محددة'}</div>
+          <div>اللغة: ${activeGeneratedQuiz.language === 'en' ? 'English' : 'العربية'}</div>
+        </div>
+      </div>
+      <ol style="counter-reset:question; padding-inline-start:18px; color:var(--text-1); line-height:1.75;">
+        ${qList.map((q, idx) => {
+          let answerBlock = '';
+          if (q.type === 'mcq' && q.options) {
+            answerBlock = `<div style="margin-top:10px; display:grid; gap:10px;">${q.options.map((option, oIdx) => `<div style="padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--bg-alt);">${String.fromCharCode(65 + oIdx)}. ${option}</div>`).join('')}</div>`;
+          } else if (q.type === 'tf') {
+            answerBlock = `<div style="margin-top:10px; display:flex; gap:10px;">${q.options.map(opt => `<span style="padding:10px 14px;border:1px solid var(--border);border-radius:12px;background:var(--bg-alt);">${opt}</span>`).join('')}</div>`;
+          }
+          return `
+            <li style="margin-bottom:20px;">
+              <div style="font-weight:700; margin-bottom:10px;">${q.question}</div>
+              ${answerBlock}
+            </li>
+          `;
+        }).join('')}
+      </ol>
     </div>
   `;
-  
-  const apiKey = localStorage.getItem('geminiApiKey');
-  if (apiKey) {
-    const prompt = `أنشئ ورقة اختبار لمادة ${subject} باللغة ${language === 'ar' ? 'العربية' : 'الإنجليزية'} لمدرسة معيذر.
-المقرر المرفوع (المصدر): ${source === 'default' ? 'المنهاج العام' : source}
-الموضوع العام: ${topic}
-اسم الدرس بالتحديد: ${lessonName}
-الصف: ${grade}
-مستوى الصعوبة المطلوبة: ${difficulty}
-تصنيف بلوم المستهدف: ${bloomLevel}
-عدد الأسئلة المطلوبة: ${count}
-الأنواع المتاحة للأسئلة: ${selectedTypes.join(', ')}
-المطلب إنشاء أسئلة فريدة وجديدة ومنوعة في كل مرة (ليست مكررة).
-يجب أن ترجع لي مصفوفة JSON فقط بالشكل التالي، بدون علامات ماركداون وبدون نصوص قبلها أو بعدها:
-[
-  {
-    "type": "mcq",
-    "question": "نص السؤال الاختياري",
-    "options": ["ألف", "باء", "جيم", "دال"],
-    "correct": 0,
-    "explanation": "لماذا هذا الخيار صحيح؟",
-    "svg": "<svg viewBox='0 0 100 80' width='100' height='80'><circle cx='50' cy='40' r='10' fill='gold'/></svg>",
-    "difficulty": "medium",
-    "bloomLevel": "فهم"
-  },
-  {
-    "type": "tf",
-    "question": "صح أم خطأ: نص السؤال هنا",
-    "options": ["صح", "خطأ"],
-    "correct": 0,
-    "explanation": "التوضيح",
-    "difficulty": "easy",
-    "bloomLevel": "تذكر"
-  },
-  {
-    "type": "blank",
-    "question": "نص السؤال المكتمل ووضع الكلمة الناقصة بين قوسين مربعين مثل [الكلمة]",
-    "correctAnswer": "الكلمة",
-    "explanation": "التوضيح",
-    "difficulty": "easy",
-    "bloomLevel": "تذكر"
-  },
-  {
-    "type": "match",
-    "question": "نص سؤال المطابقة الأساسي",
-    "leftItems": ["مادة 1", "مادة 2"],
-    "rightItems": ["تعريف 1", "تعريف 2"],
-    "correctMatch": {"مادة 1": "تعريف 1", "مادة 2": "تعريف 2"},
-    "explanation": "التوضيح",
-    "difficulty": "medium",
-    "bloomLevel": "فهم"
-  },
-  {
-    "type": "short",
-    "question": "نص السؤال ذو الإجابة القصيرة المباشرة",
-    "correctAnswer": "الإجابة النموذجية القصيرة",
-    "explanation": "التوضيح",
-    "difficulty": "medium",
-    "bloomLevel": "تطبيق"
-  },
-  {
-    "type": "essay",
-    "question": "نص السؤال المقالي المفتوح",
-    "correctAnswer": "خطوط الإرشاد النموذجية للتصحيح والتقييم للمقال",
-    "explanation": "التوضيح",
-    "difficulty": "hard",
-    "bloomLevel": "تقييم"
-  },
-  {
-    "type": "order",
-    "question": "نص سؤال الترتيب",
-    "items": ["عنصر 1", "عنصر 2"],
-    "correctOrder": ["عنصر 1", "عنصر 2"],
-    "explanation": "التوضيح",
-    "difficulty": "medium",
-    "bloomLevel": "تحليل"
-  },
-  {
-    "type": "classify",
-    "question": "نص سؤال التصنيف",
-    "items": ["عنصر أ", "عنصر ب"],
-    "categories": ["تصنيف 1", "تصنيف 2"],
-    "correctClassification": {"عنصر أ": "تصنيف 1", "عنصر ب": "تصنيف 2"},
-    "explanation": "التوضيح",
-    "difficulty": "medium",
-    "bloomLevel": "تحليل"
-  }
-]`;
 
-    fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+  if (outputCard) outputCard.innerHTML = sheetHtml + generateInteractiveQuizHTML(qList);
+
+  if (questionsPanel) {
+    questionsPanel.querySelector('#quizQuestionsList').innerHTML = qList.map((q, idx) => `
+      <li><strong>س ${idx + 1}:</strong> ${q.question}</li>
+    `).join('');
+  }
+
+  if (answerPanel) {
+    answerPanel.querySelector('#quizAnswerKeyList').innerHTML = qList.map((q, idx) => {
+      let answerText = '';
+      if (q.type === 'mcq') answerText = q.options && q.options[q.correct] ? `الخيار الصحيح: ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}` : 'الخيار الصحيح غير محدد';
+      else if (q.type === 'tf') answerText = `الإجابة الصحيحة: ${q.options && q.options[q.correct] ? q.options[q.correct] : 'غير محددة'}`;
+      else if (q.type === 'blank') answerText = `الكلمة الناقصة: ${q.correctAnswer || 'غير محددة'}`;
+      else if (q.type === 'match') answerText = `المطابقة الصحيحة: ${q.correctMatch ? JSON.stringify(q.correctMatch) : 'غير محددة'}`;
+      else if (q.type === 'short' || q.type === 'essay') answerText = `الإجابة النموذجية: ${q.correctAnswer || 'غير محددة'}`;
+      else if (q.type === 'order') answerText = `الترتيب الصحيح: ${q.correctOrder ? q.correctOrder.join(' ➔ ') : q.items ? q.items.join(' ➔ ') : 'غير محدد'}`;
+      else if (q.type === 'classify') answerText = `التصنيف الصحيح: ${q.correctClassification ? JSON.stringify(q.correctClassification) : 'غير محدد'}`;
+      return `<div><strong>س ${idx + 1}:</strong> ${answerText}</div>`;
+    }).join('');
+  }
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function showTeacherAnswer(btn, answerText) {
+  const feedback = btn.nextElementSibling;
+  if (!feedback) return;
+  btn.disabled = true;
+  feedback.innerHTML = answerText;
+  feedback.style.display = 'block';
+}
+
+function toggleTeacherMode() {
+  quizGeneratorState.teacherMode = !quizGeneratorState.teacherMode;
+  saveQuizSettings();
+  updateTeacherModeButton();
+  renderQuizSheet();
+}
+
+function updateTeacherModeButton() {
+  const button = document.getElementById('quizTeacherModeBtn');
+  if (!button) return;
+  button.textContent = quizGeneratorState.teacherMode ? 'إخفاء وضع المعلم' : 'عرض واجهة المعلم';
+}
+
+function generateInteractiveQuizHTML(qList) {
+  if (!quizGeneratorState.teacherMode) return '';
+
+  return `
+    <div class="quiz-teacher-mode-panel">
+      <div class="panel-head">
+        <div class="panel-title">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></span>
+          <div>واجهة المعلم</div>
+        </div>
+      </div>
+      <div class="quiz-teacher-instructions">يمكنك الآن حل الأسئلة هنا مباشرة والتحقق منها فوراً قبل مشاركتها مع الطلاب.</div>
+      ${qList.map((q, idx) => {
+        const questionText = escapeHtml(q.question);
+        const explanation = escapeHtml(q.explanation || 'راجع الإجابة بعد الحل.');
+        let interaction = '';
+
+        if (q.type === 'mcq' && Array.isArray(q.options)) {
+          interaction = `<div class="quiz-interactive-options">${q.options.map((opt, oIdx) => {
+            const answerText = escapeHtml(opt);
+            const isCorrect = q.correct === oIdx;
+            return `<button type="button" onclick="checkOption(this, ${isCorrect}, ${JSON.stringify(explanation)})">${String.fromCharCode(65 + oIdx)}. ${answerText}</button>`;
+          }).join('')}</div>`;
+        } else if (q.type === 'tf' && Array.isArray(q.options)) {
+          interaction = `<div class="quiz-interactive-options">${q.options.map((opt, oIdx) => {
+            const answerText = escapeHtml(opt);
+            const isCorrect = q.correct === oIdx;
+            return `<button type="button" onclick="checkOption(this, ${isCorrect}, ${JSON.stringify(explanation)})">${answerText}</button>`;
+          }).join('')}</div>`;
+        } else if (q.type === 'blank') {
+          const answerValue = escapeHtml(q.correctAnswer || '');
+          interaction = `<div class="quiz-teacher-input-row"><input type="text" placeholder="أدخل الإجابة هنا" /><button type="button" class="quiz-teacher-action" onclick="checkBlankAnswer(this, ${JSON.stringify(answerValue)})">تحقق</button></div>`;
+        } else if (q.type === 'match') {
+          const items = (q.leftItems || []).map(item => escapeHtml(item)).join('<br>');
+          interaction = `<div style="font-size:13px; color:var(--text-2);">${items}</div><button type="button" class="quiz-teacher-action" onclick="showTeacherAnswer(this, ${JSON.stringify('المطابقة الصحيحة: ' + JSON.stringify(q.correctMatch || {}))})">إظهار الإجابة</button>`;
+        } else if (q.type === 'order') {
+          interaction = `<button type="button" class="quiz-teacher-action" onclick="showTeacherAnswer(this, ${JSON.stringify('الترتيب الصحيح: ' + (q.correctOrder ? q.correctOrder.join(' ➔ ') : (q.items ? q.items.join(' ➔ ') : 'غير محدد')))})">إظهار الإجابة</button>`;
+        } else if (q.type === 'classify') {
+          interaction = `<button type="button" class="quiz-teacher-action" onclick="showTeacherAnswer(this, ${JSON.stringify('التصنيف الصحيح: ' + JSON.stringify(q.correctClassification || {}))})">إظهار الإجابة</button>`;
+        } else {
+          interaction = `<button type="button" class="quiz-teacher-action" onclick="showTeacherAnswer(this, ${JSON.stringify('الإجابة النموذجية: ' + (q.correctAnswer || 'غير محددة'))})">إظهار الإجابة</button>`;
+        }
+
+        return `
+          <div class="teacher-question-card">
+            <div class="teacher-question-title">س ${idx + 1}: ${questionText}</div>
+            ${interaction}
+            <div class="quiz-teacher-feedback"></div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function initQuizPage() {
+  if (quizPageInitialized) return;
+  quizPageInitialized = true;
+  restoreQuizSettings();
+
+  const form = document.getElementById('quizGeneratorForm');
+  if (form) {
+    const controls = form.querySelectorAll('input[type="text"], select, input[type="checkbox"]');
+    controls.forEach(control => {
+      control.addEventListener('change', saveQuizSettings);
+    });
+  }
+
+  const fileInput = document.getElementById('quizFileInput');
+  if (fileInput) {
+    fileInput.addEventListener('change', handleQuizFileInput);
+  }
+
+  updateQuizSourceMeta();
+  updateTeacherModeButton();
+  renderQuizSheet();
+}
+
+function restoreQuizSettings() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('quizGeneratorState') || '{}');
+    if (!saved) return;
+
+    const setValue = (id, value) => {
+      const el = document.getElementById(id);
+      if (el && value !== undefined && value !== null) el.value = value;
+    };
+
+    setValue('quizSubject', saved.subject || 'العلوم العامة');
+    setValue('quizLessonName', saved.lessonName || '');
+    setValue('quizGrade', saved.grade || '9');
+    setValue('quizClass', saved.className || '9-A');
+    setValue('quizCount', saved.count || '10');
+    setValue('quizLevel', saved.difficulty || 'medium');
+    setValue('quizBloomLevel', saved.bloomLevel || 'فهم');
+    setValue('quizLanguage', saved.language || 'ar');
+    const typeIds = ['qTypeMcq', 'qTypeTF', 'qTypeBlank', 'qTypeMatch', 'qTypeShort', 'qTypeEssay', 'qTypeOrder', 'qTypeClassify'];
+    typeIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.checked = saved.types ? saved.types.includes(el.id.replace('qType', '').toLowerCase()) : true;
+    });
+
+    quizGeneratorState.sourceName = saved.sourceName || '';
+    quizGeneratorState.sourceType = saved.sourceType || '';
+    quizGeneratorState.sourceText = saved.sourceText || '';
+    quizGeneratorState.teacherMode = saved.teacherMode || false;
+    updateQuizSourceMeta();
+    updateTeacherModeButton();
+  } catch (err) {
+    console.error('Unable to restore quiz state', err);
+  }
+}
+
+function saveQuizSettings() {
+  const state = {
+    subject: document.getElementById('quizSubject')?.value || 'العلوم العامة',
+    lessonName: document.getElementById('quizLessonName')?.value || '',
+    grade: document.getElementById('quizGrade')?.value || '9',
+    className: document.getElementById('quizClass')?.value || '9-A',
+    count: document.getElementById('quizCount')?.value || '10',
+    difficulty: document.getElementById('quizLevel')?.value || 'medium',
+    bloomLevel: document.getElementById('quizBloomLevel')?.value || 'فهم',
+    language: document.getElementById('quizLanguage')?.value || 'ar',
+    types: ['qTypeMcq', 'qTypeTF', 'qTypeBlank', 'qTypeMatch', 'qTypeShort', 'qTypeEssay', 'qTypeOrder', 'qTypeClassify']
+      .filter(id => document.getElementById(id)?.checked)
+      .map(id => id.replace('qType', '').toLowerCase()),
+    sourceName: quizGeneratorState.sourceName,
+    sourceType: quizGeneratorState.sourceType,
+    sourceText: quizGeneratorState.sourceText ? quizGeneratorState.sourceText.slice(0, 9000) : '',
+    teacherMode: quizGeneratorState.teacherMode || false
+  };
+  localStorage.setItem('quizGeneratorState', JSON.stringify(state));
+}
+
+function updateQuizSourceMeta() {
+  const meta = document.getElementById('quizFileMeta');
+  const nameEl = document.getElementById('quizFileName');
+  const label = document.getElementById('quizFileLabel');
+  const hint = document.getElementById('quizFileHint');
+  if (quizGeneratorState.sourceName) {
+    if (meta) meta.style.display = 'flex';
+    if (nameEl) nameEl.textContent = `${quizGeneratorState.sourceName}`;
+    if (label) label.textContent = 'تم تحميل الملف بنجاح';
+    if (hint) hint.textContent = `${quizGeneratorState.sourceType.toUpperCase()} مُستخرج`;
+  } else {
+    if (meta) meta.style.display = 'none';
+    if (label) label.textContent = 'اسحب الملف هنا أو انقر للتصفح';
+    if (hint) hint.textContent = 'PDF، DOCX، TXT';
+  }
+}
+
+function setQuizStatus(message, type = 'info', showRetry = false) {
+  const banner = document.getElementById('quizStatusBanner');
+  if (!banner) return;
+  banner.className = 'quiz-status-card';
+  if (type === 'error') banner.classList.add('error');
+  banner.innerHTML = `<div>${message}</div>${showRetry ? '<button type="button" class="action-btn" onclick="generateQuiz()" style="padding:6px 10px;">إعادة المحاولة</button>' : ''}`;
+}
+
+function setQuizLoading(isLoading, message) {
+  quizGeneratorState.loading = isLoading;
+  const button = document.getElementById('quizGenerateBtn');
+  if (button) button.disabled = isLoading;
+  setQuizStatus(message, isLoading ? 'info' : 'success', false);
+}
+
+async function handleQuizFileInput(event) {
+  event.preventDefault();
+  const file = event.dataTransfer?.files?.[0] || event.target?.files?.[0];
+  if (!file) return;
+
+  const extension = file.name.split('.').pop().toLowerCase();
+  if (!['pdf', 'docx', 'txt'].includes(extension)) {
+    setQuizStatus('الملف غير مدعوم، يرجى رفع PDF أو DOCX أو TXT فقط.', 'error');
+    if (event.target && 'value' in event.target) event.target.value = '';
+    return;
+  }
+
+  setQuizLoading(true, 'جاري قراءة الملف...');
+  try {
+    let text = '';
+    if (extension === 'txt') {
+      text = await file.text();
+    } else if (extension === 'docx') {
+      text = await extractTextFromDocx(file);
+    } else if (extension === 'pdf') {
+      text = await extractTextFromPdf(file);
+    }
+    quizGeneratorState.sourceName = file.name;
+    quizGeneratorState.sourceType = extension;
+    quizGeneratorState.sourceText = text.trim().slice(0, 10000);
+    saveQuizSettings();
+    updateQuizSourceMeta();
+    setQuizStatus(`تم تحميل الملف ${file.name} بنجاح. يمكنك الآن توليد الأسئلة.`, 'success');
+    renderQuizSheet();
+  } catch (err) {
+    console.error(err);
+    setQuizStatus('حدث خطأ أثناء قراءة الملف. حاول مرة أخرى.', 'error', false);
+  } finally {
+    setQuizLoading(false, 'جاهز للتوليد');
+  }
+}
+
+function handleQuizFileDrop(event) {
+  event.preventDefault();
+  handleQuizFileInput(event);
+}
+
+function clearQuizFile() {
+  quizGeneratorState.sourceName = '';
+  quizGeneratorState.sourceText = '';
+  quizGeneratorState.sourceType = '';
+  const fileInput = document.getElementById('quizFileInput');
+  if (fileInput) fileInput.value = '';
+  updateQuizSourceMeta();
+  saveQuizSettings();
+  setQuizStatus('تم مسح الملف. يمكنك الاستمرار بالتوليد من البيانات اليدوية.', 'info');
+}
+
+async function extractTextFromDocx(file) {
+  await loadQuizHelper('jszip');
+  const arrayBuffer = await file.arrayBuffer();
+  const zip = await JSZip.loadAsync(arrayBuffer);
+  const documentFile = zip.file('word/document.xml');
+  if (!documentFile) throw new Error('ملف DOCX غير صالح');
+  const xml = await documentFile.async('string');
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xml, 'application/xml');
+  const nodes = xmlDoc.getElementsByTagName('w:t');
+  const text = Array.from(nodes).map(node => node.textContent).join(' ');
+  return text.replace(/\s+/g, ' ').trim();
+}
+
+async function extractTextFromPdf(file) {
+  await loadQuizHelper('pdfjs');
+  if (!window.pdfjsLib) throw new Error('فشل تحميل PDF.js');
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.8.162/pdf.worker.min.js';
+  const data = new Uint8Array(await file.arrayBuffer());
+  const pdf = await window.pdfjsLib.getDocument({ data }).promise;
+  let text = '';
+  for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+    const page = await pdf.getPage(pageNumber);
+    const content = await page.getTextContent();
+    text += content.items.map(item => item.str).join(' ') + '\n\n';
+  }
+  return text.replace(/\s+/g, ' ').trim();
+}
+
+function loadQuizHelper(name) {
+  if (name === 'jszip' && window.JSZip) return Promise.resolve();
+  if (name === 'pdfjs' && window.pdfjsLib) return Promise.resolve();
+  const src = quizHelperScripts[name];
+  if (!src) return Promise.reject(new Error('مكتبة مساعدة غير معروفة'));
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error(`فشل تحميل المكتبة ${name}`));
+    document.head.appendChild(script);
+  });
+}
+
+function getQuizFormData() {
+  const selectedTypes = [];
+  if (document.getElementById('qTypeMcq')?.checked) selectedTypes.push('mcq');
+  if (document.getElementById('qTypeTF')?.checked) selectedTypes.push('tf');
+  if (document.getElementById('qTypeBlank')?.checked) selectedTypes.push('blank');
+  if (document.getElementById('qTypeMatch')?.checked) selectedTypes.push('match');
+  if (document.getElementById('qTypeShort')?.checked) selectedTypes.push('short');
+  if (document.getElementById('qTypeEssay')?.checked) selectedTypes.push('essay');
+  if (document.getElementById('qTypeOrder')?.checked) selectedTypes.push('order');
+  if (document.getElementById('qTypeClassify')?.checked) selectedTypes.push('classify');
+
+  return {
+    subject: document.getElementById('quizSubject')?.value.trim() || 'العلوم العامة',
+    grade: document.getElementById('quizGrade')?.value || '9',
+    className: document.getElementById('quizClass')?.value || '9-A',
+    lessonName: document.getElementById('quizLessonName')?.value.trim() || '',
+    difficulty: document.getElementById('quizLevel')?.value || 'medium',
+    bloomLevel: document.getElementById('quizBloomLevel')?.value || 'فهم',
+    language: document.getElementById('quizLanguage')?.value || 'ar',
+    count: parseInt(document.getElementById('quizCount')?.value) || 10,
+    selectedTypes,
+    sourceText: quizGeneratorState.sourceText,
+    sourceName: quizGeneratorState.sourceName,
+    sourceType: quizGeneratorState.sourceType
+  };
+}
+
+async function generateQuiz() {
+  const config = getQuizFormData();
+  if (config.selectedTypes.length === 0) {
+    setQuizStatus('يرجى اختيار نوع واحد على الأقل من الأسئلة!', 'error');
+    return;
+  }
+  if (!config.lessonName && !config.sourceText) {
+    setQuizStatus('يرجى إضافة عنوان الدرس أو رفع ملف لتوليد الأسئلة.', 'error');
+    return;
+  }
+
+  quizGeneratorState.lastGenerateConfig = config;
+  saveQuizSettings();
+  setQuizLoading(true, 'جاري توليد ورقة الاختبار...');
+
+  const apiKey = localStorage.getItem('geminiApiKey');
+  const sourcePreview = config.sourceName ? `المحتوى من ${config.sourceName}` : `درس ${config.lessonName}`;
+  const prompt = `أنشئ ${config.count} سؤالاً تعليميًا جديدًا من نوع ${config.selectedTypes.join(', ')} في مادة ${config.subject} للصف ${config.grade}، الشعبة ${config.className}. درس: ${config.lessonName || 'عام'}، مستوى الصعوبة: ${config.difficulty}، تصنيف بلوم: ${config.bloomLevel}. استخدم ${config.language === 'ar' ? 'العربية' : 'English'} وقدم الأسئلة بشكل واضح وموجز. النص المرجعي: ${config.sourceText ? config.sourceText.slice(0, 1500) : ''}`;
+
+  const useLocal = !apiKey;
+  if (useLocal) {
+    setQuizStatus('لا يوجد مفتاح Gemini، يتم التوليد محلياً الآن.', 'info');
+    generateQuizLocally(config.subject, config.count, config.selectedTypes, config.grade, config.className, config.lessonName, config.difficulty, config.bloomLevel, config.language);
+    setQuizLoading(false, 'جاهز للتوليد');
+    return;
+  }
+
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { responseMimeType: "application/json" }
+        generationConfig: { responseMimeType: 'application/json' }
       })
-    })
-    .then(res => res.json())
-    .then(data => {
-      let text = data.candidates[0].content.parts[0].text.trim();
-      if (text.startsWith("```json")) {
-        text = text.substring(7);
-      }
-      if (text.endsWith("```")) {
-        text = text.substring(0, text.length - 3);
-      }
-      const questions = JSON.parse(text.trim());
-      
-      activeGeneratedQuiz = {
-        questions,
-        subject,
-        grade,
-        lessonName,
-        difficulty,
-        bloomLevel,
-        count,
-        language,
-        version: 'A'
-      };
-      
-      renderQuizSheet();
-    })
-    .catch(err => {
-      console.error("Gemini quiz generation failed, using local randomized questions", err);
-      generateQuizLocally(topic, count, selectedTypes, subject, grade, lessonName, difficulty, bloomLevel, language);
     });
-  } else {
-    generateQuizLocally(topic, count, selectedTypes, subject, grade, lessonName, difficulty, bloomLevel, language);
+    const data = await res.json();
+    const candidate = data?.candidates?.[0]?.content?.[0]?.text || data?.candidates?.[0]?.content?.[0]?.text;
+    let text = candidate ? String(candidate).trim() : '';
+    if (text.startsWith('```json')) text = text.substring(text.indexOf('```json') + 7);
+    if (text.endsWith('```')) text = text.slice(0, -3);
+    let questions = [];
+    try {
+      questions = JSON.parse(text.trim());
+    } catch (error) {
+      console.warn('Failed to parse Gemini JSON response, falling back local', error);
+      questions = [];
+    }
+    if (!Array.isArray(questions) || questions.length === 0) {
+      throw new Error('ناتج Gemini غير صالح');
+    }
+
+    activeGeneratedQuiz = {
+      questions,
+      subject: config.subject,
+      grade: config.grade,
+      className: config.className,
+      lessonName: config.lessonName,
+      difficulty: config.difficulty,
+      bloomLevel: config.bloomLevel,
+      count: config.count,
+      language: config.language,
+      sourceName: config.sourceName,
+      sourceType: config.sourceType,
+      version: 'A'
+    };
+    setQuizStatus(`تم إنشاء ورقة الاختبار بنجاح باستخدام ${sourcePreview}.`, 'success');
+    renderQuizSheet();
+  } catch (err) {
+    console.error('Gemini quiz generation failed', err);
+    setQuizStatus('فشل التوليد عبر Gemini. يتم التوليد محلياً الآن.', 'error', true);
+    generateQuizLocally(config.subject, config.count, config.selectedTypes, config.grade, config.className, config.lessonName, config.difficulty, config.bloomLevel, config.language);
+  } finally {
+    setQuizLoading(false, 'جاهز للتوليد');
   }
 }
 
-function generateQuizLocally(topic, count, selectedTypes, subject, grade, lessonName, difficulty, bloomLevel, language) {
-  let qBank = JSON.parse(localStorage.getItem('questionsBankDb')) || defaultQuestionsBank;
-  
-  let filtered = qBank.filter(q => {
-    if (q.topic && q.topic !== topic) return false;
-    if (!selectedTypes.includes(q.type)) return false;
-    return true;
-  });
-  
-  if (filtered.length === 0) {
-    filtered = qBank.filter(q => selectedTypes.includes(q.type));
+function generateQuizLocally(subject, count, selectedTypes, grade, className, lessonName, difficulty, bloomLevel, language) {
+  let qBank = JSON.parse(localStorage.getItem('questionsBankDb')) || defaultQuestionsBank || [];
+  const filtered = qBank.filter(q => selectedTypes.includes(q.type));
+  let chosen = [...filtered].sort(() => 0.5 - Math.random()).slice(0, count);
+
+  while (chosen.length < count) {
+    const type = selectedTypes[chosen.length % selectedTypes.length];
+    chosen.push(generateLocalQuizQuestion(type, subject, lessonName, difficulty, bloomLevel, language, chosen.length + 1));
   }
-  if (filtered.length === 0) {
-    filtered = [...qBank];
-  }
-  
-  let shuffled = [...filtered].sort(() => 0.5 - Math.random());
-  let chosen = shuffled.slice(0, count);
-  
-  while (chosen.length < count && chosen.length > 0) {
-    const clone = JSON.parse(JSON.stringify(chosen[Math.floor(Math.random() * chosen.length)]));
-    clone.id = 'loc_dup_' + Date.now() + '_' + Math.random();
-    chosen.push(clone);
-  }
-  
-  if (chosen.length === 0) {
-    chosen.push({
-      id: 'qb_fallback',
-      subject: subject,
-      grade: grade,
-      topic: topic,
-      lessonName: lessonName,
-      type: 'mcq',
-      question: 'السؤال الافتراضي: ما هي وحدة قياس السرعة في النظام الدولي للوحدات؟',
-      options: ['متر لكل ثانية (m/s)', 'كيلومتر لكل ساعة (km/h)', 'متر (m)', 'ثانية (s)'],
-      correct: 0,
-      explanation: 'المتر لكل ثانية هو الوحدة الأساسية للسرعة في النظام الدولي للوحدات.',
-      difficulty: 'easy',
-      bloomLevel: 'تذكر',
-      tags: ['فيزياء', 'سرعة']
-    });
-  }
-  
+
   activeGeneratedQuiz = {
     questions: chosen,
     subject,
     grade,
+    className,
     lessonName,
     difficulty,
     bloomLevel,
     count,
     language,
+    sourceName: quizGeneratorState.sourceName,
+    sourceType: quizGeneratorState.sourceType,
     version: 'A'
   };
-  
   renderQuizSheet();
 }
 
-function renderQuizSheet() {
-  if (!activeGeneratedQuiz || !activeGeneratedQuiz.questions) return;
-  
-  const outputCard = document.getElementById('quizOutputCard');
-  const qList = activeGeneratedQuiz.questions;
-  
-  // 1. Calculate Estimated Solving Time
-  let totalMinutes = 0;
-  qList.forEach(q => {
-    if (q.type === 'mcq') totalMinutes += 1.5;
-    else if (q.type === 'tf') totalMinutes += 1;
-    else if (q.type === 'blank') totalMinutes += 1.5;
-    else if (q.type === 'match') totalMinutes += 3;
-    else if (q.type === 'short') totalMinutes += 2.5;
-    else if (q.type === 'essay') totalMinutes += 5;
-    else if (q.type === 'order') totalMinutes += 3;
-    else if (q.type === 'classify') totalMinutes += 3.5;
-    else totalMinutes += 2;
-  });
-  totalMinutes = Math.round(totalMinutes);
-  
-  // 2. Calculate Difficulty Distribution
-  let easyCount = 0, medCount = 0, hardCount = 0;
-  qList.forEach(q => {
-    const diff = q.difficulty || activeGeneratedQuiz.difficulty || 'medium';
-    if (diff === 'easy') easyCount++;
-    else if (diff === 'hard') hardCount++;
-    else medCount++;
-  });
-  const total = qList.length || 1;
-  const easyPct = Math.round((easyCount / total) * 100);
-  const medPct = Math.round((medCount / total) * 100);
-  const hardPct = Math.round((hardCount / total) * 100);
-  
-  // 3. Update Preview Metadata Box
-  const timeEl = document.getElementById('quizEstTime');
-  const diffEl = document.getElementById('quizDiffDist');
-  const bloomEl = document.getElementById('quizBloomTag');
-  if (timeEl) timeEl.textContent = `${totalMinutes} دقيقة`;
-  if (diffEl) diffEl.textContent = `سهل: ${easyPct}%، متوسط: ${medPct}%، صعب: ${hardPct}%`;
-  if (bloomEl) bloomEl.textContent = activeGeneratedQuiz.bloomLevel || 'فهم';
-  
-  // 4. Render Exam Sheet HTML
-  let html = `
-    <div class="card panel print-only-sheet" style="border: 2px solid var(--border); padding: 30px; border-radius: 12px; background: var(--bg-card); text-align: right; direction: rtl;">
-      
-      <!-- School Exam Header -->
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid var(--text-1); padding-bottom: 12px; margin-bottom: 24px;">
-        <div style="text-align:right;">
-          <h3 style="margin:0; font-weight:800; font-size:16px;">مدرسة معيذر الابتدائية للبنين</h3>
-          <p style="margin:4px 0 0 0; font-size:12px; color:var(--text-2);">القسم: العلوم العامة | الأستاذ: إسماعيل محبوبة</p>
-        </div>
-        <div style="text-align:center;">
-          <h2 style="margin:0; font-weight:900; font-size:20px; color:var(--gold);">ورقة اختبار العلوم</h2>
-          <span style="font-size:12px; font-weight:700; background:var(--bg-alt); padding:2px 8px; border-radius:4px;">نموذج (${activeGeneratedQuiz.version || 'A'})</span>
-        </div>
-        <div style="text-align:left; font-size:11px; color:var(--text-3); line-height:1.4;">
-          <div>المادة: ${activeGeneratedQuiz.subject}</div>
-          <div>الصف: ${activeGeneratedQuiz.grade}</div>
-          <div>التاريخ: ${new Date().toLocaleDateString('ar-EG')}</div>
-        </div>
-      </div>
-      
-      <div style="border:1px solid var(--border); padding:8px 12px; border-radius:6px; margin-bottom:24px; font-size:12px; display:flex; justify-content:space-between;">
-        <div>اسم الطالب: ..............................................................</div>
-        <div>الشعبة: ...........</div>
-        <div>الدرجة: ______ / ______</div>
-      </div>
-  `;
-  
-  qList.forEach((q, idx) => {
-    html += `
-      <div class="question-item-card" style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px dashed var(--border-light); position:relative;">
-        <div style="position:absolute; left:0; top:0; display:flex; gap:6px;" class="print-hide">
-          <button class="mini-col-btn" onclick="regenerateSingleQuestion(${idx})" title="توليد سؤال بديل">♻️ بديل</button>
-        </div>
-        
-        <h4 contenteditable="true" onblur="editQuestionText(${idx}, this.textContent)" style="margin-bottom: 12px; font-weight: 700; font-size:14px; outline:none; padding-inline-end:60px;" title="انقر نقراً مزدوجاً للتعديل الفوري للكود">
-          السؤال ${idx + 1}: ${q.question}
-        </h4>
-    `;
-    
-    if (q.svg) {
-      html += `<div class="quiz-diagram-box" style="margin: 12px 0; text-align:center;">${q.svg}</div>`;
-    }
-    
-    // MCQ Question Rendering
-    if (q.type === 'mcq') {
-      html += `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 10px;">`;
-      q.options.forEach((opt, oIdx) => {
-        html += `
-          <button class="btn-primary" onclick="checkOption(this, ${oIdx === q.correct}, '${q.explanation}')" style="background: var(--bg-alt); color: var(--text-1); border: 1px solid var(--border); text-align: right; font-size: 12.5px; font-weight: 500; justify-content: flex-start; padding: 10px 14px; width: 100%;">
-            ${String.fromCharCode(65 + oIdx)}. ${opt}
-          </button>
-        `;
-      });
-      html += `</div><div class="quiz-feedback" style="display:none; margin-top:10px; font-size:12px; padding:8px 12px; border-radius:6px;"></div>`;
-    }
-    
-    // True / False Rendering
-    else if (q.type === 'tf') {
-      html += `<div style="display: flex; gap: 12px; margin-top: 10px;">`;
-      q.options.forEach((opt, oIdx) => {
-        html += `
-          <button class="btn-primary" onclick="checkOption(this, ${oIdx === q.correct}, '${q.explanation}')" style="background: var(--bg-alt); color: var(--text-1); border: 1px solid var(--border); text-align: center; font-size: 13px; font-weight: 700; padding: 8px 24px; width: auto;">
-            ${opt}
-          </button>
-        `;
-      });
-      html += `</div><div class="quiz-feedback" style="display:none; margin-top:10px; font-size:12px; padding:8px 12px; border-radius:6px;"></div>`;
-    }
-    
-    // Fill in the Blank Rendering
-    else if (q.type === 'blank') {
-      html += `
-        <div style="margin-top:10px; display:flex; gap:10px; align-items:center;" class="print-hide">
-          <input type="text" placeholder="اكتب الكلمة الناقصة هنا..." class="form-control" style="max-width:200px; padding:6px 12px; font-size:13px;" />
-          <button class="btn-primary" onclick="checkBlankAnswer(this, '${q.correctAnswer}')" style="width:auto; padding:6px 16px; font-size:12px;">تحقق</button>
-        </div>
-        <div class="quiz-feedback" style="display:none; margin-top:10px; font-size:12px; padding:8px 12px; border-radius:6px;"></div>
-        <div class="print-only" style="display:none; margin-top:10px; border-bottom:1px solid #000; width:150px; height:20px;"></div>
-      `;
-    }
-    
-    // Matching Question Rendering
-    else if (q.type === 'match') {
-      html += `
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:10px; background:var(--bg-alt); padding:12px; border-radius:8px;">
-          <div>
-            <strong style="display:block; margin-bottom:6px; font-size:12px; color:var(--gold);">العمود أ</strong>
-            <ol style="list-style-type:decimal; margin-inline-start:15px; font-size:12.5px; line-height:1.8;">
-              ${q.leftItems.map(item => `<li>${item}</li>`).join('')}
-            </ol>
-          </div>
-          <div>
-            <strong style="display:block; margin-bottom:6px; font-size:12px; color:var(--gold);">العمود ب (عشوائي)</strong>
-            <ol style="list-style-type:upper-alpha; margin-inline-start:15px; font-size:12.5px; line-height:1.8;">
-              ${[...q.rightItems].sort(() => 0.5 - Math.random()).map(item => `<li>${item}</li>`).join('')}
-            </ol>
-          </div>
-        </div>
-      `;
-    }
-    
-    // Short Answer Rendering
-    else if (q.type === 'short') {
-      html += `
-        <div style="margin-top:12px;">
-          <input type="text" placeholder="اكتب الإجابة القصيرة هنا..." class="form-control print-hide" style="width:100%; margin-bottom:8px; font-size:13px;" />
-          <button class="btn-primary print-hide" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';" style="background:var(--maroon-light); color:var(--text-1); border:none; width:auto; font-size:12px; padding:6px 12px;">إظهار الإجابة النموذجية</button>
-          <div style="display:none; padding:10px; background:rgba(34,197,94,0.08); border-inline-start:4px solid var(--success); border-radius:6px; font-size:12.5px; color:var(--text-1); margin-top:6px;">
-            <strong style="color:var(--success);">الإجابة النموذجية:</strong> ${q.correctAnswer}
-          </div>
-          <div class="print-only" style="display:none; margin-top:10px; border-bottom:1px solid #000; width:100%; height:40px;"></div>
-        </div>
-      `;
-    }
-    
-    // Essay Rendering
-    else if (q.type === 'essay') {
-      html += `
-        <div style="margin-top:12px;">
-          <textarea rows="3" placeholder="اكتب الإجابة المقالية الحرة هنا..." class="form-control print-hide" style="width:100%; margin-bottom:8px; font-size:13px;"></textarea>
-          <button class="btn-primary print-hide" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';" style="background:var(--maroon-light); color:var(--text-1); border:none; width:auto; font-size:12px; padding:6px 12px;">إظهار مؤشرات التقييم</button>
-          <div style="display:none; padding:10px; background:rgba(34,197,94,0.08); border-inline-start:4px solid var(--success); border-radius:6px; font-size:12.5px; color:var(--text-1); margin-top:6px; line-height:1.5;">
-            <strong style="color:var(--success);">مؤشرات ومعايير التقييم:</strong> ${q.correctAnswer}
-          </div>
-          <div class="print-only" style="display:none; margin-top:10px; border:1px solid #000; border-radius:4px; width:100%; height:120px;"></div>
-        </div>
-      `;
-    }
-    
-    // Ordering Rendering
-    else if (q.type === 'order') {
-      html += `
-        <div style="margin-top:10px; background:var(--bg-alt); padding:10px; border-radius:8px;">
-          <p style="font-size:12px; color:var(--text-3); margin-bottom:6px;">الخطوات/العناصر بترتيب عشوائي:</p>
-          <div style="display:flex; flex-wrap:wrap; gap:8px;">
-            ${[...q.items].sort(() => 0.5 - Math.random()).map(item => `<span style="background:rgba(255,255,255,0.05); border:1px solid var(--border); padding:4px 10px; border-radius:4px; font-size:12px;">${item}</span>`).join('')}
-          </div>
-          <button class="btn-primary print-hide" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';" style="background:var(--maroon-light); color:var(--text-1); border:none; width:auto; font-size:12px; padding:6px 12px; margin-top:10px;">إظهار الترتيب الصحيح</button>
-          <div style="display:none; padding:10px; background:rgba(34,197,94,0.08); border-inline-start:4px solid var(--success); border-radius:6px; font-size:12.5px; color:var(--text-1); margin-top:6px;">
-            <strong style="color:var(--success);">الترتيب النموذجي:</strong> ${q.correctOrder ? q.correctOrder.join(' ➔ ') : q.items.join(' ➔ ')}
-          </div>
-        </div>
-      `;
-    }
-    
-    // Classification Rendering
-    else if (q.type === 'classify') {
-      html += `
-        <div style="margin-top:10px; background:var(--bg-alt); padding:10px; border-radius:8px;">
-          <p style="font-size:12px; color:var(--text-3); margin-bottom:6px;">العناصر المراد تصنيفها: <strong>${q.items.join('، ')}</strong></p>
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:10px; margin-top:8px;">
-            ${q.categories.map(cat => `
-              <div style="border:1px dashed var(--border); padding:8px; border-radius:6px; text-align:center;">
-                <strong style="color:var(--gold); font-size:12px;">${cat}</strong>
-                <div style="min-height:30px; margin-top:4px; font-size:11px; color:var(--text-3);" class="print-hide">اسحب أو اكتب هنا</div>
-              </div>
-            `).join('')}
-          </div>
-          <button class="btn-primary print-hide" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';" style="background:var(--maroon-light); color:var(--text-1); border:none; width:auto; font-size:12px; padding:6px 12px; margin-top:10px;">إظهار التصنيف النموذجي</button>
-          <div style="display:none; padding:10px; background:rgba(34,197,94,0.08); border-inline-start:4px solid var(--success); border-radius:6px; font-size:12.5px; color:var(--text-1); margin-top:6px;">
-            <strong style="color:var(--success);">التصنيف الصحيح:</strong>
-            <ul style="margin-top:4px; margin-inline-start:15px; list-style-type:circle;">
-              ${Object.entries(q.correctClassification || {}).map(([item, cat]) => `<li>${item}: <b>${cat}</b></li>`).join('')}
-            </ul>
-          </div>
-        </div>
-      `;
-    }
-    
-    html += `</div>`;
-  });
-  
-  html += `
-      <!-- Model Answer key bottom sheet (Toggleable) -->
-      <div style="margin-top: 40px; border-top: 2px dashed var(--border); padding-top: 20px;" class="print-hide">
-        <h4 onclick="const key = this.nextElementSibling; key.style.display = key.style.display === 'none' ? 'block' : 'none';" style="cursor:pointer; color:var(--gold); display:flex; align-items:center; gap:8px;">
-          <span>🔑 دليل نموذج الإجابة السريع للورقة (انقر للإظهار/الإخفاء)</span>
-        </h4>
-        <div style="display:none; margin-top:12px; background:rgba(255,255,255,0.03); border:1px solid var(--border); padding:16px; border-radius:8px; font-size:13px; line-height:1.6;">
-          ${qList.map((q, idx) => {
-            let answerText = '';
-            if (q.type === 'mcq') answerText = `الخيار الصحيح: ${String.fromCharCode(65 + q.correct)} (${q.options[q.correct]})`;
-            else if (q.type === 'tf') answerText = `الخيار الصحيح: ${q.options[q.correct]}`;
-            else if (q.type === 'blank') answerText = `الكلمة الناقصة: ${q.correctAnswer}`;
-            else if (q.type === 'match') answerText = `مطابقة صحيحة: ${JSON.stringify(q.correctMatch)}`;
-            else if (q.type === 'short') answerText = `الإجابة: ${q.correctAnswer}`;
-            else if (q.type === 'essay') answerText = `التقييم: ${q.correctAnswer}`;
-            else if (q.type === 'order') answerText = `الترتيب: ${q.correctOrder ? q.correctOrder.join(' ➔ ') : q.items.join(' ➔ ')}`;
-            else if (q.type === 'classify') answerText = `التصنيف: ${JSON.stringify(q.correctClassification)}`;
-            
-            return `<div style="margin-bottom:8px;"><b>س ${idx + 1}:</b> ${answerText}</div>`;
-          }).join('')}
-        </div>
-      </div>
-
-    </div>
-  `;
-  
-  outputCard.innerHTML = html;
+function generateLocalQuizQuestion(type, subject, lessonName, difficulty, bloomLevel, language, idx) {
+  const base = lessonName || subject || 'المحتوى الدراسي';
+  const safeText = base.replace(/\s+/g, ' ').trim();
+  const question = { type, difficulty, bloomLevel, explanation: 'راجع الإجابة النموذجية بعد الحل.' };
+  switch (type) {
+    case 'mcq':
+      question.question = `اختر الإجابة الصحيحة عن ${safeText}.`;
+      question.options = [`${safeText} هو الخيار الصحيح.`, 'خيار غير مناسب ١.', 'خيار غير مناسب ٢.', 'خيار غير مناسب ٣.'];
+      question.correct = 0;
+      break;
+    case 'tf':
+      question.question = `صح أم خطأ: ${safeText} يمكن أن يكون صحيحًا في هذا السياق؟`;
+      question.options = ['صح', 'خطأ'];
+      question.correct = 0;
+      break;
+    case 'blank':
+      question.question = `أكمل الفراغ في الجملة التالية المتعلقة بـ ${safeText}: [______].`;
+      question.correctAnswer = 'معلومة';
+      break;
+    case 'match':
+      question.question = `طابق العناصر التالية المتعلقة بـ ${safeText}.`;
+      question.leftItems = ['مصطلح ١', 'مصطلح ٢', 'مصطلح ٣'];
+      question.rightItems = ['تعريف ١', 'تعريف ٢', 'تعريف ٣'];
+      question.correctMatch = { 'مصطلح ١': 'تعريف ١', 'مصطلح ٢': 'تعريف ٢', 'مصطلح ٣': 'تعريف ٣' };
+      break;
+    case 'short':
+      question.question = `اكتب إجابة قصيرة تشرح ${safeText}.`;
+      question.correctAnswer = `شرح موجز عن ${safeText}.`;
+      break;
+    case 'essay':
+      question.question = `ناقش أهمية ${safeText} في موضوع العلوم.`;
+      question.correctAnswer = `اقتراح لصياغة إجابة مقالية واضحة ومترابطة.`;
+      break;
+    case 'order':
+      question.question = `رتب الخطوات التالية حسب الترتيب المنطقي في ${safeText}.`;
+      question.items = ['خطوة ١', 'خطوة ٢', 'خطوة ٣'];
+      question.correctOrder = ['خطوة ١', 'خطوة ٢', 'خطوة ٣'];
+      break;
+    case 'classify':
+      question.question = `صنف العناصر التالية في مجموعتين مرتبطتين بـ ${safeText}.`;
+      question.items = ['عنصر أ', 'عنصر ب', 'عنصر ج'];
+      question.categories = ['مجموعه ١', 'مجموعه ٢'];
+      question.correctClassification = { 'عنصر أ': 'مجموعه ١', 'عنصر ب': 'مجموعه ٢', 'عنصر ج': 'مجموعه ١' };
+      break;
+    default:
+      question.type = 'short';
+      question.question = `اكتب سؤالاً موجزًا عن ${safeText}.`;
+      question.correctAnswer = `إجابة نموذجية عن ${safeText}.`;
+  }
+  return question;
 }
 
 function checkOption(btn, isCorrect, explanation) {
@@ -2973,11 +3103,12 @@ function exportQuizToWord() {
     docHtml += `<div class="question-card"><h4>السؤال ${idx + 1}: ${q.question}</h4>`;
     
     if (q.type === 'mcq') {
+      const options = q.options || [];
       docHtml += `<div class="options-grid">`;
-      q.options.forEach((opt, oIdx) => {
+      options.forEach((opt, oIdx) => {
         if (oIdx % 2 === 0) docHtml += `<div style="display: table-row;">`;
         docHtml += `<div class="option-item">${String.fromCharCode(65 + oIdx)}) ${opt}</div>`;
-        if (oIdx % 2 === 1 || oIdx === q.options.length - 1) docHtml += `</div>`;
+        if (oIdx % 2 === 1 || oIdx === options.length - 1) docHtml += `</div>`;
       });
       docHtml += `</div>`;
     } else if (q.type === 'tf') {
@@ -2985,10 +3116,12 @@ function exportQuizToWord() {
     } else if (q.type === 'blank') {
       docHtml += `<p style="margin-right:20px; color:#555;">اكتب الكلمة الناقصة: .............................................</p>`;
     } else if (q.type === 'match') {
+      const leftItems = q.leftItems || [];
+      const rightItems = q.rightItems || [];
       docHtml += `<p>طابق عناصر العمود أ مع العمود ب:</p>`;
       docHtml += `<table border="1" cellpadding="5" style="border-collapse:collapse; width:100%; direction:rtl; text-align:right;">`;
-      q.leftItems.forEach((item, lIdx) => {
-        docHtml += `<tr><td>${item}</td><td>( &nbsp;&nbsp; ) ${q.rightItems[lIdx] || ''}</td></tr>`;
+      leftItems.forEach((item, lIdx) => {
+        docHtml += `<tr><td>${item}</td><td>( &nbsp;&nbsp; ) ${rightItems[lIdx] || ''}</td></tr>`;
       });
       docHtml += `</table>`;
     } else {
@@ -3007,6 +3140,42 @@ function exportQuizToWord() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+function exportQuizToPDF() {
+  if (!activeGeneratedQuiz) return;
+
+  const outputCard = document.getElementById('quizOutputCard');
+  if (!outputCard) return;
+
+  const html = `<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8">
+  <title>ورقة اختبار PDF - ${activeGeneratedQuiz.subject}</title>
+  <style>
+    body { margin: 0; padding: 24px; font-family: Arial, sans-serif; direction: rtl; text-align: right; background: #fff; color: #111; }
+    .quiz-print-area { border: 1px solid #ddd; border-radius: 16px; padding: 24px; }
+    .quiz-print-area h3, .quiz-print-area h4, .quiz-print-area strong { color: #111; }
+    .quiz-print-area ol { counter-reset: question; padding-inline-start: 18px; }
+    .quiz-print-area li { margin-bottom: 20px; }
+    @media print { body { margin: 0; } .quiz-print-area { box-shadow: none; border: none; } }
+  </style>
+</head>
+<body>
+  <div class="quiz-print-area">
+    ${outputCard.innerHTML}
+  </div>
+</body>
+</html>`;
+
+  const pdfWindow = window.open('', '_blank');
+  if (!pdfWindow) return;
+  pdfWindow.document.open();
+  pdfWindow.document.write(html);
+  pdfWindow.document.close();
+  pdfWindow.focus();
+  setTimeout(() => pdfWindow.print(), 300);
 }
 
 // ---------- 18. Interactive Canvas Particles Background ----------
@@ -5115,4 +5284,4 @@ document.querySelectorAll('.login-card h2, .sidebar-title').forEach(el => {
 populateClassDropdowns();
 renderClassesList();
 renderGradesHeader();
-renderGrades();
+renderGrades();
