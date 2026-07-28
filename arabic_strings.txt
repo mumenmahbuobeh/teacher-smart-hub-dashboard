@@ -1,0 +1,1166 @@
+=== HTML ===
+Line 7: <title>Teacher Smart Hub — منصة المعلم الذكية</title>
+Line 38: <img src="assets/ministry-logo.svg" alt="شعار وزارة التربية والتعليم" class="login-ministry-logo" />
+Line 42: <p class="login-school-name">مدرسة معيذر</p>
+Line 43: <p class="login-school-sub">مساعد المعلم الذكي — دولة قطر 🇶🇦</p>
+Line 47: <label for="loginUser">اسم المستخدم</label>
+Line 48: <input type="text" id="loginUser" class="form-control" placeholder="أدخل اسم المعلم..." required
+Line 49: value="إسماعيل محبوبة" />
+Line 52: <label for="loginPass">كلمة المرور</label>
+Line 55: <button type="submit" class="btn-primary" style="margin-top: 8px;">تسجيل الدخول</button>
+Line 65: <img src="assets/ministry-logo.svg" alt="شعار المدرسة" class="sidebar-school-logo animate-logo-img" />
+Line 68: <div class="t1">مدرسة معيذر</div>
+Line 69: <div class="t2">إسماعيل محبوبة</div>
+Line 74: <div class="nav-label" data-i18n="navMain">الرئيسية</div>
+Line 82: <span data-i18n="navDash">لوحة التحكم</span>
+Line 89: <span data-i18n="navMaterials">المواد الدراسية</span>
+Line 98: <span data-i18n="navStudents">إدارة الطلاب</span>
+Line 105: <span data-i18n="navAttend">الحضور والغياب</span>
+Line 112: <span data-i18n="navGrades">الدرجات والتقييم</span>
+Line 119: <span>بنك الأسئلة المركزي</span>
+Line 125: <span>لوحة النجوم 🌟</span>
+Line 130: <div class="nav-label" data-i18n="navAI">أدوات الذكاء الاصطناعي</div>
+Line 136: <span data-i18n="navQuiz">مولّد الأسئلة</span>
+Line 143: <span data-i18n="navPlan">خطط الدروس</span>
+Line 151: <span data-i18n="navSlides">توليد العروض</span>
+Line 158: <span data-i18n="navReports">التقارير الذكية</span>
+Line 164: <span data-i18n="navAI">مساعد الذكاء الاصطناعي</span>
+Line 170: <span>محلل الدرجات الذكي 📊</span>
+Line 175: <div class="nav-label" data-i18n="navMore">أقسام إضافية</div>
+Line 181: <span data-i18n="navCal">التقويم</span>
+Line 188: <span data-i18n="navNotif">الإشعارات</span>
+Line 196: <span data-i18n="navSettings">الإعدادات</span>
+Line 202: <img src="assets/school-logo.png" alt="شعار المدرسة" style="width:100%; height:100%; object-fit:contain;" />
+Line 205: <div class="sf-name" data-i18n="teacherName">إسماعيل محبوبة</div>
+Line 206: <div class="sf-role" data-i18n="teacherRole">معلّم • مدرسة معيذر</div>
+Line 215: title="القائمة">
+Line 228: <input type="text" data-i18n-ph="searchPh" placeholder="ابحث عن طالب، صف، أو تقرير...">
+Line 244: <div class="avatar" style="width:42px;height:42px;">إم</div>
+Line 253: <div class="hero-eyebrow"><span class="pulse"></span><span data-i18n="heroEyebrow">الأحد، مرحباً
+Line 254: بعودتك</span></div>
+Line 255: <h1 data-i18n="heroTitle">صباح الخير، <span>أستاذ إسماعيل</span> — لديك يوم حافل اليوم</h1>
+Line 256: <p data-i18n="heroSub">4 حصص، اختبار واحد قادم، و 3 طلاب بحاجة لمتابعة. المساعد الذكي جهّز لك ملخصاً
+Line 257: كاملاً.</p>
+Line 264: placeholder="اطلب من المساعد الذكي... مثال: جهّز ورقة عمل عن الكسور">
+Line 265: <button data-i18n="heroAiBtn">إنشاء</button>
+Line 270: title="انقر لتعديل التاريخ وتحديد موعد مخصص">
+Line 272: <div class="d2" id="heroMonth">يوليو 2026</div>
+Line 281: <span id="weatherTemp">الدوحة، جاري التحميل...</span>
+Line 299: <div class="stat-label" data-i18n="statClasses">حصص اليوم</div>
+Line 313: <div class="stat-label" data-i18n="statAttend">نسبة الحضور</div>
+Line 326: <div class="stat-label" data-i18n="statAvg">معدل الدرجات</div>
+Line 340: <div class="stat-label" data-i18n="statPending">مهام معلّقة</div>
+Line 354: <div data-i18n="heatTitle">خريطة الحضور الحرارية</div>
+Line 355: <div class="panel-sub" data-i18n="heatSub">آخر 14 أسبوعاً</div>
+Line 359: <button onclick="moveCardUp('heatmapPanel')" class="reorder-btn" title="تحريك لأعلى">▲</button>
+Line 360: <button onclick="moveCardDown('heatmapPanel')" class="reorder-btn" title="تحريك لأسفل">▼</button>
+Line 362: <div class="pill-tab"><span class="on" data-i18n="tabWeek">أسبوعي</span><span
+Line 363: data-i18n="tabMonth">شهري</span></div>
+Line 367: <span data-i18n="heatLow">أقل</span>
+Line 372: <span data-i18n="heatHigh">أعلى</span>
+Line 375: aria-label="خط بياني يوضح متوسط الدرجات خلال الأسابيع"></canvas></div>
+Line 386: <div data-i18n="classesTitle">حصص اليوم</div>
+Line 387: <div class="panel-sub" data-i18n="classesSub">الأحد، 26 يوليو</div>
+Line 391: <button onclick="moveCardUp('classesPanel')" class="reorder-btn" title="تحريك لأعلى">▲</button>
+Line 392: <button onclick="moveCardDown('classesPanel')" class="reorder-btn" title="تحريك لأسفل">▼</button>
+Line 404: <div data-i18n="examsTitle">الاختبارات القادمة</div>
+Line 419: <div data-i18n="aiTitle">اقتراحات المساعد الذكي</div>
+Line 420: <div class="panel-sub" data-i18n="aiSub">مبنية على أداء الطلاب هذا الأسبوع</div>
+Line 424: <button onclick="moveCardUp('aiSuggestionsPanel')" class="reorder-btn" title="تحريك لأعلى">▲</button>
+Line 425: <button onclick="moveCardDown('aiSuggestionsPanel')" class="reorder-btn" title="تحريك لأسفل">▼</button>
+Line 433: <div class="ai-text" data-i18n="aiTip1"><b>3 الطلاب</b> في صف 9-B تراجع أداؤهم في الرياضيات — يقترح إنشاء
+Line 434: ورقة تقوية مخصصة.</div>
+Line 441: <div class="ai-text" data-i18n="aiTip2">حان وقت تجهيز <b>خطة الدرس الأسبوعية</b> للوحدة القادمة — يمكن
+Line 442: توليدها الآن في أقل من دقيقة.</div>
+Line 449: <div class="ai-text" data-i18n="aiTip3">اختبار الوحدة الثالثة بعد يومين — <b>بنك الأسئلة</b> جاهز لتوليد
+Line 450: نسخة عشوائية جديدة.</div>
+Line 462: <div data-i18n="activityTitle">سجل النشاط الأخير</div>
+Line 466: <button onclick="moveCardUp('activityTimelinePanel')" class="reorder-btn" title="تحريك لأعلى">▲</button>
+Line 468: title="تحريك لأسفل">▼</button>
+Line 483: <div>جدول الحصص الأسبوعي للأستاذ</div>
+Line 490: <th>الحصة / اليوم</th>
+Line 491: <th>الأحد</th>
+Line 492: <th>الاثنين</th>
+Line 493: <th>الثلاثاء</th>
+Line 494: <th>الأربعاء</th>
+Line 495: <th>الخميس</th>
+Line 500: <td style="font-weight:700;">الأولى (08:00)</td>
+Line 501: <td>علوم 9-A</td>
+Line 502: <td>علوم 10-A</td>
+Line 503: <td>علوم 9-A</td>
+Line 504: <td>علوم 9-B</td>
+Line 505: <td>علوم 10-B</td>
+Line 508: <td style="font-weight:700;">الثانية (09:30)</td>
+Line 509: <td>علوم 9-B</td>
+Line 510: <td>علوم 10-B</td>
+Line 511: <td>علوم 9-B</td>
+Line 512: <td>علوم 10-A</td>
+Line 513: <td>علوم 9-A</td>
+Line 516: <td style="font-weight:700;">الثالثة (11:15)</td>
+Line 517: <td>عملي (فيزياء)</td>
+Line 518: <td>شاغر</td>
+Line 519: <td>عملي (كيمياء)</td>
+Line 520: <td>شاغر</td>
+Line 521: <td>عملي (أحياء)</td>
+Line 524: <td style="font-weight:700;">الرابعة (13:00)</td>
+Line 525: <td>قسم العلوم</td>
+Line 526: <td>علوم 9-A</td>
+Line 527: <td>علوم 10-B</td>
+Line 528: <td>علوم 9-B</td>
+Line 529: <td>قسم العلوم</td>
+Line 543: <div>الرزنامة والإجازات الرسمية للدولة (2026)</div>
+Line 544: <div class="panel-sub" style="color:var(--success);">مربوط مباشرة مع قاعدة بيانات الدولة 🟢</div>
+Line 550: <div style="text-align:center; color:var(--text-3); padding:20px;">جاري الاتصال بقاعدة بيانات الإجازات
+Line 551: الرسمية...</div>
+Line 560: <h2><span data-i18n="materialsTitle">مستودع المواد الدراسية</span></h2>
+Line 561: <p data-i18n="materialsSub">ارفع ودرّس ملفاتك وحصصك الدراسية ونظمها لكل الصفوف</p>
+Line 576: <div class="stat-label" data-i18n="totalMaterials">إجمالي المواد المرفوعة</div>
+Line 587: <div class="stat-label" data-i18n="storageUsed">حجم الملفات المرفوعة</div>
+Line 599: <div class="stat-label" data-i18n="classesCount">الصفوف النشطة</div>
+Line 611: <div data-i18n="uploadNewMaterial">رفع مادة دراسية جديدة</div>
+Line 617: <label for="mTitle" data-i18n="materialTitleLabel">عنوان المادة / الدرس</label>
+Line 622: <label for="mClass" data-i18n="selectClassLabel">اختر الصف</label>
+Line 624: <option value="9-A">صف 9-A</option>
+Line 625: <option value="9-B">صف 9-B</option>
+Line 626: <option value="10-A">صف 10-A</option>
+Line 627: <option value="10-B">صف 10-B</option>
+Line 631: <label for="mType" data-i18n="selectTypeLabel">نوع الملف</label>
+Line 635: <option value="image">صورة / Image</option>
+Line 636: <option value="video">فيديو / Video</option>
+Line 641: <label for="mDesc" data-i18n="materialDescLabel">وصف قصير</label>
+Line 649: <p id="dropzonePrompt" data-i18n="dragDropText">اسحب وأفلت الملف هنا أو انقر للتصفح</p>
+Line 663: <span data-i18n="uploadBtnText">رفع المادة الدراسية</span>
+Line 677: <div>إضافة صف دراسي جديد</div>
+Line 683: <label for="cName">اسم الصف (مثال: 9-A)</label>
+Line 684: <input type="text" id="cName" class="form-control" required placeholder="مثال: 9-A" />
+Line 687: <label for="cNumber">رقم الصف (رقم الفئة)</label>
+Line 688: <input type="text" id="cNumber" class="form-control" required placeholder="مثال: 901" />
+Line 693: <label for="cGrade">المرحلة / الصف</label>
+Line 694: <input type="text" id="cGrade" class="form-control" required placeholder="مثال: Grade 9" />
+Line 697: <label for="cSection">الشعبة</label>
+Line 698: <input type="text" id="cSection" class="form-control" required placeholder="مثال: Class A" />
+Line 702: <label for="cYear">العام الأكاديمي</label>
+Line 703: <input type="text" id="cYear" class="form-control" required placeholder="مثال: 2026/2027"
+Line 707: <label for="cNotes">ملاحظات</label>
+Line 708: <input type="text" id="cNotes" class="form-control" placeholder="اختياري..." />
+Line 715: <span>إضافة الصف</span>
+Line 723: <div>الصفوف الدراسية الحالية</div>
+Line 730: <th>اسم الصف</th>
+Line 731: <th>الرقم</th>
+Line 732: <th>المرحلة</th>
+Line 733: <th>الطلاب</th>
+Line 734: <th>إجراء</th>
+Line 752: <div data-i18n="navMaterials">المواد الدراسية</div>
+Line 766: placeholder="ابحث في المواد المرفوعة..." style="font-size:12.5px;" />
+Line 770: <option value="all" data-i18n="allClasses">كل الصفوف</option>
+Line 771: <option value="9-A">صف 9-A</option>
+Line 772: <option value="9-B">صف 9-B</option>
+Line 773: <option value="10-A">صف 10-A</option>
+Line 774: <option value="10-B">صف 10-B</option>
+Line 789: <h2>إدارة الطلاب — <span id="currentClassTitle">صف 9-A</span></h2>
+Line 790: <p>عرض وتعديل ورفع قوائم الطلاب لمادة العلوم</p>
+Line 798: <span>إضافة طالب جديد</span>
+Line 804: <span>رفع قائمة الطلاب (CSV / Excel)</span>
+Line 807: <span style="font-size:13px; font-weight:700; color:var(--text-2);">تصفية حسب:</span>
+Line 810: <option value="all">كل المراحل</option>
+Line 811: <option value="7">الصف السابع</option>
+Line 812: <option value="8">الصف الثامن</option>
+Line 813: <option value="9">الصف التاسع</option>
+Line 814: <option value="10">الصف العاشر</option>
+Line 822: <option value="all">كل الشعب</option>
+Line 823: <option value="A">شعبة A</option>
+Line 824: <option value="B">شعبة B</option>
+Line 825: <option value="C">شعبة C</option>
+Line 834: <th>الرقم</th>
+Line 835: <th>اسم الطالب</th>
+Line 836: <th>الصف</th>
+Line 837: <th>درجة العلوم</th>
+Line 838: <th>نسبة الحضور</th>
+Line 839: <th>الإجراءات</th>
+Line 852: <h2>تسجيل الحضور والغياب</h2>
+Line 853: <p>رصد حالة الحضور اليومي لطلاب مادة العلوم</p>
+Line 860: <option value="9-A">صف 9-A</option>
+Line 861: <option value="9-B">صف 9-B</option>
+Line 862: <option value="10-A">صف 10-A</option>
+Line 863: <option value="10-B">صف 10-B</option>
+Line 865: <span style="font-size: 13.5px; font-weight: 700; color: var(--text-2);" id="attendDateLabel">اليوم: الأحد 26
+Line 866: يوليو 2026</span>
+Line 873: <th>اسم الطالب</th>
+Line 874: <th>الصف</th>
+Line 875: <th>حالة الحضور</th>
+Line 888: <h2>الدرجات والتقييم</h2>
+Line 889: <p>رصد وتعديل درجات اختبارات العلوم وأوراق العمل</p>
+Line 899: onclick="document.getElementById('gradesImportInput').click()" title="استيراد ملف درجات">
+Line 903: <span>استيراد الدرجات (Excel / CSV / PDF)</span>
+Line 908: title="إضافة عمود تقييم جديد للجدول">
+Line 912: <span>إضافة عمود تقييم</span>
+Line 920: <th>اسم الطالب</th>
+Line 921: <th>اختبار الوحدة 1 (100)</th>
+Line 922: <th>اختبار الوحدة 2 (100)</th>
+Line 923: <th>المشروع العملي (100)</th>
+Line 924: <th>المعدل الحالي</th>
+Line 933: <button class="grades-fab" onclick="addNewAssessmentColumn()" title="إضافة عمود تقييم جديد">➕</button>
+Line 939: <h2>بنك الأسئلة المركزي</h2>
+Line 940: <p>تصفح، ابحث، ونظّم أسئلتك المنهجية، وقم بتجميع اختبارات مخصصة لطلابك</p>
+Line 947: placeholder="🔍 ابحث في نص الأسئلة أو الإجابات..." style="width: 250px; padding: 8px 12px;" />
+Line 951: <option value="all">كل الأنواع</option>
+Line 952: <option value="mcq">اختيار من متعدد</option>
+Line 953: <option value="tf">صح / خطأ</option>
+Line 954: <option value="blank">إكمال الفراغ</option>
+Line 955: <option value="match">مطابقة</option>
+Line 956: <option value="short">إجابة قصيرة</option>
+Line 957: <option value="essay">سؤال مقالي</option>
+Line 958: <option value="order">ترتيب</option>
+Line 959: <option value="classify">تصنيف</option>
+Line 964: <option value="all">كل الحقائب</option>
+Line 965: <option value="cell">الخلية الحية ووظائفها</option>
+Line 966: <option value="atoms">الذرة والعناصر الكيميائية</option>
+Line 967: <option value="reactions">التفاعلات الكيميائية</option>
+Line 968: <option value="motion">قوانين الحركة والسرعة</option>
+Line 973: <option value="all">كل المستويات</option>
+Line 974: <option value="easy">سهل</option>
+Line 975: <option value="medium">متوسط</option>
+Line 976: <option value="hard">صعب</option>
+Line 980: placeholder="🏷️ وسوم (مثل: أحياء)..." style="width: 140px; padding: 8px 12px;" />
+Line 984: <span>📝 تجميع اختبار من المحدَّد</span>
+Line 988: <span>➕ إضافة سؤال يدوياً</span>
+Line 993: 💡 إجمالي الأسئلة في البنك: <strong id="qbTotalCount">0</strong> | تم تحديد: <strong
+Line 994: id="qbSelectedCount">0</strong> سؤال
+Line 1006: <h2>مولّد الأسئلة والاختبارات الذكي</h2>
+Line 1007: <p>أنشئ اختبارات علوم مخصصة لطلابك في ثوانٍ</p>
+Line 1018: <div>إعدادات الاختبار</div>
+Line 1024: <label for="quizSourceFile">اختر المقرر الدراسي المرفوع</label>
+Line 1026: <option value="default">— اختر من المستندات المرفوعة (توليد ذكي) —</option>
+Line 1027: <option value="cell_structure.pdf">مستند: تركيب الخلية ووظائفها.pdf</option>
+Line 1028: <option value="periodic_table.docx">ورقة عمل: الجدول الدوري والعناصر.docx</option>
+Line 1029: <option value="motion_laws.pdf">ملخص: قوانين الحركة والسرعة.pdf</option>
+Line 1036: <label for="quizSubject">المادة</label>
+Line 1037: <input type="text" id="quizSubject" class="form-control" value="العلوم العامة" />
+Line 1040: <label for="quizGrade">الصف الدراسي</label>
+Line 1042: <option value="9">الصف التاسع</option>
+Line 1043: <option value="10">الصف العاشر</option>
+Line 1044: <option value="7">الصف السابع</option>
+Line 1045: <option value="8">الصف الثامن</option>
+Line 1053: <label for="quizTopic">حقيبة الاختبار العامة</label>
+Line 1056: <option value="cell">الخلية الحية ووظائفها</option>
+Line 1057: <option value="atoms">الذرة والعناصر الكيميائية</option>
+Line 1058: <option value="reactions">التفاعلات الكيميائية</option>
+Line 1059: <option value="motion">قوانين الحركة والسرعة</option>
+Line 1063: <label for="quizLessonName">اسم الدرس بالتحديد</label>
+Line 1065: placeholder="مثال: الانقسام الخلوي أو الروابط الكيميائية" value="الخلية الحية ووظائفها" />
+Line 1072: <label for="quizLevel">مستوى الصعوبة</label>
+Line 1074: <option value="easy">سهل / Easy</option>
+Line 1075: <option value="medium" selected>متوسط / Medium</option>
+Line 1076: <option value="hard">صعب / Hard</option>
+Line 1080: <label for="quizBloomLevel">تصنيف بلوم المستهدف (Bloom's)</label>
+Line 1082: <option value="تذكر">تذكر (Remembering)</option>
+Line 1083: <option value="فهم" selected>فهم (Understanding)</option>
+Line 1084: <option value="تطبيق">تطبيق (Applying)</option>
+Line 1085: <option value="تحليل">تحليل (Analyzing)</option>
+Line 1086: <option value="تقييم">تقييم (Evaluating)</option>
+Line 1087: <option value="ابتكار">ابتكار (Creating)</option>
+Line 1095: <label for="quizCount">عدد الأسئلة المطلوب</label>
+Line 1097: <option value="5">5 أسئلة</option>
+Line 1098: <option value="10" selected>10 أسئلة</option>
+Line 1099: <option value="15">15 سؤالاً</option>
+Line 1100: <option value="20">20 سؤالاً</option>
+Line 1101: <option value="25">25 سؤالاً</option>
+Line 1102: <option value="30">30 سؤالاً</option>
+Line 1106: <label for="quizLanguage">لغة ورقة الاختبار</label>
+Line 1108: <option value="ar">اللغة العربية</option>
+Line 1115: <label style="font-weight:700; margin-bottom:8px; display:block;">أنواع الأسئلة المطلوب توليدها</label>
+Line 1119: <span>اختيار من متعدد (MCQ)</span>
+Line 1123: <span>صح أم خطأ (T / F)</span>
+Line 1127: <span>إكمال الفراغ (Fill in the Blank)</span>
+Line 1131: <span>سؤال المطابقة (Matching)</span>
+Line 1135: <span>إجابة قصيرة (Short Answer)</span>
+Line 1139: <span>سؤال مقالي (Essay)</span>
+Line 1143: <span>سؤال الترتيب (Ordering)</span>
+Line 1147: <span>سؤال التصنيف (Classification)</span>
+Line 1159: <span>توليد ورقة الاختبار الذكية ⚡</span>
+Line 1171: <div>معاينة ورقة الاختبار والمخرجات</div>
+Line 1178: خلط الأسئلة</button>
+Line 1181: خلط الإجابات</button>
+Line 1185: <option value="A">نموذج A</option>
+Line 1186: <option value="B">نموذج B</option>
+Line 1187: <option value="C">نموذج C</option>
+Line 1191: حفظ لبنك الأسئلة</button>
+Line 1193: style="padding:4px 10px; font-size:11px; width:auto; background:var(--info); color:#fff;">📝 تصدير
+Line 1196: style="padding:4px 10px; font-size:11px; width:auto; background:var(--success); color:#fff;">🖨️ طباعة
+Line 1203: قم بتعبئة الخيارات والنقر على توليد لمعاينة ورقة الاختبار هنا
+Line 1209: <div>⏱️ زمن الحل المقدر: <strong id="quizEstTime">0 دقيقة</strong></div>
+Line 1210: <div>📊 توزيع الصعوبة: <strong id="quizDiffDist">سهل: 0%، متوسط: 0%، صعب: 0%</strong></div>
+Line 1211: <div>🏷️ تصنيف بلوم: <strong id="quizBloomTag">تذكر</strong></div>
+Line 1225: <h2>مولّد خطط الدروس اليومية والأسبوعية</h2>
+Line 1226: <p>جهّز خطة درس نموذجية لمادة العلوم بضغطة زر</p>
+Line 1237: <div>إعداد خطة الدرس</div>
+Line 1242: <label for="planTopic">موضوع الدرس</label>
+Line 1244: placeholder="مثال: الخلية الحيوانية والنباتية" />
+Line 1247: <label for="planClass">الصف الدراسي</label>
+Line 1249: <option value="9-A">الصف التاسع</option>
+Line 1250: <option value="10-A">الصف العاشر</option>
+Line 1254: <label for="planDuration">مدة الحصة</label>
+Line 1256: <option value="40">40 دقيقة</option>
+Line 1257: <option value="45" selected>45 دقيقة</option>
+Line 1258: <option value="custom">مدة مخصصة...</option>
+Line 1262: <label for="planCustomDuration">أدخل المدة بالدقائق</label>
+Line 1264: placeholder="مثال: 50" />
+Line 1270: <span>توليد خطة الدرس</span>
+Line 1282: <div>خطة الدرس المولّدة</div>
+Line 1287: سيظهر هنا تحضير الدرس بالتفصيل بعد الضغط على زر التوليد.
+Line 1296: <h2>منشئ العروض التقديمية التفاعلية</h2>
+Line 1297: <p>قم بتوليد شرائح عرض احترافية لموضوعات العلوم وعرضها فوراً</p>
+Line 1307: <div>إنشاء عرض جديد</div>
+Line 1312: <label>عنوان أو موضوع العرض</label>
+Line 1314: placeholder="مثال: البناء الضوئي أو الجدول الدوري" />
+Line 1317: <label>عدد الشرائح</label>
+Line 1319: <option value="5" selected>5 شرائح</option>
+Line 1320: <option value="8">8 شرائح</option>
+Line 1321: <option value="10">10 شرائح</option>
+Line 1322: <option value="12">12 شرائح</option>
+Line 1323: <option value="15">15 شريحة</option>
+Line 1326: <button type="submit" class="btn-primary">توليد الشرائح</button>
+Line 1338: <div>معاينة العرض التقديمي</div>
+Line 1354: اضغط على زر التوليد لعرض الشرائح هنا.
+Line 1363: <h2>التقارير الذكية وأوراق التقييم</h2>
+Line 1364: <p>توليد تقارير أداء دورية وبطاقات درجات تفصيلية للطلاب</p>
+Line 1375: <div id="reportsClassTitle">توليد تقارير الصف</div>
+Line 1379: <option value="9-A">صف 9-A</option>
+Line 1380: <option value="9-B">صف 9-B</option>
+Line 1381: <option value="10-A">صف 10-A</option>
+Line 1382: <option value="10-B">صف 10-B</option>
+Line 1390: <th>اسم الطالب</th>
+Line 1391: <th>متوسط الدرجات</th>
+Line 1392: <th>حالة الحضور</th>
+Line 1393: <th>الإجراء</th>
+Line 1407: <h2>مساعد العلوم بالذكاء الاصطناعي</h2>
+Line 1408: <p>اسأل المساعد الذكي عن شرح المفاهيم العلمية أو توليد خطط الدروس والأنشطة</p>
+Line 1420: <div style="font-size:11px; color:var(--success);">● متصل الآن ومستعد للمساعدة</div>
+Line 1427: أهلاً بك أستاذ إسماعيل! أنا مساعد العلوم الذكي. كيف يمكنني مساعدتك اليوم في تحضير دروسك أو تخطيط تجاربك؟
+Line 1433: placeholder="اكتب سؤالك هنا... مثال: كيف أشرح قانون نيوتن الثالث؟" required style="flex:1;" />
+Line 1434: <button type="submit" class="btn-primary" style="padding: 10px 20px;">إرسال</button>
+Line 1442: <h2>جدول وتقويم المعلم التفاعلي</h2>
+Line 1443: <p>نظّم جدول الحصص، موعد الاختبارات، والأنشطة المدرسية</p>
+Line 1453: <div>أحداث شهر يوليو 2026</div>
+Line 1458: <div>الأحد</div>
+Line 1459: <div>الاثنين</div>
+Line 1460: <div>الثلاثاء</div>
+Line 1461: <div>الأربعاء</div>
+Line 1462: <div>الخميس</div>
+Line 1463: <div>الجمعة</div>
+Line 1464: <div>السبت</div>
+Line 1478: <div>إضافة موعد أو حدث جديد</div>
+Line 1483: <label>اسم الحدث / الاختبار</label>
+Line 1485: placeholder="مثال: اختبار الكيمياء العملي" />
+Line 1488: <label>تاريخ الحدث</label>
+Line 1492: <label>نوع الحدث</label>
+Line 1494: <option value="exam">اختبار</option>
+Line 1495: <option value="session">حصة دراسية</option>
+Line 1496: <option value="meeting">اجتماع</option>
+Line 1499: <button type="submit" class="btn-primary">حفظ الحدث</button>
+Line 1502: <h4 style="font-weight:700; font-size:13px; margin-bottom:8px;">قائمة المواعيد القادمة:</h4>
+Line 1514: <h2>مركز الإشعارات والتنبيهات</h2>
+Line 1515: <p>تابع آخر مستجدات أداء طلابك وجدول أعمالك اليومي</p>
+Line 1524: <div>تنبيهات النظام النشطة</div>
+Line 1527: style="width:auto; padding:6px 12px; font-size:12px;">مسح الكل</button>
+Line 1538: <h2>إعدادات النظام والملف الشخصي</h2>
+Line 1539: <p>تخصيص لوحة التحكم والتحكم ببيانات المعلم والمدرسة</p>
+Line 1550: <div>بيانات المعلم والمدرسة</div>
+Line 1555: <label>اسم المعلم</label>
+Line 1556: <input type="text" id="setTeacherName" class="form-control" required value="إسماعيل محبوبة" />
+Line 1559: <label>المدرسة</label>
+Line 1560: <input type="text" id="setSchoolName" class="form-control" required value="مدرسة معيذر" />
+Line 1563: <label>التخصص الدراسي</label>
+Line 1564: <input type="text" id="setSpecialty" class="form-control" required value="معلّم العلوم" />
+Line 1567: <label>مفتاح Gemini API للتوليد اللا نهائي (اختياري)</label>
+Line 1570: <button type="submit" class="btn-primary">حفظ الإعدادات</button>
+Line 1580: <div>هوية وألوان المدرسة (School Theme Presets)</div>
+Line 1583: <p style="font-size:12.5px; color:var(--text-2); margin-bottom:12px;">اختر اللون الذي يمثل هوية مدرستك
+Line 1584: الرسمية لصبغ المنصة بالكامل:</p>
+Line 1588: title="العنابي (العاصمي)"></button>
+Line 1591: title="الأزرق الملكي"></button>
+Line 1594: title="الأخضر التعليمي"></button>
+Line 1597: title="البرتقالي الدافئ"></button>
+Line 1600: title="البنفسجي الإبداعي"></button>
+Line 1611: <div>تخصيص تخطيط المنصة والجانبية</div>
+Line 1614: <p style="font-size:12.5px; color:var(--text-2); margin-bottom:14px;">حدد الألواح التي تود إظهارها في لوحة
+Line 1615: التحكم وتفضيلات الشريط الجانبي:</p>
+Line 1618: <label style="font-weight:700; margin-bottom:8px; display:block;">إظهار وإخفاء ألواح التحكم
+Line 1619: الرئيسية:</label>
+Line 1624: <span>خريطة الحضور الحرارية والدرجات</span>
+Line 1629: <span>حصص اليوم والاختبارات القادمة</span>
+Line 1634: <span>اقتراحات المساعد الذكي AI</span>
+Line 1639: <span>سجل النشاط الأخير للمنصة</span>
+Line 1646: <label for="sidebarAlignSelect" style="font-weight:700;">موقع القائمة الجانبية</label>
+Line 1649: <option value="right">اليمين (الافتراضي للعربية)</option>
+Line 1650: <option value="left">اليسار (النمط الغربي)</option>
+Line 1654: <label for="sidebarStyleSelect" style="font-weight:700;">حجم ونمط القائمة</label>
+Line 1657: <option value="normal">عريض (أيقونات + أسماء)</option>
+Line 1658: <option value="slim">نحيف / مضغوط (أيقونات فقط)</option>
+Line 1672: <div style="color:var(--danger);">منطقة الخطر وإعادة التهيئة</div>
+Line 1676: تنبيه: يمكنك إعادة تهيئة النظام بالكامل وحذف كافة الطلاب المضافين والملفات المرفوعة ليعود الموقع لحالته
+Line 1677: الأصلية. لا يمكن التراجع عن هذا الإجراء.
+Line 1680: style="background:linear-gradient(145deg, var(--danger), #c22929);">إعادة تهيئة البيانات بالكامل</button>
+Line 1688: <h2>لوحة النجوم والتميز 🌟</h2>
+Line 1689: <p>كافئ طلابك المتميزين وعزز التنافس الإيجابي في مدرسة معيذر</p>
+Line 1702: <div>منح نجوم ووسام تقديري</div>
+Line 1707: <label for="starStudentSelect">اختر الطالب</label>
+Line 1714: <label for="starCountSelect">عدد النجوم</label>
+Line 1716: <option value="1">⭐ نجمة واحدة</option>
+Line 1717: <option value="2">⭐⭐ نجمتان</option>
+Line 1718: <option value="3">⭐⭐⭐ 3 نجوم</option>
+Line 1719: <option value="4">⭐⭐⭐⭐ 4 نجوم</option>
+Line 1720: <option value="5">⭐⭐⭐⭐⭐ 5 نجوم (تميز استثنائي)</option>
+Line 1724: <label for="starReasonSelect">سبب التكريم</label>
+Line 1726: <option value="مشاركة ممتازة في الحصة">مشاركة ممتازة في الحصة</option>
+Line 1727: <option value="التفوق في التقييمات">التفوق في التقييمات والواجبات</option>
+Line 1728: <option value="إجراء تجربة علمية مميزة">إجراء تجربة علمية مميزة</option>
+Line 1729: <option value="السلوك المثالي والمساعدة">السلوك المثالي والمساعدة</option>
+Line 1730: <option value="custom">سبب مخصص...</option>
+Line 1735: <label for="starCustomReason">السبب المخصص</label>
+Line 1736: <input type="text" id="starCustomReason" class="form-control" placeholder="اكتب السبب هنا..." />
+Line 1739: <label for="starNotes">ملاحظات المعلم</label>
+Line 1740: <input type="text" id="starNotes" class="form-control" placeholder="ملاحظة إضافية تظهر في الشهادة..." />
+Line 1744: <span>منح النجوم والوسام 🏆</span>
+Line 1757: <div>لوحة متصدري النجوم</div>
+Line 1760: <span class="on" onclick="switchLeaderboardView('weekly')">أسبوعي</span>
+Line 1761: <span onclick="switchLeaderboardView('monthly')">شهري</span>
+Line 1771: <h3>بطاقات التميز وشهادات الطلاب 🏆</h3>
+Line 1782: <h2>محلل الدرجات والخطط العلاجية الذكي 📊</h2>
+Line 1783: <p>تصنيف تلقائي لمستويات الطلاب، إحصاءات بيانية متكاملة، وخطة علاجية ذكية لكل طالب ضعيف</p>
+Line 1790: <div class="panel-title">مخطط توزيع أداء الطلاب (Performance Distribution)</div>
+Line 1796: <div class="panel-title">مقارنة متوسط أداء الصفوف الدراسية</div>
+Line 1806: <div style="font-size: 11px; color:var(--text-3); font-weight:700;">ممتاز (90+)</div>
+Line 1810: <div style="font-size: 11px; color:var(--text-3); font-weight:700;">جيد جداً (80-89)</div>
+Line 1814: <div style="font-size: 11px; color:var(--text-3); font-weight:700;">جيد (70-79)</div>
+Line 1818: <div style="font-size: 11px; color:var(--text-3); font-weight:700;">مقبول (60-69)</div>
+Line 1822: <div style="font-size: 11px; color:var(--text-3); font-weight:700;">ضعيف (50-59)</div>
+Line 1826: <div style="font-size: 11px; color:var(--text-3); font-weight:700;">ضعيف جداً (&lt;50)</div>
+Line 1839: <div>التصنيف والتحليل البيداغوجي للمستويات الدراسية</div>
+Line 1855: <div>الخطة العلاجية الذكية الفردية للطلاب الضعاف (Remedial Plan)</div>
+Line 1859: <label for="weakStudentsSelect">اختر الطالب لمراجعة أو تعديل خطته العلاجية:</label>
+Line 1869: <h4 id="remStudentName" style="font-size:16px; font-weight:800;">طالب: -</h4>
+Line 1872: <span>حفظ تعديلات الخطة 💾</span>
+Line 1878: <label>الأهداف الأسبوعية (Weekly Goals)</label>
+Line 1883: <label>الأهداف الشهرية (Monthly Goals)</label>
+Line 1891: <label>الأنشطة العلاجية والواجبات المنزلية</label>
+Line 1896: <label>توصيات موجهة لولي الأمر والمنزل</label>
+Line 1904: <label>توصيات المعلم والأنشطة الصفية</label>
+Line 1909: <label>جدول التقييم ومواعيد المتابعة</label>
+Line 1917: <label style="font-weight:800; display:block; margin-bottom:8px;">مؤشر تقدم الطالب ومتابعة الأهداف
+Line 1918: العلاجية:</label>
+Line 1925: لا يوجد طلاب بمعدلات ضعيفة (أقل من 60%) في هذا الصف. أحسنتم! 🎉
+Line 1936: <h3>بطاقة أداء الطالب الشهرية</h3>
+Line 1941: <h3 style="text-align:center; border-bottom:2px solid #222; padding-bottom:8px; margin-bottom:16px;">مدرسة معيذر
+Line 1942: الابتدائية للبنين — بطاقة تقييم أداء</h3>
+Line 1945: <div style="flex:1;"><strong>اسم الطالب:</strong> <span id="repStudentName">-</span></div>
+Line 1946: <div style="flex:1;"><strong>الصف:</strong> <span id="repStudentClass">-</span></div>
+Line 1951: <th style="border:1px solid #222; padding:8px;">المادة / التقييم</th>
+Line 1952: <th style="border:1px solid #222; padding:8px;">الدرجة</th>
+Line 1953: <th style="border:1px solid #222; padding:8px;">التقدير</th>
+Line 1958: <td style="border:1px solid #222; padding:8px; font-weight:700;">العلوم العامة (نظري)</td>
+Line 1963: <td style="border:1px solid #222; padding:8px; font-weight:700;">النشاط والمشاركة</td>
+Line 1968: <td style="border:1px solid #222; padding:8px; font-weight:700;">الاختبار العملي</td>
+Line 1973: <td style="border:1px solid #222; padding:8px;">المعدل العام</td>
+Line 1980: <strong>حالة حضور الطالب:</strong> <span id="repStudentAttendance">-</span><br />
+Line 1981: <strong>ملاحظة معلم العلوم:</strong> <span id="repStudentComment">-</span>
+Line 1985: <button class="btn-primary" onclick="window.print()">طباعة التقرير</button>
+Line 1987: style="background:var(--bg-alt); color:var(--text-1); border:1px solid var(--border);">إغلاق</button>
+Line 1994: <h3>التقويم التفاعلي — اختر موعداً</h3>
+Line 1999: <label for="customDatePicker">حدد التاريخ اليومي للمنصة</label>
+Line 2004: ملاحظة: اختيار تاريخ جديد سيقوم بتحديث عدّاد الحصص اليومي وجداول الحضور والتقويم ديناميكياً ليطابق اليوم
+Line 2005: المحدد.
+Line 2007: <button type="submit" class="btn-primary">تحديث تاريخ المنصة</button>
+Line 2016: <h3>➕ إضافة طالب جديد</h3>
+Line 2022: 💡 تم استعادة مسودة غير محفوظة مسبقاً.
+Line 2037: <label style="font-weight: 700; margin-bottom: 6px; display: block;">صورة الطالب</label>
+Line 2041: <small style="color: var(--text-3); font-size: 11px;">الحد الأقصى للحجم: 1 ميجابايت (JPG, PNG)</small>
+Line 2049: <label for="sName">اسم الطالب رباعي <span style="color:var(--danger)">*</span></label>
+Line 2050: <input type="text" id="sName" class="form-control" required placeholder="مثال: أحمد عبد الله الكواري"
+Line 2053: style="color: var(--danger); font-size: 11px; display: none;">يجب إدخال الاسم الرباعي بشكل صحيح (3 كلمات
+Line 2054: على الأقل).</span>
+Line 2059: <label for="sCode">رقم الطالب الأكاديمي (Student ID) <span style="color:var(--danger)">*</span></label>
+Line 2060: <input type="text" id="sCode" class="form-control" required placeholder="مثال: 20260001"
+Line 2063: style="color: var(--danger); font-size: 11px; display: none;">يجب إدخال رقم أكاديمي مكون من 8
+Line 2064: أرقام.</span>
+Line 2069: <label for="sNationalId">الرقم الشخصي القطري (QID) <span style="color:var(--danger)">*</span></label>
+Line 2070: <input type="text" id="sNationalId" class="form-control" required placeholder="مثال: 31512345678"
+Line 2073: style="color: var(--danger); font-size: 11px; display: none;">يجب إدخال الرقم الشخصي القطري المكون من 11
+Line 2074: رقماً.</span>
+Line 2079: <label for="sGender">الجنس</label>
+Line 2081: <option value="بنين">بنين</option>
+Line 2082: <option value="بنات">بنات</option>
+Line 2088: <label for="sDob">تاريخ الميلاد <span style="color:var(--danger)">*</span></label>
+Line 2091: style="color: var(--danger); font-size: 11px; display: none;">تاريخ الميلاد غير صالح.</span>
+Line 2096: <label for="sGrade">المرحلة الدراسية</label>
+Line 2098: <option value="9">الصف التاسع</option>
+Line 2099: <option value="10">الصف العاشر</option>
+Line 2100: <option value="7">الصف السابع</option>
+Line 2101: <option value="8">الصف الثامن</option>
+Line 2107: <label for="sClass">الصف الدراسي <span style="color:var(--danger)">*</span></label>
+Line 2115: <label for="sSection">الشعبة <span style="color:var(--danger)">*</span></label>
+Line 2116: <input type="text" id="sSection" class="form-control" required placeholder="مثال: أ أو A"
+Line 2119: style="color: var(--danger); font-size: 11px; display: none;">الشعبة مطلوبة.</span>
+Line 2126: 👨‍👩‍👦 معلومات ولي الأمر</h4>
+Line 2132: <label for="sParentName">اسم ولي الأمر <span style="color:var(--danger)">*</span></label>
+Line 2133: <input type="text" id="sParentName" class="form-control" required placeholder="اسم ولي الأمر ثلاثي"
+Line 2136: style="color: var(--danger); font-size: 11px; display: none;">اسم ولي الأمر مطلوب.</span>
+Line 2141: <label for="sParentPhone">رقم جوال ولي الأمر <span style="color:var(--danger)">*</span></label>
+Line 2142: <input type="text" id="sParentPhone" class="form-control" required placeholder="مثال: 55123456"
+Line 2145: style="color: var(--danger); font-size: 11px; display: none;">يجب إدخال رقم هاتف صالح (8 أرقام).</span>
+Line 2150: <label for="sParentEmail">بريد ولي الأمر الإلكتروني</label>
+Line 2154: style="color: var(--danger); font-size: 11px; display: none;">صيغة البريد الإلكتروني غير صالحة.</span>
+Line 2159: <label for="sAddress">العنوان السكني</label>
+Line 2160: <input type="text" id="sAddress" class="form-control" placeholder="المنطقة، الشارع، رقم المنزل"
+Line 2168: 📝 معلومات إضافية وحالة الطالب</h4>
+Line 2174: <label for="sEnrollDate">تاريخ التسجيل</label>
+Line 2180: <label for="sStatus">حالة القيد</label>
+Line 2182: <option value="نشط">نشط / Active</option>
+Line 2183: <option value="غير نشط">غير نشط / Inactive</option>
+Line 2184: <option value="خريج">خريج / Graduated</option>
+Line 2185: <option value="منقول">منقول / Transferred</option>
+Line 2191: <label for="sSpecialNeeds">حالة ذوي الاحتياجات الخاصة</label>
+Line 2193: <option value="لا يوجد">لا يوجد</option>
+Line 2194: <option value="صعوبات تعلم">صعوبات تعلم</option>
+Line 2195: <option value="حركي">احتياج حركي</option>
+Line 2196: <option value="سمعي / بصري">احتياج سمعي / بصري</option>
+Line 2197: <option value="أخرى">أخرى (سجل في الملاحظات)</option>
+Line 2203: <label for="sMedical">ملاحظات طبية / حساسية</label>
+Line 2204: <input type="text" id="sMedical" class="form-control" placeholder="مثال: حساسية من البنسلين أو لا يوجد"
+Line 2210: <label for="sNotes">ملاحظات عامة</label>
+Line 2212: placeholder="ملاحظات أكاديمية أو سلوكية إضافية عن الطالب..." oninput="saveStudentDraft()"></textarea>
+Line 2218: <button type="submit" class="btn-primary" style="width: auto; padding: 10px 24px;">حفظ الطالب</button>
+Line 2220: style="width: auto; padding: 10px 20px; background: var(--bg-alt);">إعادة تعيين</button>
+Line 2222: style="width: auto; padding: 10px 20px;">إلغاء</button>
+Line 2232: <h3>📥 معالج استيراد الطلاب (Import Wizard)</h3>
+Line 2239: <div class="step-indicator active" id="stepInd1">1. رفع الملف</div>
+Line 2240: <div class="step-indicator" id="stepInd2">2. معاينة البيانات</div>
+Line 2241: <div class="step-indicator" id="stepInd3">3. مطابقة الأعمدة</div>
+Line 2242: <div class="step-indicator" id="stepInd4">4. التحقق والتدقيق</div>
+Line 2243: <div class="step-indicator" id="stepInd5">5. الاستيراد والملخص</div>
+Line 2249: <label for="wizardRClass" style="font-weight:700; margin-bottom:8px; display:block;">الصف الدراسي المستهدف
+Line 2250: للاستيراد</label>
+Line 2260: <p style="font-weight:700; font-size:14px; margin-bottom:4px; color:var(--text-1);">اسحب وأفلت ملف Excel
+Line 2261: (XLSX, XLS) أو ملف CSV هنا</p>
+Line 2262: <p style="font-size:12px; color:var(--text-3);">أو انقر للتصفح من جهازك</p>
+Line 2268: <span>✅ الملف المحدد:</span>
+Line 2271: style="padding:2px 8px; font-size:11px; width:auto; border-radius:4px;">إلغاء</button>
+Line 2276: style="width:auto; padding:10px 24px;">التالي: معاينة البيانات ←</button>
+Line 2283: <h4 style="font-weight:800; color:var(--gold);">معاينة أسطر الملف الأولى:</h4>
+Line 2284: <p style="font-size:12px; color:var(--text-3);">تأكد من قراءة البيانات بشكل صحيح قبل الانتقال للمطابقة.</p>
+Line 2294: style="width:auto; padding:10px 20px; background:var(--bg-alt);">→ السابق</button>
+Line 2295: <button class="btn-primary" onclick="goToWizardStep3()" style="width:auto; padding:10px 24px;">التالي:
+Line 2296: مطابقة الأعمدة ←</button>
+Line 2303: <h4 style="font-weight:800; color:var(--gold);">مطابقة الحقول البرمجية مع أعمدة الملف:</h4>
+Line 2304: <p style="font-size:12px; color:var(--text-3);">تم التعرف تلقائياً على الأعمدة المشابهة. يمكنك تصحيح
+Line 2305: المطابقة يدوياً.</p>
+Line 2310: <label style="font-weight:700; font-size:13px;">اسم الطالب (كامل)</label>
+Line 2314: <label style="font-weight:700; font-size:13px;">الرقم الأكاديمي (Student ID)</label>
+Line 2318: <label style="font-weight:700; font-size:13px;">الرقم الشخصي القطري (QID)</label>
+Line 2322: <label style="font-weight:700; font-size:13px;">اسم ولي الأمر</label>
+Line 2326: <label style="font-weight:700; font-size:13px;">رقم هاتف ولي الأمر</label>
+Line 2330: <label style="font-weight:700; font-size:13px;">الشعبة (اختياري)</label>
+Line 2336: style="width:auto; padding:10px 20px; background:var(--bg-alt);">→ السابق</button>
+Line 2337: <button class="btn-primary" onclick="goToWizardStep4()" style="width:auto; padding:10px 24px;">التالي:
+Line 2338: التحقق والتدقيق ←</button>
+Line 2345: <h4 style="font-weight:800; color:var(--gold);">تقرير التدقيق وصحة البيانات:</h4>
+Line 2346: <p style="font-size:12px; color:var(--text-3);">راجع الأخطاء أو التكرارات المكتشفة أدناه قبل الحفظ النهائي.
+Line 2358: style="width:auto; padding:10px 20px; background:var(--bg-alt);">→ السابق</button>
+Line 2360: style="width:auto; padding:10px 24px; background:var(--success);">التالي: تأكيد الاستيراد ←</button>
+Line 2368: <h4 style="font-weight:800; font-size:18px; margin-top:12px; margin-bottom:16px; color:var(--gold);">جاهز
+Line 2369: لاستيراد البيانات لقاعدة البيانات</h4>
+Line 2371: يرجى مراجعة ملخص الأسطر المكتشفة أدناه والتأكيد لإتمام إدراج الطلاب وتنسيبهم للصف المحدد.
+Line 2379: <div style="font-size:11px; color:var(--text-3); font-weight:700;">إجمالي الأسطر</div>
+Line 2384: <div style="font-size:11px; color:var(--text-3); font-weight:700;">سيتم استيرادهم</div>
+Line 2389: <div style="font-size:11px; color:var(--text-3); font-weight:700;">مكررون (سيتم تجاوزهم)</div>
+Line 2394: <div style="font-size:11px; color:var(--text-3); font-weight:700;">أخطاء (سيتم تجاوزهم)</div>
+Line 2401: style="width:auto; padding:10px 20px; background:var(--bg-alt);">→ السابق</button>
+Line 2403: style="width:auto; padding:10px 30px; background: linear-gradient(145deg, var(--success), #10b981); color:#fff; font-weight:800;">تأكيد
+Line 2404: وحفظ الطلاب 📥</button>
+Line 2415: <h3 id="qbModalTitle">➕ إضافة سؤال جديد للبنك</h3>
+Line 2425: <label for="qbTopic">الحقيبة التعليمية</label>
+Line 2427: <option value="cell">الخلية الحية ووظائفها</option>
+Line 2428: <option value="atoms">الذرة والعناصر الكيميائية</option>
+Line 2429: <option value="reactions">التفاعلات الكيميائية</option>
+Line 2430: <option value="motion">قوانين الحركة والسرعة</option>
+Line 2434: <label for="qbType">نوع السؤال</label>
+Line 2436: <option value="mcq">اختيار من متعدد (MCQ)</option>
+Line 2437: <option value="tf">صح أم خطأ (T / F)</option>
+Line 2438: <option value="blank">إكمال الفراغ</option>
+Line 2439: <option value="short">إجابة قصيرة</option>
+Line 2440: <option value="essay">سؤال مقالي</option>
+Line 2446: <label for="qbText">نص السؤال</label>
+Line 2448: placeholder="أدخل نص السؤال العلمي هنا..."></textarea>
+Line 2453: <label style="font-weight:700; margin-bottom:6px; display:block;">خيارات الإجابة</label>
+Line 2455: <input type="text" id="qbOptA" class="form-control" placeholder="خيار أ" value="" />
+Line 2456: <input type="text" id="qbOptB" class="form-control" placeholder="خيار ب" value="" />
+Line 2457: <input type="text" id="qbOptC" class="form-control" placeholder="خيار ج" value="" />
+Line 2458: <input type="text" id="qbOptD" class="form-control" placeholder="خيار د" value="" />
+Line 2461: <label for="qbCorrectMcq">الخيار الصحيح</label>
+Line 2463: <option value="0">خيار أ (A)</option>
+Line 2464: <option value="1">خيار ب (B)</option>
+Line 2465: <option value="2">خيار ج (C)</option>
+Line 2466: <option value="3">خيار د (D)</option>
+Line 2473: <label for="qbCorrectAnswer">الإجابة النموذجية</label>
+Line 2475: placeholder="الإجابة الصحيحة أو الكلمة الناقصة..." />
+Line 2482: <label for="qbDifficulty">مستوى الصعوبة</label>
+Line 2484: <option value="easy">سهل</option>
+Line 2485: <option value="medium">متوسط</option>
+Line 2486: <option value="hard">صعب</option>
+Line 2490: <label for="qbBloomLevel">تصنيف بلوم</label>
+Line 2492: <option value="تذكر">تذكر</option>
+Line 2493: <option value="فهم">فهم</option>
+Line 2494: <option value="تطبيق">تطبيق</option>
+Line 2495: <option value="تحليل">تحليل</option>
+Line 2496: <option value="تقييم">تقييم</option>
+Line 2497: <option value="ابتكار">ابتكار</option>
+Line 2503: <label for="qbTags">الوسوم (مفصولة بفاصلة)</label>
+Line 2504: <input type="text" id="qbTags" class="form-control" placeholder="أحياء, خلية, طاقة" />
+Line 2508: <label for="qbExplanation">التبرير العلمي للإجابة</label>
+Line 2509: <textarea id="qbExplanation" class="form-control" rows="2" placeholder="لماذا الإجابة صحيحة..."></textarea>
+Line 2514: <button type="submit" class="btn-primary" style="width: auto; padding: 8px 24px;">حفظ السؤال</button>
+Line 2516: style="width: auto; padding: 8px 20px;">إلغاء</button>
+
+=== JS ===
+Line 3: brandT1:'Teacher Smart Hub', brandT2:'مساعد المعلم الذكي',
+Line 4: navMain:'الرئيسية', navDash:'لوحة التحكم', navStudents:'إدارة الطلاب', navAttend:'الحضور والغياب', navGrades:'الدرجات والتقييم',
+Line 5: navAI:'أدوات الذكاء الاصطناعي', navQuiz:'مولّد الأسئلة', navPlan:'خطط الدروس', navSlides:'توليد العروض', navReports:'التقارير الذكية',
+Line 6: navMore:'أقسام إضافية', navCal:'التقويم', navNotif:'الإشعارات', navSettings:'الإعدادات',
+Line 7: teacherName:'إسماعيل محبوبة', teacherRole:'معلّم العلوم • مدرسة معيذر',
+Line 8: searchPh:'ابحث عن طالب، صف، أو تقرير...',
+Line 9: heroEyebrow:'الأحد، مرحباً بعودتك',
+Line 10: heroTitle:'صباح الخير، <span>أستاذ إسماعيل</span> — لديك يوم حافل اليوم',
+Line 11: heroSub:'4 حصص علوم، اختبار عملي واحد قادم، و 3 طلاب بحاجة لمتابعة. المساعد الذكي جهّز لك ملخصاً كاملاً.',
+Line 12: heroAiPh:'اطلب من مساعد العلوم... مثال: جهّز ورقة عمل عن الخلية الحيوانية والنباتية', heroAiBtn:'إنشاء',
+Line 13: heroMonth:'يوليو 2026',
+Line 14: statClasses:'حصص اليوم', statAttend:'نسبة الحضور', statAvg:'معدل الدرجات', statPending:'مهام معلّقة',
+Line 15: heatTitle:'خريطة الحضور الحرارية', heatSub:'آخر 14 أسبوعاً', tabWeek:'أسبوعي', tabMonth:'شهري', heatLow:'أقل', heatHigh:'أعلى',
+Line 16: classesTitle:'حصص اليوم', classesSub:'الأحد، 26 يوليو', examsTitle:'الاختبارات القادمة',
+Line 17: aiTitle:'اقتراحات المساعد الذكي', aiSub:'مبنية على أداء الطلاب هذا الأسبوع',
+Line 18: aiTip1:'<b>3 طلاب</b> في صف 9-B تراجع أداؤهم في العلوم — يقترح إنشاء ورقة تقوية مخصصة.',
+Line 19: aiTip2:'حان وقت تجهيز <b>تحضير الدرس الأسبوعي</b> للوحدة القادمة — يمكن توليدها الآن في أقل من دقيقة.',
+Line 20: aiTip3:'اختبار الوحدة الثانية (الأحياء) بعد يومين — <b>بنك الأسئلة</b> جاهز لتوليد نسخة عشوائية جديدة.',
+Line 21: activityTitle:'سجل النشاط الأخير',
+Line 24: navMaterials:'المواد الدراسية',
+Line 25: materialsTitle:'مستودع المواد الدراسية للعلوم',
+Line 26: materialsSub:'ارفع ودرّس ملفاتك وحصصك الدراسية ونظمها لكل الصفوف',
+Line 27: totalMaterials:'إجمالي المواد المرفوعة',
+Line 28: storageUsed:'حجم الملفات المرفوعة',
+Line 29: classesCount:'الصفوف النشطة',
+Line 30: uploadNewMaterial:'رفع مادة دراسية جديدة',
+Line 31: materialTitleLabel:'عنوان المادة / الدرس',
+Line 32: selectClassLabel:'اختر الصف',
+Line 33: selectTypeLabel:'نوع الملف',
+Line 34: materialDescLabel:'وصف قصير',
+Line 35: dragDropText:'اسحب وأفلت الملف هنا أو انقر للتصفح',
+Line 36: uploadBtnText:'رفع المادة الدراسية',
+Line 37: searchMaterialsPh:'ابحث في المواد المرفوعة...',
+Line 38: allClasses:'كل الصفوف',
+Line 39: noMaterialsText:'لا توجد مواد مرفوعة حالياً. ابدأ برفع أول مادة دراسية!',
+Line 40: confirmDelete:'هل أنت متأكد من رغبتك في حذف هذه المادة؟',
+Line 41: fileUploadedSuccess:'تم رفع الملف بنجاح!'
+Line 91: { id: 101, name: 'أحمد خالد ياسين', className: '9-A', grade1: 85, grade2: 90, grade3: 88, status: 'present' },
+Line 92: { id: 102, name: 'يوسف مراد علي', className: '9-A', grade1: 72, grade2: 78, grade3: 80, status: 'present' },
+Line 93: { id: 103, name: 'سارة نبيل غانم', className: '9-A', grade1: 94, grade2: 92, grade3: 96, status: 'present' },
+Line 94: { id: 104, name: 'ريم عبد الله حسن', className: '9-A', grade1: 60, grade2: 65, grade3: 70, status: 'absent' },
+Line 95: { id: 105, name: 'عمر فاروق عثمان', className: '9-B', grade1: 88, grade2: 82, grade3: 85, status: 'present' },
+Line 96: { id: 106, name: 'ليلى ماجد فريد', className: '9-B', grade1: 91, grade2: 95, grade3: 92, status: 'present' },
+Line 97: { id: 107, name: 'خالد حماد ناصر', className: '10-A', grade1: 80, grade2: 84, grade3: 82, status: 'present' },
+Line 98: { id: 108, name: 'سليم أحمد العلي', className: '10-B', grade1: 76, grade2: 74, grade3: 79, status: 'present' }
+Line 203: alert(currentLang === 'ar' ? 'هذه الميزة ستكون متوفرة قريباً!' : 'This feature will be available soon!');
+Line 231: if (currentTitle) currentTitle.textContent = `صف ${cls}`;
+Line 284: tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-3);padding:24px;">لا يوجد طلاب في هذا الصف حالياً. قم برفع قائمة أو إضافة طلاب.</td></tr>`;
+Line 295: <span style="font-weight:700;color:${s.status === 'absent' ? 'var(--danger)' : (s.status === 'late' || s.status === 'متأخر' ? 'var(--gold)' : 'var(--success)')}">
+Line 296: ${s.status === 'absent' ? (currentLang === 'ar' ? 'غياب' : 'Absent') : (s.status === 'late' || s.status === 'متأخر' ? (currentLang === 'ar' ? 'متأخر' : 'Late') : (currentLang === 'ar' ? 'حاضر' : 'Present'))}
+Line 301: <button class="action-btn btn-delete" onclick="deleteStudent(${s.id})" title="حذف الطالب">
+Line 319: alert(currentLang === 'ar' ? 'حجم الصورة كبير جداً! الحد الأقصى هو 1 ميجابايت.' : 'Photo is too large! Maximum limit is 1MB.');
+Line 414: document.getElementById('sGender').value = draft.gender || 'بنين';
+Line 424: document.getElementById('sStatus').value = draft.status || 'نشط';
+Line 425: document.getElementById('sSpecialNeeds').value = draft.specialNeeds || 'لا يوجد';
+Line 466: if (confirm(currentLang === 'ar' ? 'هل تريد الاحتفاظ بالمسودة للعودة إليها لاحقاً؟' : 'Do you want to keep this draft for later?')) {
+Line 485: alert(currentLang === 'ar' ? 'يرجى تصحيح الأخطاء في النموذج قبل الحفظ!' : 'Please fix form errors before saving!');
+Line 512: alert(currentLang === 'ar' ? 'رقم الطالب الأكاديمي مسجل لطالب آخر بالفعل!' : 'Student ID already registered for another student!');
+Line 531: status: statusVal === 'نشط' ? 'present' : 'absent',
+Line 548: alert(currentLang === 'ar' ? `تم إضافة الطالب ${name} بنجاح! 🎉` : `Student ${name} added successfully! 🎉`);
+Line 618: alert(currentLang === 'ar' ? 'مكتبة قراءة الملفات غير محملة، يرجى التأكد من الاتصال بالإنترنت وإعادة المحاولة.' : 'XLSX library is not loaded. Check connection.');
+Line 630: alert(currentLang === 'ar' ? 'الملف فارغ أو غير صالح!' : 'File is empty or invalid!');
+Line 641: alert(currentLang === 'ar' ? 'حدث خطأ أثناء قراءة ملف الإكسيل/CSV: ' + err.message : 'Error reading file: ' + err.message);
+Line 703: select.innerHTML = '<option value="">— اختر العمود الملائم —</option>';
+Line 714: matchedIdx = wizardHeaders.findIndex(h => h.includes('اسم') || h.includes('طالب') || h.includes('name'));
+Line 716: matchedIdx = wizardHeaders.findIndex(h => h.includes('كود') || h.includes('أكاديمي') || h.includes('code') || h.includes('id'));
+Line 718: matchedIdx = wizardHeaders.findIndex(h => h.includes('شخصي') || h.includes('بطاقة') || h.includes('national') || h.includes('qid'));
+Line 720: matchedIdx = wizardHeaders.findIndex(h => h.includes('أمر') || h.includes('والد') || h.includes('parent'));
+Line 722: matchedIdx = wizardHeaders.findIndex(h => h.includes('هاتف') || h.includes('جوال') || h.includes('تلفون') || h.includes('phone') || h.includes('mobile'));
+Line 724: matchedIdx = wizardHeaders.findIndex(h => h.includes('شعبة') || h.includes('section'));
+Line 744: alert(currentLang === 'ar' ? 'يرجى مطابقة الحقول الأساسية (الاسم، الرقم الأكاديمي، الرقم الشخصي، هاتف ولي الأمر) أولاً!' : 'Please map all required fields first!');
+Line 764: details = currentLang === 'ar' ? 'الاسم مفقود' : 'Missing name';
+Line 767: details = currentLang === 'ar' ? 'الرقم الأكاديمي مفقود' : 'Missing ID';
+Line 770: details = currentLang === 'ar' ? 'الرقم الشخصي مفقود' : 'Missing QID';
+Line 773: details = currentLang === 'ar' ? 'الرقم الأكاديمي مكرر بالنظام' : 'Duplicate ID in DB';
+Line 795: <th>اسم الطالب</th>
+Line 796: <th>الرقم الأكاديمي</th>
+Line 797: <th>حالة السجل</th>
+Line 798: <th>التفاصيل</th>
+Line 807: statusBadge = `<span style="color:var(--success); font-weight:700;">🟢 سليم / Valid</span>`;
+Line 809: statusBadge = `<span style="color:var(--warning); font-weight:700;">🟡 مكرر / Duplicate</span>`;
+Line 811: statusBadge = `<span style="color:var(--danger); font-weight:700;">🔴 خطأ / Error</span>`;
+Line 820: <td style="font-size:11px; color:var(--text-3); font-style:italic;">${r.details || 'لا توجد أخطاء'}</td>
+Line 851: alert(currentLang === 'ar' ? 'لا توجد سجلات صالحة للاستيراد!' : 'No valid records to import!');
+Line 862: gender: 'بنين',
+Line 866: section: r.section || 'أ',
+Line 867: parentName: r.parentName || (r.name.split(' ').slice(1).join(' ')) || 'ولي الأمر',
+Line 873: studentStatus: 'نشط',
+Line 888: ? `تم استيراد ${validRecords.length} طالباً بنجاح وتنسيبهم للصف ${targetClass}! 🎉`
+Line 897: if (confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذا الطالب؟' : 'Are you sure you want to delete this student?')) {
+Line 917: tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--text-3);padding:24px;">${currentLang === 'ar' ? 'لا يوجد طلاب في هذا الصف.' : 'No students in this class.'}</td></tr>`;
+Line 924: const isLate = s.status === 'late' || s.status === 'متأخر';
+Line 932: <button class="attend-btn p-btn ${isPresent ? 'active' : ''}" onclick="setAttend(${s.id}, 'present')">${currentLang === 'ar' ? 'حاضر' : 'Present'}</button>
+Line 933: <button class="attend-btn a-btn ${isAbsent ? 'active' : ''}" onclick="setAttend(${s.id}, 'absent')">${currentLang === 'ar' ? 'غياب' : 'Absent'}</button>
+Line 934: <button class="attend-btn l-btn ${isLate ? 'active' : ''}" onclick="setAttend(${s.id}, 'late')">${currentLang === 'ar' ? 'متأخر' : 'Late'}</button>
+Line 963: let html = `<th>${currentLang === 'ar' ? 'اسم الطالب' : 'Student Name'}</th>`;
+Line 970: <div style="font-size: 11px; opacity: 0.8; font-weight: 500;">(العظمى: ${maxVal})</div>
+Line 972: <button onclick="renameAssessmentColumn('${col.id}')" title="تعديل الاسم" class="mini-col-btn">✏️</button>
+Line 973: <button onclick="changeMaxGradeAssessmentColumn('${col.id}')" title="تعديل الدرجة العظمى" class="mini-col-btn">🔢</button>
+Line 974: <button onclick="duplicateAssessmentColumn('${col.id}')" title="تكرار العمود" class="mini-col-btn">📋</button>
+Line 975: <button onclick="moveAssessmentColumn('${col.id}', -1)" ${index === 0 ? 'disabled' : ''} title="نقل لليمين" class="mini-col-btn">◀️</button>
+Line 976: <button onclick="moveAssessmentColumn('${col.id}', 1)" ${index === gradesColumns.length - 1 ? 'disabled' : ''} title="نقل لليسار" class="mini-col-btn">▶️</button>
+Line 977: <button onclick="deleteAssessmentColumn('${col.id}')" title="حذف" class="mini-col-btn btn-delete">❌</button>
+Line 983: html += `<th>${currentLang === 'ar' ? 'المعدل الحالي' : 'Current Average'}</th>`;
+Line 993: tbody.innerHTML = `<tr><td colspan="${gradesColumns.length + 2}" style="text-align:center;color:var(--text-3);padding:24px;">لا يوجد طلاب في هذا الصف.</td></tr>`;
+Line 1039: alert(currentLang === 'ar' ? `الدرجة المدخلة تتجاوز الدرجة العظمى المحددة للعمود وهي (${maxVal})!` : `The entered grade exceeds the maximum grade allowed for this column (${maxVal})!`);
+Line 1052: const title = prompt(currentLang === 'ar' ? 'أدخل عنوان التقييم الجديد:' : 'Enter title for the new assessment:');
+Line 1055: const maxInput = prompt(currentLang === 'ar' ? 'أدخل الدرجة العظمى (الافتراضي 100):' : 'Enter maximum grade (default 100):', '100');
+Line 1076: const newTitle = prompt(currentLang === 'ar' ? 'أدخل العنوان الجديد للتقييم:' : 'Enter new title for this assessment:', col.title);
+Line 1087: const newMax = prompt(currentLang === 'ar' ? 'أدخل الدرجة العظمى الجديدة للتقييم:' : 'Enter new maximum grade for this assessment:', col.maxGrade || 100);
+Line 1107: title: original.title + ' (نسخة)',
+Line 1142: if (confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف عمود التقييم هذا؟ سيؤدي ذلك لمسح درجات جميع الطلاب فيه!' : 'Are you sure you want to delete this assessment column? This will remove all students grades for this assessment!')) {
+Line 1180: { q: 'ما هو العضي الخلوي المسؤول عن إنتاج الطاقة (ATP) في الخلية الحية؟', options: ['النواة', 'الميتوكوندريا', 'جهاز جولجي', 'الرايبوسوم'], a: 'الميتوكوندريا' },
+Line 1181: { q: 'ما الفرق الرئيسي بين الخلية النباتية والخلية الحيوانية؟', options: ['النواة والغشاء الخلوي', 'الجدار الخلوي والبلاستيدات الخضراء', 'السيتوبلازم والرايبوسومات', 'الميتوكوندريا والأجسام الحالة'], a: 'الجدار الخلوي والبلاستيدات الخضراء' },
+Line 1182: { q: 'أي جزء من الخلية يحتوي على المادة الوراثية DNA ويتحكم في الأنشطة؟', options: ['السيتوبلازم', 'النواة', 'الغشاء البلازمي', 'الفجوة العصارية'], a: 'النواة' },
+Line 1183: { q: 'ما هي عملية صنع الغذاء في النباتات باستخدام الضوء؟', options: ['التنفس الخلوي', 'البناء الضوئي', 'الهضم الكيميائي', 'التخمر اللاهوائي'], a: 'البناء الضوئي' },
+Line 1184: { q: 'أي مادة تعطي النباتات لونها الأخضر وتمتص أشعة الضوء؟', options: ['الهيموجلوبين', 'الكلوروفيل', 'الميلانين', 'الكاروتين'], a: 'الكلوروفيل' }
+Line 1187: { q: 'ما هي الجسيمات سالبة الشحنة التي تدور حول نواة الذرة؟', options: ['البروتونات', 'النيوترونات', 'الإلكترونات', 'البوزيترونات'], a: 'الإلكترونات' },
+Line 1188: { q: 'تتكون نواة الذرة من جسيمات هما:', options: ['إلكترونات وبروتونات', 'بروتونات ونيوترونات', 'نيوترونات وإلكترونات', 'فوتونات وإلكترونات'], a: 'بروتونات ونيوترونات' },
+Line 1189: { q: 'ما هو أبسط عنصر في الجدول الدوري وله العدد الذري 1؟', options: ['الهيليوم', 'الهيدروجين', 'الأكسجين', 'الكربون'], a: 'الهيدروجين' },
+Line 1190: { q: 'الرابطة التي تنتج عن مشاركة زوج من الإلكترونات بين ذرتين تسمى:', options: ['الرابطة الأيونية', 'الرابطة التساهمية', 'الرابطة الفلزية', 'الرابطة الهيدروجينية'], a: 'الرابطة التساهمية' }
+Line 1193: { q: 'ما هو الدليل على حدوث تفاعل كيميائي في محلول؟', options: ['تغير اللون أو تصاعد غاز', 'تغير الحالة الفيزيائية فقط', 'الذوبان في الماء', 'انخفاض الحجم فقط'], a: 'تغير اللون أو تصاعد غاز' },
+Line 1194: { q: 'التفاعل الكيميائي الذي يطلق حرارة إلى الوسط المحيط يسمى تفاعل:', options: ['ماص للحرارة', 'طارد للحرارة', 'متعادل الحرارة', 'تحلل مائي'], a: 'طارد للحرارة' },
+Line 1195: { q: 'ما هو الغاز الذي يساعد على الاشتعال وينتج عن تحليل الماء كهربائياً؟', options: ['الهيدروجين', 'الأكسجين', 'النيتروجين', 'ثاني أكسيد الكربون'], a: 'الأكسجين' }
+Line 1198: { q: 'ما هو القانون الأول لنيوتن في الحركة؟', options: ['لكل فعل رد فعل مساوٍ له في المقدار', 'القوة تساوي الكتلة في التسارع', 'يظل الجسم على حالته ما لم تؤثر عليه قوة خارجية', 'تسقط الأجسام بتسارع الجاذبية الأرضية'], a: 'يظل الجسم على حالته ما لم تؤثر عليه قوة خارجية' },
+Line 1199: { q: 'وحدة قياس القوة في النظام الدولي للوحدات هي:', options: ['الجول', 'الوات', 'النيوتن', 'الكيلوغرام'], a: 'النيوتن' },
+Line 1200: { q: 'المسافة المقطوعة خلال وحدة الزمن تسمى:', options: ['التسارع', 'الإزاحة', 'السرعة', 'الزخم'], a: 'السرعة' },
+Line 1201: { q: 'ما هو تسارع الجاذبية الأرضية التقريبي القريب من سطح الأرض؟', options: ['5 m/s²', '9.8 m/s²', '15 m/s²', '1.6 m/s²'], a: '9.8 m/s²' }
+Line 1225: const topicsAr = { cell: 'الخلية الحية ووظائفها', atoms: 'بنية الذرة والجدول الدوري', reactions: 'التفاعلات والروابط الكيميائية', motion: 'قوانين الحركة والسرعة' };
+Line 1229: <h3>مدرسة معيذر — اختبار مادة العلوم</h3>
+Line 1231: <div><strong>الصف:</strong> التاسع (العلوم العامة)</div>
+Line 1232: <div><strong>الموضوع:</strong> ${topicsAr[topic]}</div>
+Line 1233: <div><strong>الاسم:</strong> ............................................................</div>
+Line 1236: السؤال الأول: اختر الإجابة الصحيحة من الخيارات التالية:
+Line 1256: <h4 style="font-weight: 800; margin-bottom: 8px; color: var(--maroon);">🔑 نموذج الإجابة والمفاتيح:</h4>
+Line 1258: ${selected.map((q, idx) => `<li><strong>س ${idx + 1}:</strong> الإجابة الصحيحة هي (${q.a})</li>`).join('')}
+Line 1277: <h3 style="font-weight:800;color:var(--maroon-light);margin-bottom:12px;">خطة درس: ${topic}</h3>
+Line 1278: <p><strong>الصف الدراسي:</strong> ${planClass} • <strong>المدة:</strong> ${duration} دقيقة • <strong>المادة:</strong> العلوم العامة</p>
+Line 1280: <p><strong>1. الأهداف السلوكية (Objectives):</strong></p>
+Line 1282: <li>أن يشرح الطالب المفهوم العلمي لـ (${topic}) بوضوح وبنسبة إتقان لا تقل عن 90%.</li>
+Line 1283: <li>أن يستنتج الطالب العلاقة بين خصائص الدرس والتطبيقات العملية في حياة العلوم والتكنولوجيا.</li>
+Line 1284: <li>أن يرسم أو يحدد أجزاء وعناصر التفاعل/التركيب العلمي لـ (${topic}) بشكل صحيح.</li>
+Line 1286: <p style="margin-top:10px;"><strong>2. الوسائل التعليمية (Materials Needed):</strong></p>
+Line 1288: <li>السبورة الذكية وعرض تقديمي مصمم بالشرائح.</li>
+Line 1289: <li>مجسمات/أجهزة معملية أو محاكاة تفاعلية لحقائق المادة.</li>
+Line 1290: <li>كتاب الطالب المدرسي وورقة تقييم مخصصة.</li>
+Line 1292: <p style="margin-top:10px;"><strong>3. سير الحصة والأنشطة (Lesson Procedure):</strong></p>
+Line 1294: <li><strong>التمهيد (5 دقائق):</strong> طرح سؤال عصف ذهني لإثارة اهتمام الطلاب حول الظاهرة.</li>
+Line 1295: <li><strong>العرض والتدريس (25 دقيقة):</strong> شرح المفاهيم، عمل تجربة بسيطة أو استعراض محاكاة ومناقشة تفاعلية.</li>
+Line 1296: <li><strong>النشاط التعاوني (10 دقائق):</strong> تقسيم الطلاب في مجموعات لحل نشاط تطبيقي.</li>
+Line 1297: <li><strong>الخاتمة والتقييم (5 دقائق):</strong> تلخيص الدرس وحل اختبار قصير سريع.</li>
+Line 1304: { id: 1, title: 'تركيب الخلية ووظائف أعضائها', className: '9-A', type: 'pdf', desc: 'ملخص رسومي شامل يوضح الفروقات بين الخلايا النباتية والحيوانية', size: 1024 * 342, date: '2026-07-25', hasData: false },
+Line 1305: { id: 2, title: 'جدول العناصر الذكية والروابط', className: '9-B', type: 'doc', desc: 'دليل مبسط للروابط التساهمية والأيونية في مادة الكيمياء للعلوم', size: 1024 * 156, date: '2026-07-24', hasData: false }
+Line 1387: desc: desc || (currentLang === 'ar' ? 'لا يوجد وصف للمادة' : 'No description provided'),
+Line 1512: <button class="action-btn" onclick="downloadMaterial(${m.id})" title="${currentLang === 'ar' ? 'تحميل' : 'Download'}">
+Line 1515: <button class="action-btn btn-delete" onclick="deleteMaterial(${m.id})" title="${currentLang === 'ar' ? 'حذف' : 'Delete'}">
+Line 1527: {t:'08:00', title:'علوم عامة — صف 9-A', sub:'معمل الفيزياء • 28 طالباً', color:'#3B82F6'},
+Line 1528: {t:'09:30', title:'علوم عامة — صف 9-B', sub:'معمل الكيمياء • 26 طالباً', color:'#22C55E'},
+Line 1529: {t:'11:15', title:'جلسة تجربة معملية', sub:'معمل الأحياء • 6 طلاب', color:'#F59E0B'},
+Line 1530: {t:'13:00', title:'اجتماع قسم العلوم', sub:'غرفة الإدارة • 30 دقيقة', color:'#8A1538'}
+Line 1541: {t:'الثلاثاء', title:'اختبار العلوم العملي (الخلية)', sub:'صف 9-A و 9-B', color:'#EF4444'},
+Line 1542: {t:'الخميس', title:'اختبار قصير في الكيمياء', sub:'صف 9-B', color:'#F59E0B'}
+Line 1551: {time:'قبل 12 دقيقة', text:'تم تصحيح <b>18</b> ورقة اختبار تلقائياً بواسطة مساعد العلوم بالذكاء الاصطناعي'},
+Line 1552: {time:'قبل ساعة', text:'أُضيف <b>3 طلاب جدد</b> إلى صف 9-A'},
+Line 1553: {time:'اليوم، 07:40', text:'تم إنشاء <b>خطة درس نموذجية</b> جديدة لوحدة الأحياء (الخلايا)'},
+Line 1554: {time:'أمس', text:'تم إرسال <b>تقرير أداء العلوم الشهري</b> لأولياء الأمور'}
+Line 1598: labels:['أ1','أ2','أ3','أ4','أ5','أ6','أ7','أ8'],
+Line 1651: const savedName = localStorage.getItem('teacherName') || "إسماعيل محبوبة";
+Line 1670: title: `الشريحة ${i}: ${topic}`,
+Line 1671: content: `شرح تفصيلي ومفاهيم توضيحية حول موضوع <strong>(${topic})</strong> في مادة العلوم العامة. يتضمن هذا المبحث أهم القوانين، الملاحظات، والتطبيقات العلمية في حياتنا اليومية.`
+Line 1724: tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-3); padding:24px;">لا يوجد طلاب في هذا الصف.</td></tr>`;
+Line 1730: const statusText = s.status === 'absent' ? 'غياب متكرر' : 'حضور منتظم';
+Line 1740: <button class="btn-primary" style="padding:6px 12px; font-size:12px;" onclick="showReportCard(${s.id})">توليد البطاقة</button>
+Line 1754: if (g >= 90) return 'ممتاز';
+Line 1755: if (g >= 80) return 'جيد جداً';
+Line 1756: if (g >= 70) return 'جيد';
+Line 1757: if (g >= 50) return 'مقبول';
+Line 1758: return 'ضعيف';
+Line 1772: document.getElementById('repStudentAttendance').textContent = student.status === 'absent' ? 'غياب متكرر (يحتاج لمتابعة)' : 'حضور ممتاز وملتزم';
+Line 1773: document.getElementById('repStudentComment').textContent = avg >= 80 ? 'طالب متميز ومشارك فعال في حصص العلوم.' : 'يحتاج الطالب إلى مراجعة بعض المفاهيم الإضافية لتحسين أدائه.';
+Line 1797: let reply = "شكراً لطرحك هذا السؤال! بصفتي مساعد العلوم الذكي، يسعدني إعلامك أن هذا الموضوع يندرج تحت المنهج الدراسي المقرر ويمكنني إعداد ورقة عمل شاملة أو تجربة معملية تفصيلية لك بضغطة زر.";
+Line 1799: if (text.includes("نيوتن") || text.includes("حركة")) {
+Line 1800: reply = "تتحدث قوانين نيوتن عن حركة الأجسام. القانون الثالث ينص على أن: 'لكل فعل رد فعل، مساوٍ له في المقدار ومعاكس له في الاتجاه'. يمكنك شرح ذلك للطلاب عبر تجربة تفاعل البالون المندفع بالهواء كنشاط صفي بسيط.";
+Line 1801: } else if (text.includes("خلية") || text.includes("أحياء")) {
+Line 1802: reply = "الخلية هي وحدة البناء والوظيفة في الكائنات الحية. لشرح الفروقات بين الخلايا النباتية والحيوانية، يفضل عرض البلاستيدات الخضراء والجدار الخلوي كميزات حصرية للخلية النباتية في معمل العلوم.";
+Line 1815: { id: 1, title: 'اختبار العلوم العملي', date: '2026-07-28', type: 'exam' },
+Line 1816: { id: 2, title: 'اجتماع قسم العلوم', date: '2026-07-30', type: 'meeting' }
+Line 1858: const typeLabel = { exam: 'اختبار', session: 'حصة', meeting: 'اجتماع' }[e.type];
+Line 1901: { id: 1, title: 'إنذار غياب متكرر للطالبة ريم عبد الله', time: 'قبل ساعتين', icon: '⚠️', bg: 'rgba(245,158,11,0.1)' },
+Line 1902: { id: 2, title: 'موعد تسليم درجات اختبار العلوم العملي غداً', time: 'اليوم، 09:00', icon: '📅', bg: 'rgba(59,130,246,0.1)' },
+Line 1903: { id: 3, title: 'مساعد الذكاء الاصطناعي أعد ورقة العمل المطلوبة', time: 'أمس', icon: '✨', bg: 'rgba(16,185,129,0.1)' }
+Line 1911: list.innerHTML = `<div class="no-materials">لا توجد إشعارات نشطة حالياً.</div>`;
+Line 1933: const savedName = localStorage.getItem('teacherName') || "إسماعيل محبوبة";
+Line 1935: document.getElementById('setSchoolName').value = localStorage.getItem('schoolName') || "مدرسة الدوحة النموذجية";
+Line 1936: document.getElementById('setSpecialty').value = localStorage.getItem('specialty') || "معلّم العلوم";
+Line 1955: alert(currentLang === 'ar' ? 'تم حفظ الإعدادات بنجاح!' : 'Settings saved successfully!');
+Line 1959: if (confirm(currentLang === 'ar' ? 'هل أنت متأكد من رغبتك في مسح كافة البيانات المسجلة والملفات؟ لا يمكن التراجع عن هذا الإجراء!' : 'Are you sure you want to clear all data? This cannot be undone.')) {
+Line 1997: { date: '2026-02-10', localName: 'اليوم الرياضي للدولة', name: 'National Sports Day' },
+Line 1998: { date: '2026-03-20', localName: 'عيد الفطر المبارك', name: 'Eid al-Fitr' },
+Line 1999: { date: '2026-05-27', localName: 'عيد الأضحى المبارك', name: 'Eid al-Adha' },
+Line 2000: { date: '2026-12-18', localName: 'اليوم الوطني لقطر', name: 'Qatar National Day' }
+Line 2026: <span class="nav-badge" style="background:rgba(201,162,39,0.12); color:var(--gold); font-size:10px;">عطلة رسمية</span>
+Line 2073: const weekdaysAr = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+Line 2076: const monthsAr = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+Line 2086: dateString = `${dayName}، ${dayNum} ${monthName} ${yearNum}`;
+Line 2109: attendLabel.textContent = `${currentLang === 'ar' ? 'اليوم:' : 'Today:'} ${dayName} ${dayNum} ${monthName}`;
+Line 2127: tempSpan.textContent = `الدوحة، ${temp}°م`;
+Line 2142: tempSpan.textContent = currentLang === 'ar' ? 'الدوحة، 38°م' : 'Doha, 38°C';
+Line 2229: alert(currentLang === 'ar' ? 'يرجى اختيار نوع واحد على الأقل من الأسئلة!' : 'Please select at least one question type!');
+Line 2249: <p style="margin-top:16px; font-weight:700; color:var(--text-1); font-size:14px;">جاري توليد ورقة أسئلة فريدة ورسومات بيانية مباشرة عبر Gemini API...</p>
+Line 2255: const prompt = `أنشئ ورقة اختبار لمادة ${subject} باللغة ${language === 'ar' ? 'العربية' : 'الإنجليزية'} لمدرسة معيذر.
+Line 2256: المقرر المرفوع (المصدر): ${source === 'default' ? 'المنهاج العام' : source}
+Line 2257: الموضوع العام: ${topic}
+Line 2258: اسم الدرس بالتحديد: ${lessonName}
+Line 2259: الصف: ${grade}
+Line 2260: مستوى الصعوبة المطلوبة: ${difficulty}
+Line 2261: تصنيف بلوم المستهدف: ${bloomLevel}
+Line 2262: عدد الأسئلة المطلوبة: ${count}
+Line 2263: الأنواع المتاحة للأسئلة: ${selectedTypes.join(', ')}
+Line 2264: المطلب إنشاء أسئلة فريدة وجديدة ومنوعة في كل مرة (ليست مكررة).
+Line 2265: يجب أن ترجع لي مصفوفة JSON فقط بالشكل التالي، بدون علامات ماركداون وبدون نصوص قبلها أو بعدها:
+Line 2269: "question": "نص السؤال الاختياري",
+Line 2270: "options": ["ألف", "باء", "جيم", "دال"],
+Line 2272: "explanation": "لماذا هذا الخيار صحيح؟",
+Line 2275: "bloomLevel": "فهم"
+Line 2279: "question": "صح أم خطأ: نص السؤال هنا",
+Line 2280: "options": ["صح", "خطأ"],
+Line 2282: "explanation": "التوضيح",
+Line 2284: "bloomLevel": "تذكر"
+Line 2288: "question": "نص السؤال المكتمل ووضع الكلمة الناقصة بين قوسين مربعين مثل [الكلمة]",
+Line 2289: "correctAnswer": "الكلمة",
+Line 2290: "explanation": "التوضيح",
+Line 2292: "bloomLevel": "تذكر"
+Line 2296: "question": "نص سؤال المطابقة الأساسي",
+Line 2297: "leftItems": ["مادة 1", "مادة 2"],
+Line 2298: "rightItems": ["تعريف 1", "تعريف 2"],
+Line 2299: "correctMatch": {"مادة 1": "تعريف 1", "مادة 2": "تعريف 2"},
+Line 2300: "explanation": "التوضيح",
+Line 2302: "bloomLevel": "فهم"
+Line 2306: "question": "نص السؤال ذو الإجابة القصيرة المباشرة",
+Line 2307: "correctAnswer": "الإجابة النموذجية القصيرة",
+Line 2308: "explanation": "التوضيح",
+Line 2310: "bloomLevel": "تطبيق"
+Line 2314: "question": "نص السؤال المقالي المفتوح",
+Line 2315: "correctAnswer": "خطوط الإرشاد النموذجية للتصحيح والتقييم للمقال",
+Line 2316: "explanation": "التوضيح",
+Line 2318: "bloomLevel": "تقييم"
+Line 2322: "question": "نص سؤال الترتيب",
+Line 2323: "items": ["عنصر 1", "عنصر 2"],
+Line 2324: "correctOrder": ["عنصر 1", "عنصر 2"],
+Line 2325: "explanation": "التوضيح",
+Line 2327: "bloomLevel": "تحليل"
+Line 2331: "question": "نص سؤال التصنيف",
+Line 2332: "items": ["عنصر أ", "عنصر ب"],
+Line 2333: "categories": ["تصنيف 1", "تصنيف 2"],
+Line 2334: "correctClassification": {"عنصر أ": "تصنيف 1", "عنصر ب": "تصنيف 2"},
+Line 2335: "explanation": "التوضيح",
+Line 2337: "bloomLevel": "تحليل"
+Line 2416: question: 'السؤال الافتراضي: ما هي وحدة قياس السرعة في النظام الدولي للوحدات؟',
+Line 2417: options: ['متر لكل ثانية (m/s)', 'كيلومتر لكل ساعة (km/h)', 'متر (m)', 'ثانية (s)'],
+Line 2419: explanation: 'المتر لكل ثانية هو الوحدة الأساسية للسرعة في النظام الدولي للوحدات.',
+Line 2421: bloomLevel: 'تذكر',
+Line 2422: tags: ['فيزياء', 'سرعة']
+Line 2479: if (timeEl) timeEl.textContent = `${totalMinutes} دقيقة`;
+Line 2480: if (diffEl) diffEl.textContent = `سهل: ${easyPct}%، متوسط: ${medPct}%، صعب: ${hardPct}%`;
+Line 2481: if (bloomEl) bloomEl.textContent = activeGeneratedQuiz.bloomLevel || 'فهم';
+Line 2490: <h3 style="margin:0; font-weight:800; font-size:16px;">مدرسة معيذر الابتدائية للبنين</h3>
+Line 2491: <p style="margin:4px 0 0 0; font-size:12px; color:var(--text-2);">القسم: العلوم العامة | الأستاذ: إسماعيل محبوبة</p>
+Line 2494: <h2 style="margin:0; font-weight:900; font-size:20px; color:var(--gold);">ورقة اختبار العلوم</h2>
+Line 2495: <span style="font-size:12px; font-weight:700; background:var(--bg-alt); padding:2px 8px; border-radius:4px;">نموذج (${activeGeneratedQuiz.version || 'A'})</span>
+Line 2498: <div>المادة: ${activeGeneratedQuiz.subject}</div>
+Line 2499: <div>الصف: ${activeGeneratedQuiz.grade}</div>
+Line 2500: <div>التاريخ: ${new Date().toLocaleDateString('ar-EG')}</div>
+Line 2505: <div>اسم الطالب: ..............................................................</div>
+Line 2506: <div>الشعبة: ...........</div>
+Line 2507: <div>الدرجة: ______ / ______</div>
+Line 2515: <button class="mini-col-btn" onclick="regenerateSingleQuestion(${idx})" title="توليد سؤال بديل">♻️ بديل</button>
+Line 2518: <h4 contenteditable="true" onblur="editQuestionText(${idx}, this.textContent)" style="margin-bottom: 12px; font-weight: 700; font-size:14px; outline:none; padding-inline-end:60px;" title="انقر نقراً مزدوجاً للتعديل الفوري للكود">
+Line 2519: السؤال ${idx + 1}: ${q.question}
+Line 2557: <input type="text" placeholder="اكتب الكلمة الناقصة هنا..." class="form-control" style="max-width:200px; padding:6px 12px; font-size:13px;" />
+Line 2558: <button class="btn-primary" onclick="checkBlankAnswer(this, '${q.correctAnswer}')" style="width:auto; padding:6px 16px; font-size:12px;">تحقق</button>
+Line 2570: <strong style="display:block; margin-bottom:6px; font-size:12px; color:var(--gold);">العمود أ</strong>
+Line 2576: <strong style="display:block; margin-bottom:6px; font-size:12px; color:var(--gold);">العمود ب (عشوائي)</strong>
+Line 2589: <input type="text" placeholder="اكتب الإجابة القصيرة هنا..." class="form-control print-hide" style="width:100%; margin-bottom:8px; font-size:13px;" />
+Line 2590: <button class="btn-primary print-hide" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';" style="background:var(--maroon-light); color:var(--text-1); border:none; width:auto; font-size:12px; padding:6px 12px;">إظهار الإجابة النموذجية</button>
+Line 2592: <strong style="color:var(--success);">الإجابة النموذجية:</strong> ${q.correctAnswer}
+Line 2603: <textarea rows="3" placeholder="اكتب الإجابة المقالية الحرة هنا..." class="form-control print-hide" style="width:100%; margin-bottom:8px; font-size:13px;"></textarea>
+Line 2604: <button class="btn-primary print-hide" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';" style="background:var(--maroon-light); color:var(--text-1); border:none; width:auto; font-size:12px; padding:6px 12px;">إظهار مؤشرات التقييم</button>
+Line 2606: <strong style="color:var(--success);">مؤشرات ومعايير التقييم:</strong> ${q.correctAnswer}
+Line 2617: <p style="font-size:12px; color:var(--text-3); margin-bottom:6px;">الخطوات/العناصر بترتيب عشوائي:</p>
+Line 2621: <button class="btn-primary print-hide" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';" style="background:var(--maroon-light); color:var(--text-1); border:none; width:auto; font-size:12px; padding:6px 12px; margin-top:10px;">إظهار الترتيب الصحيح</button>
+Line 2623: <strong style="color:var(--success);">الترتيب النموذجي:</strong> ${q.correctOrder ? q.correctOrder.join(' ➔ ') : q.items.join(' ➔ ')}
+Line 2633: <p style="font-size:12px; color:var(--text-3); margin-bottom:6px;">العناصر المراد تصنيفها: <strong>${q.items.join('، ')}</strong></p>
+Line 2638: <div style="min-height:30px; margin-top:4px; font-size:11px; color:var(--text-3);" class="print-hide">اسحب أو اكتب هنا</div>
+Line 2642: <button class="btn-primary print-hide" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';" style="background:var(--maroon-light); color:var(--text-1); border:none; width:auto; font-size:12px; padding:6px 12px; margin-top:10px;">إظهار التصنيف النموذجي</button>
+Line 2644: <strong style="color:var(--success);">التصنيف الصحيح:</strong>
+Line 2660: <span>🔑 دليل نموذج الإجابة السريع للورقة (انقر للإظهار/الإخفاء)</span>
+Line 2665: if (q.type === 'mcq') answerText = `الخيار الصحيح: ${String.fromCharCode(65 + q.correct)} (${q.options[q.correct]})`;
+Line 2666: else if (q.type === 'tf') answerText = `الخيار الصحيح: ${q.options[q.correct]}`;
+Line 2667: else if (q.type === 'blank') answerText = `الكلمة الناقصة: ${q.correctAnswer}`;
+Line 2668: else if (q.type === 'match') answerText = `مطابقة صحيحة: ${JSON.stringify(q.correctMatch)}`;
+Line 2669: else if (q.type === 'short') answerText = `الإجابة: ${q.correctAnswer}`;
+Line 2670: else if (q.type === 'essay') answerText = `التقييم: ${q.correctAnswer}`;
+Line 2671: else if (q.type === 'order') answerText = `الترتيب: ${q.correctOrder ? q.correctOrder.join(' ➔ ') : q.items.join(' ➔ ')}`;
+Line 2672: else if (q.type === 'classify') answerText = `التصنيف: ${JSON.stringify(q.correctClassification)}`;
+Line 2674: return `<div style="margin-bottom:8px;"><b>س ${idx + 1}:</b> ${answerText}</div>`;
+Line 2697: feedback.innerHTML = `🟢 <b>إجابة صحيحة!</b> ${explanation}`;
+Line 2704: feedback.innerHTML = `❌ <b>إجابة خاطئة!</b> ${explanation}`;
+Line 2723: feedback.innerHTML = `🟢 <b>إجابة صحيحة!</b>`;
+Line 2728: feedback.innerHTML = `❌ <b>إجابة خاطئة!</b> الإجابة الصحيحة هي: <b>${correctVal}</b>`;
+Line 2737: alert(currentLang === 'ar' ? 'تم إعادة ترتيب الأسئلة عشوائياً! 🔀' : 'Questions shuffled successfully! 🔀');
+Line 2750: alert(currentLang === 'ar' ? 'تم إعادة ترتيب الإجابات عشوائياً! 🔄' : 'Answers shuffled successfully! 🔄');
+Line 2770: const prefixRegex = /^السؤال\s+\d+:\s*/i;
+Line 2791: alert(currentLang === 'ar' ? 'عذراً، لا توجد أسئلة بديلة من نفس النوع متوفرة في بنك الأسئلة!' : 'Sorry, no alternative questions of the same type available in the bank!');
+Line 2804: subject: activeGeneratedQuiz.subject || 'العلوم العامة',
+Line 2807: lessonName: activeGeneratedQuiz.lessonName || 'غير مصنف',
+Line 2822: bloomLevel: q.bloomLevel || activeGeneratedQuiz.bloomLevel || 'فهم',
+Line 2823: tags: q.tags || ['توليد_تلقائي']
+Line 2831: alert(currentLang === 'ar' ? `تم حفظ ${newAddedCount} سؤال جديد لبنك الأسئلة المركزي بنجاح! 💾` : `Saved ${newAddedCount} questions to Centralized Question Bank! 💾`);
+Line 2841: <title>اختبار مادة ${activeGeneratedQuiz.subject}</title>
+Line 2853: <h2>مدرسة معيذر للبنين</h2>
+Line 2854: <h3>ورقة اختبار مادة: ${activeGeneratedQuiz.subject} — نموذج (${activeGeneratedQuiz.version || 'A'})</h3>
+Line 2855: <p>الدرس: ${activeGeneratedQuiz.lessonName} | الصف: ${activeGeneratedQuiz.grade} | الصعوبة: ${activeGeneratedQuiz.difficulty}</p>
+Line 2856: <p>اسم الطالب: ............................................ | الشعبة: ....... | التاريخ: ${new Date().toLocaleDateString('ar-EG')}</p>
+Line 2861: docHtml += `<div class="question-card"><h4>السؤال ${idx + 1}: ${q.question}</h4>`;
+Line 2872: docHtml += `<p style="margin-right:20px;">(  ) صح &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (  ) خطأ</p>`;
+Line 2874: docHtml += `<p style="margin-right:20px; color:#555;">اكتب الكلمة الناقصة: .............................................</p>`;
+Line 2876: docHtml += `<p>طابق عناصر العمود أ مع العمود ب:</p>`;
+Line 2883: docHtml += `<p style="margin-top:10px; color:#555;">الإجابة: ..................................................................................................................</p>`;
+Line 3037: { id: 1, name: 'سادس - أ', grade: '6', section: 'أ', notes: 'شعبة العلوم المتميزة' },
+Line 3038: { id: 2, name: 'سادس - ب', grade: '6', section: 'ب', notes: 'شعبة العلوم المتقدمة' },
+Line 3039: { id: 3, name: 'خامس - أ', grade: '5', section: 'أ', notes: 'شعبة المتفوقين' }
+Line 3043: { id: 'grade1', title: 'اختبار الوحدة 1' },
+Line 3044: { id: 'grade2', title: 'اختبار الوحدة 2' },
+Line 3045: { id: 'grade3', title: 'المشروع العملي' }
+Line 3049: { id: 1, studentId: 1, studentName: 'عبدالرحمن الدوسري', className: 'سادس - أ', stars: 5, reason: 'مشاركة ممتازة في الحصة', date: new Date().toISOString(), notes: 'تفاعل رائع وإجابات نموذجية' },
+Line 3050: { id: 2, studentId: 2, studentName: 'خالد الكواري', className: 'سادس - أ', stars: 4, reason: 'التفوق في التقييمات', date: new Date().toISOString(), notes: 'الحصول على الدرجة الكاملة في التقييم' }
+Line 3118: alert(currentLang === 'ar' ? 'يرجى إدخال اسم الصف!' : 'Please enter class name!');
+Line 3124: alert(currentLang === 'ar' ? 'اسم الصف موجود بالفعل!' : 'Class name already exists!');
+Line 3148: alert(currentLang === 'ar' ? 'تم إضافة الصف بنجاح!' : 'Class added successfully!');
+Line 3160: container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:24px; color:var(--text-3);">لا توجد صفوف مضافة حالياً.</div>`;
+Line 3171: <span class="achievement-badge" style="margin-top:0;">${c.grade ? `الصف ${c.grade}` : 'عام'}</span>
+Line 3173: <p style="font-size:12.5px; color:var(--text-3); margin-top:6px;">الشعبة: ${c.section || 'أ'} | العام الدراسي: ${c.year || '2026'}</p>
+Line 3177: <span style="font-size:12.5px; font-weight:700; color:var(--text-2);">عدد الطلاب: <b style="color:var(--gold); font-size:14px;">${studentCount}</b></span>
+Line 3178: <button class="action-btn btn-delete" onclick="deleteClass(${c.id})" title="حذف الصف" style="padding:4px 8px; border-radius:6px; border:none; cursor:pointer;">
+Line 3194: if (!confirm(currentLang === 'ar' ? `تنبيه: هذا الصف يحتوي على ${studentCount} طالباً. هل أنت متأكد من حذف الصف وكافة الطلاب المرتبطين به؟` : `Warning: This class contains ${studentCount} students. Are you sure you want to delete this class and all its students?`)) {
+Line 3201: if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذا الصف؟' : 'Are you sure you want to delete this class?')) {
+Line 3259: alert(currentLang === 'ar' ? 'يرجى اختيار طالب أولاً!' : 'Please select a student!');
+Line 3263: const finalReason = reasonSelect === 'custom' ? (customReason || 'تميز وتفوق في الحصة') : reasonSelect;
+Line 3289: alert(currentLang === 'ar' ? `تهانينا! تم منح ${starsCount} نجوم للطالب ${student.name} بنجاح! 🌟` : `Success! Rewarded ${starsCount} stars to ${student.name}!`);
+Line 3343: container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-3); font-size:12.5px;">لا توجد نجوم مسجلة لهذه الفترة.</div>`;
+Line 3378: grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:24px; color:var(--text-3);">لم يتم منح أي أوسمة أو نجوم للطلاب بعد.</div>`;
+Line 3402: <span>طباعة الشهادة 📜</span>
+Line 3477: <title>شهادة تميز — مدرسة معيذر</title>
+Line 3571: <div>دولة قطر — وزارة التعليم</div>
+Line 3572: <div>مدرسة معيذر الابتدائية للبنين</div>
+Line 3574: <h1>شهادة تفوق وتقدير</h1>
+Line 3575: <div class="sub-title">تمنح إدارة المدرسة هذه الشهادة للطالب المتميز تقديراً لجهوده</div>
+Line 3576: <p style="font-size:15px; color:#555; margin:0;">يسرنا تكريم الطالب المبدع:</p>
+Line 3580: من الصف: <strong>${reward.className}</strong> <br>
+Line 3581: نظير تميزه وسلوكه الاستثنائي في حصة العلوم:<br>
+Line 3583: ${reward.notes ? `<br><span style="font-size:13.5px; color:#666; font-style:italic;">ملاحظة: ${reward.notes}</span>` : ''}
+Line 3586: <div>مدرس العلوم: الأستاذ إسماعيل محبوبة</div>
+Line 3587: <div>مدير المدرسة: مدرسة معيذر للبنين</div>
+Line 3654: 'ممتاز (90+)',
+Line 3657: 'نقاط القوة: سرعة الاستيعاب، تطبيق المفاهيم العلمية بدقة، ومهارات التحليل العالية.',
+Line 3658: 'النقاط المحتاجة لتطوير: التوسع في التفكير الإبداعي والقيادة الطلابية.',
+Line 3659: 'الخطة الإثرائية: إشراكهم في مشاريع علمية متقدمة وتوجيه أقرانهم الضعاف كمرشدين.'
+Line 3664: 'جيد جداً إلى جيد (70-89)',
+Line 3667: 'نقاط القوة: الفهم الجيد للمقرر، والمشاركة الفعالة في الأنشطة والواجبات.',
+Line 3668: 'النقاط المحتاجة لتطوير: الدقة في حل المسائل الحسابية وتطبيقات الفيزياء.',
+Line 3669: 'الخطة المقترحة: تزويدهم بمسائل تحدي إضافية وتدريبات دورية على التفاصيل الدقيقة.'
+Line 3674: 'مقبول (60-69)',
+Line 3677: 'نقاط القوة: الحضور المستمر وبذل الجهد الفردي لحفظ الأساسيات.',
+Line 3678: 'النقاط المحتاجة لتطوير: الفهم النظري المتكامل وصياغة الإجابات النموذجية.',
+Line 3679: 'الخطة المقترحة: جلسات مراجعة قصيرة وربط الدروس بالواقع اليومي لتبسيط المفاهيم.'
+Line 3684: 'ضعيف إلى ضعيف جداً (أقل من 60)',
+Line 3687: 'النقاط الحرجة: صعوبة في فهم المصطلحات الكيميائية والفيزيائية، وتراكم الفجوات التعليمية.',
+Line 3688: 'المهارات المفقودة: المهارات الرياضية للحساب والتمييز بين الخلايا.',
+Line 3689: 'خطة التدخل العلاجي: جلسات مخصصة، أوراق عمل تبسيطية وتكليفات مرنة بالتنسيق مع ولي الأمر.'
+Line 3734: const names = studentsList.map(s => `${s.name} (${calculateStudentAverage(s)}%)`).join(' ، ') || 'لا يوجد طلاب حالياً';
+Line 3738: <span>فئة: ${title}</span>
+Line 3739: <span>العدد: ${studentsList.length}</span>
+Line 3742: <strong>الطلاب المندرجون:</strong> ${names}
+Line 3750: <strong>الإستراتيجية البيداغوجية:</strong> <br>
+Line 3767: labels: ['ممتاز', 'جيد جداً', 'جيد', 'مقبول', 'ضعيف', 'ضعيف جداً'],
+Line 3769: label: 'عدد الطلاب',
+Line 3818: label: 'متوسط الدرجات %',
+Line 3859: weeklyGoals: `• مراجعة المفاهيم الأساسية لدرس الخلايا والأنسجة.\n• حل ورقة عمل للمراجعة الأسبوعية.\n• حضور جلسة الدعم الصباحية مع الأستاذ إسماعيل محبوبة.`,
+Line 3860: monthlyGoals: `• رفع علامة التقييم القادم لتصل إلى 70% على الأقل.\n• تعزيز القدرة على حل المسائل العملية وقوانين السرعة.\n• كتابة واجبات العلوم الأسبوعية بانتظام.`,
+Line 3861: activities: `• أوراق عمل تفاعلية مبسطة بصيغة رسومات.\n• استخدام مقاطع فيديو قصيرة لشرح المادة.\n• تكليف الطالب بواجبات مخصصة متناسبة مع مستواه.`,
+Line 3862: parentRecs: `• تخصيص 20 دقيقة يومياً لمراجعة مادة العلوم.\n• التحقق من إتمام الواجبات المنزلية المخصصة.\n• متابعة تقدم الطالب مع الأستاذ إسماعيل عبر الهاتف/المنصة.`,
+Line 3863: teacherRecs: `• إجلاس الطالب في الصف الأول لتفادي التشتت.\n• تقسيم المهام المعقدة إلى خطوات بسيطة مع الطالب.\n• تعزيز الثقة بالنفس وتصحيح الأخطاء بصورة سرية وداعمة.`,
+Line 3864: schedule: `• جلسة متابعة كل ثلاثاء بعد الحصة الرابعة.\n• تقييم قصير تشخيصي نهاية الأسبوع الثالث.`,
+Line 3866: { text: "إتمام ورقة العمل التشخيصية الأولى", done: false },
+Line 3867: { text: "حضور جلسة الدعم والتقوية الأولى مع الأستاذ إسماعيل", done: false },
+Line 3868: { text: "حل وتصفية واجب قوانين الحركة والسرعة المخصص", done: false },
+Line 3869: { text: "المشاركة الصفية الإيجابية في حصتين متتاليتين", done: false }
+Line 3877: document.getElementById('remStudentName').textContent = `الخطة العلاجية للطالب: ${student.name} (المعدل الحالي: ${avg}%)`;
+Line 3918: alert(currentLang === 'ar' ? 'تم حفظ تعديلات الخطة العلاجية بنجاح!' : 'Remedial plan modifications saved successfully!');
+Line 3938: alert(currentLang === 'ar' ? 'جاري تحليل وقراءة درجات الطلاب من ملف PDF بالذكاء الاصطناعي...' : 'Parsing student grades from PDF with AI...');
+Line 3951: alert(currentLang === 'ar' ? 'تم استيراد درجات ملف PDF وتحديث الجدول بنجاح!' : 'PDF grades imported and table updated successfully!');
+Line 3960: alert(currentLang === 'ar' ? 'الملف فارغ أو غير صالح!' : 'File is empty or invalid!');
+Line 3964: let nameIdx = headers.findIndex(h => h.includes('name') || h.includes('اسم') || h.includes('طالب'));
+Line 3995: alert(currentLang === 'ar' ? `تم استيراد وتحديث درجات ${updatedCount} طالباً بنجاح!` : `Imported and updated grades for ${updatedCount} students!`);
+Line 4007: alert(currentLang === 'ar' ? 'حدث خطأ أثناء قراءة ملف CSV.' : 'Error reading CSV file.');
+Line 4021: alert(currentLang === 'ar' ? 'حدث خطأ أثناء قراءة ملف الإكسيل/CSV' : 'Error reading Excel/CSV file');
+Line 4037: subject: 'العلوم العامة',
+Line 4040: lessonName: 'تركيب الخلية ووظائفها',
+Line 4042: question: 'ما هو العضي الخلوي المسؤول عن إنتاج الطاقة (ATP) في الخلية؟',
+Line 4043: options: ['النواة', 'الميتوكوندريا', 'جهاز جولجي', 'الريبوسوم'],
+Line 4045: explanation: 'الميتوكوندريا هي مصنع إنتاج الطاقة الرئيسي للخلية عبر التنفس الخلوي.',
+Line 4047: bloomLevel: 'تذكر',
+Line 4048: tags: ['أحياء', 'طاقة', 'خلية'],
+Line 4053: subject: 'العلوم العامة',
+Line 4056: lessonName: 'تركيب الخلية ووظائفها',
+Line 4058: question: 'تحتوي الخلايا الحيوانية على جدار خلوي سميك يعطيها شكلاً ثابتاً.',
+Line 4059: options: ['صح', 'خطأ'],
+Line 4061: explanation: 'الخلايا الحيوانية لا تحتوي على جدار خلوي بل غشاء بلازمي فقط، الجدار الخلوي مميز للخلية النباتية.',
+Line 4063: bloomLevel: 'تذكر',
+Line 4064: tags: ['أحياء', 'جدار خلوي']
+Line 4068: subject: 'العلوم العامة',
+Line 4071: lessonName: 'تركيب الخلية ووظائفها',
+Line 4073: question: 'العضية التي تحتوي على المادة الوراثية (DNA) وتدير الأنشطة الخلوية تسمى [النواة].',
+Line 4074: correctAnswer: 'النواة',
+Line 4075: explanation: 'النواة هي مركز التحكم الجيني في الخلية الحية.',
+Line 4077: bloomLevel: 'تذكر',
+Line 4078: tags: ['أحياء', 'نواة']
+Line 4082: subject: 'العلوم العامة',
+Line 4085: lessonName: 'تركيب الخلية ووظائفها',
+Line 4087: question: 'طابق العضية الخلوية بالوظيفة المناسبة لها:',
+Line 4088: leftItems: ['الميتوكوندريا', 'البلاستيدات الخضراء', 'الريبوسومات', 'جهاز جولجي'],
+Line 4089: rightItems: ['صنع الغذاء بالبناء الضوئي', 'إنتاج الطاقة ATP', 'تعديل وتغليف البروتينات', 'بناء البروتين'],
+Line 4090: correctMatch: { 'الميتوكوندريا': 'إنتاج الطاقة ATP', 'البلاستيدات الخضراء': 'صنع الغذاء بالبناء الضوئي', 'الريبوسومات': 'بناء البروتين', 'جهاز جولجي': 'تعديل وتغليف البروتينات' },
+Line 4091: explanation: 'تعتمد العضيات على تكامل وظائفها للقيام بالأنشطة الخلوية.',
+Line 4093: bloomLevel: 'فهم',
+Line 4094: tags: ['أحياء', 'وظائف العضيات']
+Line 4098: subject: 'العلوم العامة',
+Line 4101: lessonName: 'تركيب الخلية ووظائفها',
+Line 4103: question: 'لماذا يعتبر الغشاء البلازمي غشاءً ذو نفاذية اختيارية؟',
+Line 4104: correctAnswer: 'لأنه يسمح بمرور بعض المواد بحرية ويمنع مرور مواد أخرى حسب حاجة الخلية وحجم الجزيئات.',
+Line 4105: explanation: 'النفاذية الاختيارية تحافظ على التوازن الداخلي للخلية.',
+Line 4107: bloomLevel: 'تحليل',
+Line 4108: tags: ['أحياء', 'غشاء بلازمي']
+Line 4112: subject: 'العلوم العامة',
+Line 4115: lessonName: 'الانقسام الخلوي',
+Line 4117: question: 'رتب مراحل الانقسام الميتوزي (الغير مباشر) ترتيباً صحيحاً من البداية للنهاية:',
+Line 4118: items: ['الطور التمهيدي', 'الطور الاستوائي', 'الطور الانفصالي', 'الطور النهائي'],
+Line 4119: correctOrder: ['الطور التمهيدي', 'الطور الاستوائي', 'الطور الانفصالي', 'الطور النهائي'],
+Line 4120: explanation: 'يبدأ الانقسام بتكثف الكروموسومات (التمهيدي) وينتهي بتكوين نواتين جديدتين (النهائي).',
+Line 4122: bloomLevel: 'تطبيق',
+Line 4123: tags: ['أحياء', 'انقسام ميتوزي']
+Line 4127: subject: 'العلوم العامة',
+Line 4130: lessonName: 'الجدول الدوري والعناصر',
+Line 4132: question: 'ما هي الجسيمات سالبة الشحنة التي تدور حول نواة الذرة؟',
+Line 4133: options: ['البروتونات', 'النيوترونات', 'الإلكترونات', 'البوزيترونات'],
+Line 4135: explanation: 'الإلكترونات سالبة الشحنة وتدور في مستويات طاقة حول النواة الموجبة.',
+Line 4137: bloomLevel: 'تذكر',
+Line 4138: tags: ['كيمياء', 'ذرة'],
+Line 4143: subject: 'العلوم العامة',
+Line 4146: lessonName: 'الروابط الكيميائية',
+Line 4148: question: 'تنشأ الرابطة التساهمية نتيجة انتقال كامل للإلكترونات من ذرة فلز إلى ذرة لا فلز.',
+Line 4149: options: ['صح', 'خطأ'],
+Line 4151: explanation: 'تنشأ الرابطة التساهمية عن طريق مشاركة الإلكترونات وليس انتقالها بالكامل. الانتقال يسبب الرابطة الأيونية.',
+Line 4153: bloomLevel: 'فهم',
+Line 4154: tags: ['كيمياء', 'روابط']
+Line 4158: subject: 'العلوم العامة',
+Line 4161: lessonName: 'الجدول الدوري والعناصر',
+Line 4163: question: 'صنف العناصر التالية إلى (فلزات) أو (لا فلزات):',
+Line 4164: items: ['الحديد (Fe)', 'الأكسجين (O)', 'النحاس (Cu)', 'النيتروجين (N)'],
+Line 4165: categories: ['فلزات', 'لا فلزات'],
+Line 4166: correctClassification: { 'الحديد (Fe)': 'فلزات', 'الأكسجين (O)': 'لا فلزات', 'النحاس (Cu)': 'فلزات', 'النيتروجين (N)': 'لا فلزات' },
+Line 4167: explanation: 'تتميز الفلزات بالتوصيل واللمعان وفقد الإلكترونات، واللا فلزات عكس ذلك.',
+Line 4169: bloomLevel: 'فهم',
+Line 4170: tags: ['كيمياء', 'تصنيف']
+Line 4174: subject: 'العلوم العامة',
+Line 4177: lessonName: 'الجدول الدوري والعناصر',
+Line 4179: question: 'اشرح كيف يؤثر العدد الذري في تحديد الخواص الكيميائية والفيزيائية للعنصر وترتيبه بالجدول الدوري.',
+Line 4180: correctAnswer: 'العدد الذري يمثل عدد البروتونات (وكذلك عدد الإلكترونات في الذرة المتعادلة). يحدد هذا العدد التوزيع الإلكتروني في الغلاف الخارجي (إلكترونات التكافؤ)، وهي المسؤولة عن السلوك الكيميائي والترتيب في المجموعات بالجدول الدوري.',
+Line 4181: explanation: 'التوزيع الإلكتروني هو المحدد الرئيسي لنشاط العنصر وروابطه.',
+Line 4183: bloomLevel: 'ابتكار',
+Line 4184: tags: ['كيمياء', 'جدول دوري']
+Line 4188: subject: 'العلوم العامة',
+Line 4191: lessonName: 'قوانين الحركة والسرعة',
+Line 4193: question: 'ما هو القانون الذي ينص على أن "لكل فعل رد فعل مساوٍ له في المقدار ومضاد له في الاتجاه"؟',
+Line 4194: options: ['قانون نيوتن الأول', 'قانون نيوتن الثاني', 'قانون نيوتن الثالث', 'قانون الجذب العام'],
+Line 4196: explanation: 'هذا هو قانون نيوتن الثالث للحركة.',
+Line 4198: bloomLevel: 'تذكر',
+Line 4199: tags: ['فيزياء', 'حركة'],
+Line 4204: subject: 'العلوم العامة',
+Line 4207: lessonName: 'قوانين الحركة والسرعة',
+Line 4209: question: 'حسب قانون نيوتن الثاني، تتناسب القوة طردياً مع الكتلة و [التسارع].',
+Line 4210: correctAnswer: 'التسارع',
+Line 4211: explanation: 'القوة = الكتلة × التسارع (F = m.a).',
+Line 4213: bloomLevel: 'فهم',
+Line 4214: tags: ['فيزياء', 'قوانين نيوتن']
+Line 4218: subject: 'العلوم العامة',
+Line 4221: lessonName: 'قوانين الحركة والسرعة',
+Line 4223: question: 'سيارة تقطع مسافة 150 كيلومتر في زمن قدره 3 ساعات، احسب سرعتها المتوسطة بوحدة كم/ساعة.',
+Line 4224: correctAnswer: 'السرعة = المسافة / الزمن = 150 / 3 = 50 كم/ساعة.',
+Line 4225: explanation: 'تُحسب السرعة بقسمة المسافة المقطوعة على الزمن المستغرق.',
+Line 4227: bloomLevel: 'تطبيق',
+Line 4228: tags: ['فيزياء', 'مسائل']
+Line 4274: 🔍 لا توجد أسئلة تطابق الفلاتر المحددة حالياً.
+Line 4285: <span class="badge" style="background:rgba(59,130,246,0.1); color:var(--info); font-size:10px; padding:2px 6px; border-radius:4px; font-weight:700; margin-inline-start:4px;">${q.bloomLevel || 'فهم'}</span>
+Line 4293: if (q.type === 'mcq' && q.options) answerLabel = `الإجابة الصحيحة: <b>${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}</b>`;
+Line 4294: else if (q.type === 'tf') answerLabel = `الإجابة: <b>${q.options[q.correct]}</b>`;
+Line 4295: else if (q.type === 'blank') answerLabel = `الكلمة الناقصة: <b>${q.correctAnswer}</b>`;
+Line 4296: else if (q.type === 'match') answerLabel = `المطابقة: <b>${JSON.stringify(q.correctMatch)}</b>`;
+Line 4297: else if (q.type === 'short' || q.type === 'essay') answerLabel = `الإجابة النموذجية: <b>${q.correctAnswer}</b>`;
+Line 4298: else if (q.type === 'order') answerLabel = `الترتيب الصحيح: <b>${q.correctOrder ? q.correctOrder.join(' ➔ ') : q.items.join(' ➔ ')}</b>`;
+Line 4299: else if (q.type === 'classify') answerLabel = `التصنيف الصحيح: <b>${JSON.stringify(q.correctClassification)}</b>`;
+Line 4308: <button onclick="editQuestionFromBank('${q.id}')" class="mini-col-btn" style="width:auto; padding:2px 8px; font-size:11px;" title="تعديل">✏️ تعديل</button>
+Line 4309: <button onclick="duplicateQuestionFromBank('${q.id}')" class="mini-col-btn" style="width:auto; padding:2px 8px; font-size:11px;" title="تكرار">📋 تكرار</button>
+Line 4310: <button onclick="deleteQuestionFromBank('${q.id}')" class="mini-col-btn btn-delete" style="width:auto; padding:2px 8px; font-size:11px;" title="حذف">❌ حذف</button>
+Line 4318: ${q.explanation ? `<div style="font-size:11px; color:var(--text-3); font-style:italic; margin-top:4px; padding-top:4px; border-top:1px dashed var(--border-light);">التوضيح: ${q.explanation}</div>` : ''}
+Line 4351: subject: 'العلوم العامة (تجميع مخصص)',
+Line 4353: lessonName: 'بنك الأسئلة المركزي',
+Line 4354: difficulty: 'مختلط',
+Line 4355: bloomLevel: 'متنوع',
+Line 4374: document.getElementById('qbModalTitle').textContent = '➕ إضافة سؤال جديد للبنك';
+Line 4416: item.subject = 'العلوم العامة';
+Line 4434: item.options = ['صح', 'خطأ'];
+Line 4445: alert(currentLang === 'ar' ? 'تم حفظ السؤال في بنك الأسئلة المركزي بنجاح!' : 'Question saved to bank successfully!');
+Line 4456: document.getElementById('qbModalTitle').textContent = '✏️ تعديل السؤال في البنك';
+Line 4461: document.getElementById('qbBloomLevel').value = q.bloomLevel || 'فهم';
+Line 4487: copy.question += ' (نسخة)';
+Line 4492: alert(currentLang === 'ar' ? 'تم تكرار السؤال بنجاح!' : 'Question duplicated successfully!');
+Line 4496: if (confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذا السؤال من بنك الأسئلة؟' : 'Are you sure you want to delete this question?')) {
+Line 4557: ? ['ممتاز (90+)', 'جيد جداً (80-89)', 'جيد (70-79)', 'مقبول (60-69)', 'ضعيف (50-59)', 'ضعيف جداً (<50)']
+Line 4591: label: currentLang === 'ar' ? 'متوسط درجات الصف (%)' : 'Class Average Grade (%)',
+Line 4621: opt.textContent = currentLang === 'ar' ? '🎉 جميع الطلاب في هذا الصف ممتازون (لا يوجد طلاب ضعاف)' : '🎉 All students have good performance';
+Line 4629: opt.textContent = `${s.name} (${s.className}) — المعدل: ${calculateStudentAverage(s)}%`;
+Line 4646: if (nameEl) nameEl.textContent = `${currentLang === 'ar' ? 'طالب:' : 'Student:'} ${s.name} (${s.className}) — ${calculateStudentAverage(s)}%`;
+Line 4650: weeklyGoals: '• رفع مستوى الفهم في مفاهيم الخلية الأساسية.\n• إنجاز ورقة العمل العلاجية رقم 1.',
+Line 4651: monthlyGoals: '• اجتياز اختبار الوحدة القادمة بنسبة لا تقل عن 70%.\n• تحسين الانتظام والمشاركة الصفية.',
+Line 4652: activities: '• مراجعة ملخص الدرس يومياً لمدة 15 دقيقة.\n• أداء التمارين التفاعلية عبر منصة المعلم الذكية.',
+Line 4653: parentRecs: '• متابعة حل الواجبات اليومية في المنزل.\n• التواصل الأسبوعي مع معلم العلوم عبر المنصة.',
+Line 4654: teacherRecs: '• تقديم دعم فردي لمدة 10 دقائق في حصة النشاط.\n• إشراكه مع مجموعة متفوقة للتعلم بالأقران.',
+Line 4655: schedule: '• تقييم أسبوعي كل يوم خميس.\n• مراجعة الخطة بنهاية الشهر الحالي.'
+Line 4683: alert(currentLang === 'ar' ? 'تم حفظ تعديلات الخطة العلاجية بنجاح! 💾' : 'Remedial plan saved successfully! 💾');
+Line 4694: el.textContent = 'مدرسة معيذر للبنين';

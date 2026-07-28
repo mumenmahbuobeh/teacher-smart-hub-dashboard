@@ -1,0 +1,2332 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Smart Hub — منصة المعلم الذكية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="floating-particles-container" id="particlesContainer"></div>
+  <!-- Login View -->
+  <div id="loginView" class="login-view">
+    <canvas id="loginParticlesCanvas" style="position:absolute; inset:0; pointer-events:none; z-index:0;"></canvas>
+    <div class="login-bg-decorations" style="z-index:1; pointer-events:none;">
+      <div class="decor-atom">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="nucleus"></div>
+      </div>
+      <div class="decor-flask">🧪</div>
+      <div class="decor-star" style="top:20%; left:10%;">✨</div>
+      <div class="decor-star" style="top:75%; left:85%;">✨</div>
+    </div>
+    <div class="login-card" id="loginCard" style="position:relative; z-index:2;">
+      <div class="login-brand">
+        <div class="login-school-header">
+          <div class="login-ministry-logo-wrap">
+            <img src="assets/ministry-logo.svg" alt="شعار وزارة التربية والتعليم" class="login-ministry-logo">
+          </div>
+        </div>
+        <h3>Teacher Smart Hub</h3>
+        <p class="login-school-name" data-i18n="auto_1">مدرسة معيذر</p>
+        <p class="login-school-sub" data-i18n="auto_2">مساعد المعلم الذكي — دولة قطر 🇶🇦</p>
+      </div>
+      <form onsubmit="event.preventDefault(); handleLogin();" class="upload-form">
+        <div class="form-group">
+          <label for="loginUser" data-i18n="auto_3">اسم المستخدم</label>
+          <input type="text" id="loginUser" class="form-control" placeholder="أدخل اسم المعلم..." required="" value="إسماعيل محبوبة" data-i18n-ph="auto_4">
+        </div>
+        <div class="form-group">
+          <label for="loginPass" data-i18n="auto_5">كلمة المرور</label>
+          <input type="password" id="loginPass" class="form-control" placeholder="••••••••" required="" value="123456">
+        </div>
+        <button type="submit" class="btn-primary" style="margin-top: 8px;" data-i18n="auto_6">تسجيل الدخول</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="app" id="appContainer" style="display: none;">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="sidebar-school-logo-wrap animate-logo-wrap">
+          <img src="assets/ministry-logo.svg" alt="شعار المدرسة" class="sidebar-school-logo animate-logo-img">
+        </div>
+        <div class="brand-text">
+          <div class="t1" data-i18n="auto_7">مدرسة معيذر</div>
+          <div class="t2" data-i18n="auto_8">إسماعيل محبوبة</div>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label" data-i18n="navMain">الرئيسية</div>
+        <div class="nav-item active" data-tab="dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="7" height="9" rx="2"></rect>
+            <rect x="14" y="3" width="7" height="5" rx="2"></rect>
+            <rect x="14" y="12" width="7" height="9" rx="2"></rect>
+            <rect x="3" y="16" width="7" height="5" rx="2"></rect>
+          </svg>
+          <span data-i18n="navDash">لوحة التحكم</span>
+        </div>
+        <div class="nav-item" data-tab="materials">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 10v6M9 13h6M20 20H4V4h16v16z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span data-i18n="navMaterials">المواد الدراسية</span>
+        </div>
+        <div class="nav-item" data-tab="students">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path>
+            <circle cx="10" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <span data-i18n="navStudents">إدارة الطلاب</span>
+        </div>
+        <div class="nav-item" data-tab="attend">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+            <path d="M16 2v4M8 2v4M3 10h18"></path>
+          </svg>
+          <span data-i18n="navAttend">الحضور والغياب</span>
+        </div>
+        <div class="nav-item" data-tab="grades">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          <span data-i18n="navGrades">الدرجات والتقييم</span>
+        </div>
+        <div class="nav-item" data-tab="questionbank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            <path d="M9 17v-5m3 5V9m3 8v-3" stroke="currentColor" stroke-width="1.8"></path>
+          </svg>
+          <span data-i18n="navQuestionBank">بنك الأسئلة المركزي</span>
+        </div>
+        <div class="nav-item" data-tab="starboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+          </svg>
+          <span data-i18n="navStarboard">لوحة النجوم 🌟</span>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label" data-i18n="navAI">أدوات الذكاء الاصطناعي</div>
+        <div class="nav-item" data-tab="quiz">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"></path>
+          </svg>
+          <span data-i18n="navQuiz">مولّد الأسئلة</span>
+        </div>
+        <div class="nav-item" data-tab="plan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <path d="M14 2v6h6"></path>
+          </svg>
+          <span data-i18n="navPlan">خطط الدروس</span>
+          <span class="nav-badge">AI</span>
+        </div>
+        <div class="nav-item" data-tab="slides">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="18" height="14" rx="2"></rect>
+            <path d="M8 21h8M12 17v4"></path>
+          </svg>
+          <span data-i18n="navSlides">توليد العروض</span>
+        </div>
+        <div class="nav-item" data-tab="reports">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M9 11l3 3L22 4"></path>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+          <span data-i18n="navReports">التقارير الذكية</span>
+        </div>
+        <div class="nav-item" data-tab="ai">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span data-i18n="navAIAssistant">مساعد الذكاء الاصطناعي</span>
+        </div>
+        <div class="nav-item" data-tab="analyzer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M18 20V10M12 20V4M6 20v-6"></path>
+          </svg>
+          <span data-i18n="navAnalyzer">محلل الدرجات الذكي 📊</span>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-label" data-i18n="navMore">أقسام إضافية</div>
+        <div class="nav-item" data-tab="calendar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+            <path d="M16 2v4M8 2v4M3 10h18"></path>
+          </svg>
+          <span data-i18n="navCal">التقويم</span>
+        </div>
+        <div class="nav-item" data-tab="notif">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span data-i18n="navNotif">الإشعارات</span>
+        </div>
+        <div class="nav-item" data-tab="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span data-i18n="navSettings">الإعدادات</span>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="avatar" style="background: transparent; overflow: hidden; padding: 2px;">
+          <img src="assets/school-logo.png" alt="شعار المدرسة" style="width:100%; height:100%; object-fit:contain;">
+        </div>
+        <div>
+          <div class="sf-name" data-i18n="teacherName">إسماعيل محبوبة</div>
+          <div class="sf-role" data-i18n="teacherRole">معلّم • مدرسة معيذر</div>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar(false)"></div>
+
+    <main class="main">
+      <div class="topbar">
+        <button class="icon-btn mobile-menu-toggle" id="mobileMenuToggleBtn" onclick="toggleMobileSidebar(true)" title="القائمة" data-i18n-title="auto_9">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:20px; height:20px;">
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="4" y1="18" x2="20" y2="18"></line>
+          </svg>
+        </button>
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="text" data-i18n-ph="auto_10" placeholder="ابحث عن طالب، صف، أو تقرير...">
+          <span class="kbd">⌘K</span>
+        </div>
+        <button class="icon-btn lang-toggle" id="langBtn" title="Language">EN</button>
+        <button class="icon-btn" id="themeBtn" title="Theme">
+          <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path>
+          </svg>
+        </button>
+        <button class="icon-btn" title="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="dot"></span>
+        </button>
+        <div class="avatar" style="width:42px;height:42px;" data-i18n="auto_11">إم</div>
+      </div>
+
+      <!-- Dashboard Tab -->
+      <div id="dashboardTab" class="tab-content active">
+        <section class="hero">
+          <div class="star-motif"></div>
+          <div class="hero-inner">
+            <div>
+              <div class="hero-eyebrow"><span class="pulse"></span><span data-i18n="heroEyebrow">الأحد، مرحباً
+                  بعودتك</span></div>
+              <h1 data-i18n="heroTitle">صباح الخير، <span data-i18n="auto_12">أستاذ إسماعيل</span> — لديك يوم حافل اليوم</h1>
+              <p data-i18n="heroSub">4 حصص، اختبار واحد قادم، و 3 طلاب بحاجة لمتابعة. المساعد الذكي جهّز لك ملخصاً
+                كاملاً.</p>
+              <div class="hero-ai">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"></path>
+                </svg>
+                <input type="text" data-i18n-ph="auto_13" placeholder="اطلب من المساعد الذكي... مثال: جهّز ورقة عمل عن الكسور">
+                <button data-i18n="heroAiBtn">إنشاء</button>
+              </div>
+            </div>
+            <div class="hero-side">
+              <div class="hero-date" id="heroDateBadge" style="cursor:pointer;" onclick="openDatePickerModal()" title="انقر لتعديل التاريخ وتحديد موعد مخصص" data-i18n-title="auto_14">
+                <div class="d1" id="heroDay">26</div>
+                <div class="d2" id="heroMonth" data-i18n="auto_15">يوليو 2026</div>
+              </div>
+              <div class="hero-weather" id="liveWeatherContainer">
+                <span id="weatherIcon"><svg class="spin-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"></path>
+                  </svg></span>
+                <span id="weatherTemp" data-i18n="auto_16">الدوحة، جاري التحميل...</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="grid-4">
+          <div class="card stat">
+            <div class="stat-top">
+              <div class="stat-icon" style="background:rgba(59,130,246,.12); color:var(--info);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+              </div>
+              <span class="stat-trend up">↑ <span>4</span></span>
+            </div>
+            <div class="stat-value" data-count="4">0</div>
+            <div class="stat-label" data-i18n="statClasses">حصص اليوم</div>
+            <div class="stat-spark"><canvas id="spark1"></canvas></div>
+          </div>
+          <div class="card stat">
+            <div class="stat-top">
+              <div class="stat-icon" style="background:rgba(34,197,94,.12); color:var(--success);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M9 11l3 3L22 4"></path>
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                </svg>
+              </div>
+              <span class="stat-trend up">↑ 2.1%</span>
+            </div>
+            <div class="stat-value" data-count="96" data-suffix="%">0%</div>
+            <div class="stat-label" data-i18n="statAttend">نسبة الحضور</div>
+            <div class="stat-spark"><canvas id="spark2"></canvas></div>
+          </div>
+          <div class="card stat">
+            <div class="stat-top">
+              <div class="stat-icon" style="background:rgba(201,162,39,.14); color:var(--gold);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M12 2l3 7h7l-5.6 4.3L18.5 21 12 16.8 5.5 21l2.1-7.7L2 9h7z"></path>
+                </svg>
+              </div>
+              <span class="stat-trend up">↑ 1.4</span>
+            </div>
+            <div class="stat-value" data-count="87" data-suffix="%">0%</div>
+            <div class="stat-label" data-i18n="statAvg">معدل الدرجات</div>
+            <div class="stat-spark"><canvas id="spark3"></canvas></div>
+          </div>
+          <div class="card stat">
+            <div class="stat-top">
+              <div class="stat-icon" style="background:rgba(239,68,68,.12); color:var(--danger);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 6v6l4 2"></path>
+                </svg>
+              </div>
+              <span class="stat-trend down">↓ 3</span>
+            </div>
+            <div class="stat-value" data-count="7">0</div>
+            <div class="stat-label" data-i18n="statPending">مهام معلّقة</div>
+            <div class="stat-spark"><canvas id="spark4"></canvas></div>
+          </div>
+        </div>
+
+        <div class="grid-2" id="dashboardCardsContainer">
+          <div class="card panel" id="heatmapPanel">
+            <div class="panel-head">
+              <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                    <path d="M16 2v4M8 2v4M3 10h18"></path>
+                  </svg></span>
+                <div>
+                  <div data-i18n="heatTitle">خريطة الحضور الحرارية</div>
+                  <div class="panel-sub" data-i18n="heatSub">آخر 14 أسبوعاً</div>
+                </div>
+              </div>
+              <div class="card-reorder-actions">
+                <button onclick="moveCardUp('heatmapPanel')" class="reorder-btn" title="تحريك لأعلى" data-i18n-title="auto_17">▲</button>
+                <button onclick="moveCardDown('heatmapPanel')" class="reorder-btn" title="تحريك لأسفل" data-i18n-title="auto_18">▼</button>
+              </div>
+              <div class="pill-tab"><span class="on" data-i18n="tabWeek">أسبوعي</span><span data-i18n="tabMonth">شهري</span></div>
+            </div>
+            <div class="heatmap" id="heatmap"></div>
+            <div class="heat-legend">
+              <span data-i18n="heatLow">أقل</span>
+              <span class="sq" style="background:#F1E4B8"></span>
+              <span class="sq" style="background:#DEC26A"></span>
+              <span class="sq" style="background:var(--gold)"></span>
+              <span class="sq" style="background:var(--maroon)"></span>
+              <span data-i18n="heatHigh">أعلى</span>
+            </div>
+            <div style="height:190px; margin-top:18px;"><canvas id="gradeChart" role="img" aria-label="خط بياني يوضح متوسط الدرجات خلال الأسابيع"></canvas></div>
+          </div>
+
+          <div class="card panel" id="classesPanel">
+            <div class="panel-head">
+              <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2"></path>
+                  </svg></span>
+                <div>
+                  <div data-i18n="classesTitle">حصص اليوم</div>
+                  <div class="panel-sub" data-i18n="classesSub">الأحد، 26 يوليو</div>
+                </div>
+              </div>
+              <div class="card-reorder-actions">
+                <button onclick="moveCardUp('classesPanel')" class="reorder-btn" title="تحريك لأعلى" data-i18n-title="auto_19">▲</button>
+                <button onclick="moveCardDown('classesPanel')" class="reorder-btn" title="تحريك لأسفل" data-i18n-title="auto_20">▼</button>
+              </div>
+            </div>
+            <div class="row-list" id="classesList"></div>
+
+            <div class="panel-head" style="margin-top:22px;">
+              <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M9 11l3 3L22 4"></path>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                  </svg></span>
+                <div>
+                  <div data-i18n="examsTitle">الاختبارات القادمة</div>
+                </div>
+              </div>
+            </div>
+            <div class="row-list" id="examsList"></div>
+          </div>
+
+          <div class="card panel" id="aiSuggestionsPanel">
+            <div class="panel-head">
+              <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"></path>
+                  </svg></span>
+                <div>
+                  <div data-i18n="aiTitle">اقتراحات المساعد الذكي</div>
+                  <div class="panel-sub" data-i18n="aiSub">مبنية على أداء الطلاب هذا الأسبوع</div>
+                </div>
+              </div>
+              <div class="card-reorder-actions">
+                <button onclick="moveCardUp('aiSuggestionsPanel')" class="reorder-btn" title="تحريك لأعلى" data-i18n-title="auto_21">▲</button>
+                <button onclick="moveCardDown('aiSuggestionsPanel')" class="reorder-btn" title="تحريك لأسفل" data-i18n-title="auto_22">▼</button>
+              </div>
+            </div>
+            <div class="ai-card">
+              <div class="ai-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"></path>
+                </svg></div>
+              <div class="ai-text" data-i18n="aiTip1"><b data-i18n="auto_23">3 الطلاب</b> في صف 9-B تراجع أداؤهم في الرياضيات — يقترح إنشاء
+                ورقة تقوية مخصصة.</div>
+            </div>
+            <div class="ai-card">
+              <div class="ai-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"></path>
+                </svg></div>
+              <div class="ai-text" data-i18n="aiTip2">حان وقت تجهيز <b data-i18n="auto_24">خطة الدرس الأسبوعية</b> للوحدة القادمة — يمكن
+                توليدها الآن في أقل من دقيقة.</div>
+            </div>
+            <div class="ai-card">
+              <div class="ai-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"></path>
+                </svg></div>
+              <div class="ai-text" data-i18n="aiTip3">اختبار الوحدة الثالثة بعد يومين — <b data-i18n="auto_25">بنك الأسئلة</b> جاهز لتوليد
+                نسخة عشوائية جديدة.</div>
+            </div>
+          </div>
+
+          <div class="card panel" id="activityTimelinePanel">
+            <div class="panel-head">
+              <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2"></path>
+                  </svg></span>
+                <div>
+                  <div data-i18n="activityTitle">سجل النشاط الأخير</div>
+                </div>
+              </div>
+              <div class="card-reorder-actions">
+                <button onclick="moveCardUp('activityTimelinePanel')" class="reorder-btn" title="تحريك لأعلى" data-i18n-title="auto_26">▲</button>
+                <button onclick="moveCardDown('activityTimelinePanel')" class="reorder-btn" title="تحريك لأسفل" data-i18n-title="auto_27">▼</button>
+              </div>
+            </div>
+            <div class="timeline" id="activityList"></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                    <path d="M16 2v4M8 2v4M3 10h18"></path>
+                  </svg></span>
+                <div data-i18n="auto_28">جدول الحصص الأسبوعي للأستاذ</div>
+              </div>
+            </div>
+            <div class="table-container" style="margin-top:0;">
+              <table class="app-table" style="font-size:12px;">
+                <thead>
+                  <tr style="background:var(--bg-alt);">
+                    <th data-i18n="auto_29">الحصة / اليوم</th>
+                    <th data-i18n="auto_30">الأحد</th>
+                    <th data-i18n="auto_31">الاثنين</th>
+                    <th data-i18n="auto_32">الثلاثاء</th>
+                    <th data-i18n="auto_33">الأربعاء</th>
+                    <th data-i18n="auto_34">الخميس</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight:700;" data-i18n="auto_35">الأولى (08:00)</td>
+                    <td data-i18n="auto_36">علوم 9-A</td>
+                    <td data-i18n="auto_37">علوم 10-A</td>
+                    <td data-i18n="auto_38">علوم 9-A</td>
+                    <td data-i18n="auto_39">علوم 9-B</td>
+                    <td data-i18n="auto_40">علوم 10-B</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:700;" data-i18n="auto_41">الثانية (09:30)</td>
+                    <td data-i18n="auto_42">علوم 9-B</td>
+                    <td data-i18n="auto_43">علوم 10-B</td>
+                    <td data-i18n="auto_44">علوم 9-B</td>
+                    <td data-i18n="auto_45">علوم 10-A</td>
+                    <td data-i18n="auto_46">علوم 9-A</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:700;" data-i18n="auto_47">الثالثة (11:15)</td>
+                    <td data-i18n="auto_48">عملي (فيزياء)</td>
+                    <td data-i18n="auto_49">شاغر</td>
+                    <td data-i18n="auto_50">عملي (كيمياء)</td>
+                    <td data-i18n="auto_51">شاغر</td>
+                    <td data-i18n="auto_52">عملي (أحياء)</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:700;" data-i18n="auto_53">الرابعة (13:00)</td>
+                    <td data-i18n="auto_54">قسم العلوم</td>
+                    <td data-i18n="auto_55">علوم 9-A</td>
+                    <td data-i18n="auto_56">علوم 10-B</td>
+                    <td data-i18n="auto_57">علوم 9-B</td>
+                    <td data-i18n="auto_58">قسم العلوم</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg></span>
+                <div>
+                  <div data-i18n="auto_59">الرزنامة والإجازات الرسمية للدولة (2026)</div>
+                  <div class="panel-sub" style="color:var(--success);" data-i18n="auto_60">مربوط مباشرة مع قاعدة بيانات الدولة 🟢</div>
+                </div>
+              </div>
+            </div>
+            <div id="stateHolidaysList" style="display:flex; flex-direction:column; gap:8px; max-height:190px; overflow-y:auto; font-size:12.5px;">
+              <div style="text-align:center; color:var(--text-3); padding:20px;" data-i18n="auto_61">جاري الاتصال بقاعدة بيانات الإجازات
+                الرسمية...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Materials Tab -->
+      <div id="materialsTab" class="tab-content">
+        <div class="materials-header">
+          <h2><span data-i18n="materialsTitle">مستودع المواد الدراسية</span></h2>
+          <p data-i18n="materialsSub">ارفع ودرّس ملفاتك وحصصك الدراسية ونظمها لكل الصفوف</p>
+        </div>
+
+        <!-- Quick stats for materials -->
+        <div class="grid-4" style="margin-bottom: 24px;">
+          <div class="card stat">
+            <div class="stat-top">
+              <div class="stat-icon" style="background:rgba(138,21,56,.12); color:var(--maroon-light);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-value" id="totalMaterialsCount">0</div>
+            <div class="stat-label" data-i18n="totalMaterials">إجمالي المواد المرفوعة</div>
+          </div>
+          <div class="card stat">
+            <div class="stat-top">
+              <div class="stat-icon" style="background:rgba(34,197,94,.12); color:var(--success);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-value" id="storageUsedValue">0 KB</div>
+            <div class="stat-label" data-i18n="storageUsed">حجم الملفات المرفوعة</div>
+          </div>
+          <div class="card stat">
+            <div class="stat-top">
+              <div class="stat-icon" style="background:rgba(201,162,39,.14); color:var(--gold);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="10" cy="7" r="4"></circle>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-value" id="activeClassesCount">0</div>
+            <div class="stat-label" data-i18n="classesCount">الصفوف النشطة</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- Upload Form -->
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"></path>
+                  </svg></span>
+                <div data-i18n="uploadNewMaterial">رفع مادة دراسية جديدة</div>
+              </div>
+            </div>
+            <form class="upload-form" id="materialUploadForm" onsubmit="event.preventDefault(); handleMaterialUpload();">
+              <div class="form-group">
+                <label for="mTitle" data-i18n="materialTitleLabel">عنوان المادة / الدرس</label>
+                <input type="text" id="mTitle" class="form-control" required="" placeholder="...">
+              </div>
+              <div class="grid-2" style="grid-template-columns: 1fr 1fr; margin-bottom: 0; gap: 12px;">
+                <div class="form-group">
+                  <label for="mClass" data-i18n="selectClassLabel">اختر الصف</label>
+                  <select id="mClass" class="form-control" required="">
+                    <option value="9-A" data-i18n="auto_62">صف 9-A</option>
+                    <option value="9-B" data-i18n="auto_63">صف 9-B</option>
+                    <option value="10-A" data-i18n="auto_64">صف 10-A</option>
+                    <option value="10-B" data-i18n="auto_65">صف 10-B</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="mType" data-i18n="selectTypeLabel">نوع الملف</label>
+                  <select id="mType" class="form-control" required="">
+                    <option value="pdf">PDF</option>
+                    <option value="doc">Word / Document</option>
+                    <option value="image" data-i18n="auto_66">صورة / Image</option>
+                    <option value="video" data-i18n="auto_67">فيديو / Video</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="mDesc" data-i18n="materialDescLabel">وصف قصير</label>
+                <input type="text" id="mDesc" class="form-control" placeholder="...">
+              </div>
+              <div class="form-group">
+                <div class="dropzone" id="uploadDropzone">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"></path>
+                  </svg>
+                  <p id="dropzonePrompt" data-i18n="dragDropText">اسحب وأفلت الملف هنا أو انقر للتصفح</p>
+                  <input type="file" id="mFileInput" required="" onchange="handleFileSelect(event)">
+                </div>
+                <div class="selected-file-info" id="selectedFileInfo">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 6L9 17l-5-5"></path>
+                  </svg>
+                  <span id="selectedFileName">file.pdf</span>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 5v14M5 12h14"></path>
+                </svg>
+                <span data-i18n="uploadBtnText">رفع المادة الدراسية</span>
+              </button>
+          </form></div>
+
+          <!-- Add Class Form -->
+          <div class="card panel" style="margin-top: 16px;">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="3" width="7" height="9" rx="2"></rect>
+                    <rect x="14" y="3" width="7" height="5" rx="2"></rect>
+                    <rect x="14" y="12" width="7" height="9" rx="2"></rect>
+                    <rect x="3" y="16" width="7" height="5" rx="2"></rect>
+                  </svg></span>
+                <div data-i18n="auto_68">إضافة صف دراسي جديد</div>
+              </div>
+            </div>
+            
+              <div class="grid-2" style="grid-template-columns: 1fr 1fr; margin-bottom: 0; gap: 12px;">
+                <div class="form-group">
+                  <label for="cName" data-i18n="auto_69">اسم الصف (مثال: 9-A)</label>
+                  <input type="text" id="cName" class="form-control" required="" placeholder="مثال: 9-A" data-i18n-ph="auto_70">
+                </div>
+                <div class="form-group">
+                  <label for="cNumber" data-i18n="auto_71">رقم الصف (رقم الفئة)</label>
+                  <input type="text" id="cNumber" class="form-control" required="" placeholder="مثال: 901" data-i18n-ph="auto_72">
+                </div>
+              </div>
+              <div class="grid-2" style="grid-template-columns: 1fr 1fr; margin-bottom: 0; gap: 12px;">
+                <div class="form-group">
+                  <label for="cGrade" data-i18n="auto_73">المرحلة / الصف</label>
+                  <input type="text" id="cGrade" class="form-control" required="" placeholder="مثال: Grade 9" data-i18n-ph="auto_74">
+                </div>
+                <div class="form-group">
+                  <label for="cSection" data-i18n="auto_75">الشعبة</label>
+                  <input type="text" id="cSection" class="form-control" required="" placeholder="مثال: Class A" data-i18n-ph="auto_76">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="cYear" data-i18n="auto_77">العام الأكاديمي</label>
+                <input type="text" id="cYear" class="form-control" required="" placeholder="مثال: 2026/2027" value="2026/2027" data-i18n-ph="auto_78">
+              </div>
+              <div class="form-group">
+                <label for="cNotes" data-i18n="auto_79">ملاحظات</label>
+                <input type="text" id="cNotes" class="form-control" placeholder="اختياري..." data-i18n-ph="auto_80">
+              </div>
+              <button type="submit" class="btn-primary" style="background: linear-gradient(145deg, var(--maroon), var(--plum)); color:#fff;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 5v14M5 12h14"></path>
+                </svg>
+                <span data-i18n="auto_81">إضافة الصف</span>
+              </button>
+            
+
+            <hr style="margin:20px 0; border:none; border-top:1px solid var(--border);">
+
+            <div class="panel-head">
+              <div class="panel-title">
+                <div data-i18n="auto_82">الصفوف الدراسية الحالية</div>
+              </div>
+            </div>
+            <div class="table-container" style="margin-top:8px;">
+              <table class="app-table" style="font-size:12px;">
+                <thead>
+                  <tr>
+                    <th data-i18n="auto_83">اسم الصف</th>
+                    <th data-i18n="auto_84">الرقم</th>
+                    <th data-i18n="auto_85">المرحلة</th>
+                    <th data-i18n="auto_86">الطلاب</th>
+                    <th data-i18n="auto_87">إجراء</th>
+                  </tr>
+                </thead>
+                <tbody id="classesTableBody">
+                  <!-- Dynamic -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Materials List -->
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                  </svg></span>
+                <div data-i18n="navMaterials">المواد الدراسية</div>
+              </div>
+            </div>
+
+            <div class="materials-list-wrapper">
+              <div class="list-toolbar">
+                <div class="search search-bar" style="margin-bottom: 0; padding: 8px 12px; display: flex; align-items: center;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;margin-inline-end:8px;">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                  </svg>
+                  <input type="text" id="materialsSearchInput" oninput="renderMaterials()" placeholder="ابحث في المواد المرفوعة..." style="font-size:12.5px;" data-i18n-ph="auto_88">
+                </div>
+                <select id="classFilterSelect" onchange="renderMaterials()" class="form-control" style="padding: 8px 12px; border-radius: 12px; font-size: 12.5px;">
+                  <option value="all" data-i18n="allClasses">كل الصفوف</option>
+                  <option value="9-A" data-i18n="auto_89">صف 9-A</option>
+                  <option value="9-B" data-i18n="auto_90">صف 9-B</option>
+                  <option value="10-A" data-i18n="auto_91">صف 10-A</option>
+                  <option value="10-B" data-i18n="auto_92">صف 10-B</option>
+                </select>
+              </div>
+
+              <div class="materials-grid" id="materialsGrid">
+                <!-- Material cards populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Students Tab -->
+      <div id="studentsTab" class="tab-content">
+        <div class="materials-header">
+          <h2><span data-i18n="auto_93">إدارة الطلاب —</span><span id="currentClassTitle" data-i18n="auto_94">صف 9-A</span></h2>
+          <p data-i18n="auto_95">عرض وتعديل ورفع قوائم الطلاب لمادة العلوم</p>
+        </div>
+
+        <div class="list-toolbar" style="margin-bottom: 16px;">
+          <button class="btn-primary" onclick="openAddStudentModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            <span data-i18n="auto_96">إضافة طالب جديد</span>
+          </button>
+          <button class="btn-primary" style="background:var(--success);" onclick="openRosterUploadModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"></path>
+            </svg>
+            <span data-i18n="auto_97">رفع قائمة الطلاب (CSV / Excel)</span>
+          </button>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:10px; width:100%;">
+            <span style="font-size:13px; font-weight:700; color:var(--text-2);" data-i18n="auto_98">تصفية حسب:</span>
+            <select id="studentsGradeFilterSelect" onchange="filterStudentsList()" class="form-control" style="width: 130px; padding: 8px 12px;">
+              <option value="all" data-i18n="auto_99">كل المراحل</option>
+              <option value="7" data-i18n="auto_100">الصف السابع</option>
+              <option value="8" data-i18n="auto_101">الصف الثامن</option>
+              <option value="9" data-i18n="auto_102">الصف التاسع</option>
+              <option value="10" data-i18n="auto_103">الصف العاشر</option>
+            </select>
+            <select id="studentsClassSelect" onchange="switchStudentClass(this.value)" class="form-control" style="width: 150px; padding: 8px 12px;">
+              <!-- Dynamic classes populated in app.js -->
+            </select>
+            <select id="studentsSectionFilterSelect" onchange="filterStudentsList()" class="form-control" style="width: 130px; padding: 8px 12px;">
+              <option value="all" data-i18n="auto_104">كل الشعب</option>
+              <option value="A" data-i18n="auto_105">شعبة A</option>
+              <option value="B" data-i18n="auto_106">شعبة B</option>
+              <option value="C" data-i18n="auto_107">شعبة C</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="app-table">
+            <thead>
+              <tr>
+                <th data-i18n="auto_108">الرقم</th>
+                <th data-i18n="auto_109">اسم الطالب</th>
+                <th data-i18n="auto_110">الصف</th>
+                <th data-i18n="auto_111">درجة العلوم</th>
+                <th data-i18n="auto_112">نسبة الحضور</th>
+                <th data-i18n="auto_113">الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Attendance Tab -->
+      <div id="attendTab" class="tab-content">
+        <div class="materials-header">
+          <h2 data-i18n="auto_114">تسجيل الحضور والغياب</h2>
+          <p data-i18n="auto_115">رصد حالة الحضور اليومي لطلاب مادة العلوم</p>
+        </div>
+
+        <div class="list-toolbar" style="margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+          <select id="attendClassSelect" onchange="switchAttendClass(this.value)" class="form-control" style="width: 150px; padding: 8px 12px;">
+            <option value="9-A" data-i18n="auto_116">صف 9-A</option>
+            <option value="9-B" data-i18n="auto_117">صف 9-B</option>
+            <option value="10-A" data-i18n="auto_118">صف 10-A</option>
+            <option value="10-B" data-i18n="auto_119">صف 10-B</option>
+          </select>
+          <span style="font-size: 13.5px; font-weight: 700; color: var(--text-2);" id="attendDateLabel" data-i18n="auto_120">اليوم: الأحد 26
+            يوليو 2026</span>
+        </div>
+
+        <div class="table-container">
+          <table class="app-table">
+            <thead>
+              <tr>
+                <th data-i18n="auto_121">اسم الطالب</th>
+                <th data-i18n="auto_122">الصف</th>
+                <th data-i18n="auto_123">حالة الحضور</th>
+              </tr>
+            </thead>
+            <tbody id="attendTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Grades Tab -->
+      <div id="gradesTab" class="tab-content">
+        <div class="materials-header">
+          <h2 data-i18n="auto_124">الدرجات والتقييم</h2>
+          <p data-i18n="auto_125">رصد وتعديل درجات اختبارات العلوم وأوراق العمل</p>
+        </div>
+
+        <div class="list-toolbar" style="margin-bottom: 16px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <select id="gradesClassSelect" onchange="switchGradesClass(this.value)" class="form-control" style="width: 150px; padding: 8px 12px;">
+            <!-- Dynamic classes populated in app.js -->
+          </select>
+          <button class="btn-primary" style="background:var(--success);" onclick="document.getElementById('gradesImportInput').click()" title="استيراد ملف درجات" data-i18n-title="auto_126">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"></path>
+            </svg>
+            <span data-i18n="auto_127">استيراد الدرجات (Excel / CSV / PDF)</span>
+          </button>
+          <input type="file" id="gradesImportInput" accept=".xlsx,.xls,.csv,.pdf" style="display:none;" onchange="handleGradesImport(event)">
+          <button class="btn-primary" style="background:var(--info);" onclick="addNewAssessmentColumn()" title="إضافة عمود تقييم جديد للجدول" data-i18n-title="auto_128">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            <span data-i18n="auto_129">إضافة عمود تقييم</span>
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table class="app-table">
+            <thead>
+              <tr id="gradesTableHead">
+                <th data-i18n="auto_130">اسم الطالب</th>
+                <th data-i18n="auto_131">اختبار الوحدة 1 (100)</th>
+                <th data-i18n="auto_132">اختبار الوحدة 2 (100)</th>
+                <th data-i18n="auto_133">المشروع العملي (100)</th>
+                <th data-i18n="auto_134">المعدل الحالي</th>
+              </tr>
+            </thead>
+            <tbody id="gradesTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+        <!-- Floating + button for Grades -->
+        <button class="grades-fab" onclick="addNewAssessmentColumn()" title="إضافة عمود تقييم جديد" data-i18n-title="auto_135">➕</button>
+      </div>
+
+      <!-- Centralized Question Bank Tab -->
+      <div id="questionbankTab" class="tab-content">
+        <div class="materials-header">
+          <h2 data-i18n="auto_136">بنك الأسئلة المركزي</h2>
+          <p data-i18n="auto_137">تصفح، ابحث، ونظّم أسئلتك المنهجية، وقم بتجميع اختبارات مخصصة لطلابك</p>
+        </div>
+
+        <div class="list-toolbar" style="margin-bottom: 16px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; text-align: right; direction: rtl;">
+
+          <input type="text" id="qbSearchInput" oninput="renderQuestionBank()" class="form-control" placeholder="🔍 ابحث في نص الأسئلة أو الإجابات..." style="width: 250px; padding: 8px 12px;" data-i18n-ph="auto_138">
+
+          <select id="qbTypeFilter" onchange="renderQuestionBank()" class="form-control" style="width: 130px; padding: 8px 12px;">
+            <option value="all" data-i18n="auto_139">كل الأنواع</option>
+            <option value="mcq" data-i18n="auto_140">اختيار من متعدد</option>
+            <option value="tf" data-i18n="auto_141">صح / خطأ</option>
+            <option value="blank" data-i18n="auto_142">إكمال الفراغ</option>
+            <option value="match" data-i18n="auto_143">مطابقة</option>
+            <option value="short" data-i18n="auto_144">إجابة قصيرة</option>
+            <option value="essay" data-i18n="auto_145">سؤال مقالي</option>
+            <option value="order" data-i18n="auto_146">ترتيب</option>
+            <option value="classify" data-i18n="auto_147">تصنيف</option>
+          </select>
+
+          <select id="qbTopicFilter" onchange="renderQuestionBank()" class="form-control" style="width: 150px; padding: 8px 12px;">
+            <option value="all" data-i18n="auto_148">كل الحقائب</option>
+            <option value="cell" data-i18n="auto_149">الخلية الحية ووظائفها</option>
+            <option value="atoms" data-i18n="auto_150">الذرة والعناصر الكيميائية</option>
+            <option value="reactions" data-i18n="auto_151">التفاعلات الكيميائية</option>
+            <option value="motion" data-i18n="auto_152">قوانين الحركة والسرعة</option>
+          </select>
+
+          <select id="qbDiffFilter" onchange="renderQuestionBank()" class="form-control" style="width: 110px; padding: 8px 12px;">
+            <option value="all" data-i18n="auto_153">كل المستويات</option>
+            <option value="easy" data-i18n="auto_154">سهل</option>
+            <option value="medium" data-i18n="auto_155">متوسط</option>
+            <option value="hard" data-i18n="auto_156">صعب</option>
+          </select>
+
+          <input type="text" id="qbTagInput" oninput="renderQuestionBank()" class="form-control" placeholder="🏷️ وسوم (مثل: أحياء)..." style="width: 140px; padding: 8px 12px;" data-i18n-ph="auto_157">
+
+          <button class="btn-primary" style="background:var(--success); margin-inline-start: auto; width: auto;" onclick="compileExamFromSelected()" id="btnCompileExam" disabled="">
+            <span data-i18n="auto_158">📝 تجميع اختبار من المحدَّد</span>
+          </button>
+
+          <button class="btn-primary" style="background:var(--gold); width: auto;" onclick="openAddQuestionModal()">
+            <span data-i18n="auto_159">➕ إضافة سؤال يدوياً</span>
+          </button>
+        </div>
+
+        <div style="text-align: right; direction: rtl; margin-bottom: 10px; font-size: 13px; color: var(--text-2);"><span data-i18n="auto_160">💡 إجمالي الأسئلة في البنك:</span><strong id="qbTotalCount">0</strong><span data-i18n="auto_161">| تم تحديد:</span><strong id="qbSelectedCount">0</strong><span data-i18n="auto_162">سؤال</span></div>
+
+        <div style="display: grid; grid-template-columns: 1fr; gap: 16px; direction: rtl; text-align: right;" id="qbQuestionsContainer">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- Quiz Tab -->
+      <div id="quizTab" class="tab-content">
+        <div class="materials-header">
+          <h2 data-i18n="auto_163">مولّد الأسئلة والاختبارات الذكي</h2>
+          <p data-i18n="auto_164">أنشئ اختبارات علوم مخصصة لطلابك في ثوانٍ</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    <path d="M12 8v8m-4-4h8"></path>
+                  </svg></span>
+                <div data-i18n="auto_165">إعدادات الاختبار</div>
+              </div>
+            </div>
+            <form class="upload-form" id="quizGeneratorForm" onsubmit="event.preventDefault(); generateQuiz();" style="text-align: right; direction: rtl;">
+              <div class="form-group">
+                <label for="quizSourceFile" data-i18n="auto_166">اختر المقرر الدراسي المرفوع</label>
+                <select id="quizSourceFile" class="form-control" onchange="handleQuizSourceChange(this.value)">
+                  <option value="default" data-i18n="auto_167">— اختر من المستندات المرفوعة (توليد ذكي) —</option>
+                  <option value="cell_structure.pdf" data-i18n="auto_168">مستند: تركيب الخلية ووظائفها.pdf</option>
+                  <option value="periodic_table.docx" data-i18n="auto_169">ورقة عمل: الجدول الدوري والعناصر.docx</option>
+                  <option value="motion_laws.pdf" data-i18n="auto_170">ملخص: قوانين الحركة والسرعة.pdf</option>
+                </select>
+              </div>
+
+              <div class="form-grid-columns" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div class="form-group">
+                  <label for="quizSubject" data-i18n="auto_171">المادة</label>
+                  <input type="text" id="quizSubject" class="form-control" value="العلوم العامة">
+                </div>
+                <div class="form-group">
+                  <label for="quizGrade" data-i18n="auto_172">الصف الدراسي</label>
+                  <select id="quizGrade" class="form-control">
+                    <option value="9" data-i18n="auto_173">الصف التاسع</option>
+                    <option value="10" data-i18n="auto_174">الصف العاشر</option>
+                    <option value="7" data-i18n="auto_175">الصف السابع</option>
+                    <option value="8" data-i18n="auto_176">الصف الثامن</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-grid-columns" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div class="form-group">
+                  <label for="quizTopic" data-i18n="auto_177">حقيبة الاختبار العامة</label>
+                  <select id="quizTopic" class="form-control" onchange="document.getElementById('quizLessonName').value = this.options[this.selectedIndex].text">
+                    <option value="cell" data-i18n="auto_178">الخلية الحية ووظائفها</option>
+                    <option value="atoms" data-i18n="auto_179">الذرة والعناصر الكيميائية</option>
+                    <option value="reactions" data-i18n="auto_180">التفاعلات الكيميائية</option>
+                    <option value="motion" data-i18n="auto_181">قوانين الحركة والسرعة</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="quizLessonName" data-i18n="auto_182">اسم الدرس بالتحديد</label>
+                  <input type="text" id="quizLessonName" class="form-control" placeholder="مثال: الانقسام الخلوي أو الروابط الكيميائية" value="الخلية الحية ووظائفها" data-i18n-ph="auto_183">
+                </div>
+              </div>
+
+              <div class="form-grid-columns" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div class="form-group">
+                  <label for="quizLevel" data-i18n="auto_184">مستوى الصعوبة</label>
+                  <select id="quizLevel" class="form-control">
+                    <option value="easy" data-i18n="auto_185">سهل / Easy</option>
+                    <option value="medium" selected="" data-i18n="auto_186">متوسط / Medium</option>
+                    <option value="hard" data-i18n="auto_187">صعب / Hard</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="quizBloomLevel" data-i18n="auto_188">تصنيف بلوم المستهدف (Bloom's)</label>
+                  <select id="quizBloomLevel" class="form-control">
+                    <option value="تذكر" data-i18n="auto_189">تذكر (Remembering)</option>
+                    <option value="فهم" selected="" data-i18n="auto_190">فهم (Understanding)</option>
+                    <option value="تطبيق" data-i18n="auto_191">تطبيق (Applying)</option>
+                    <option value="تحليل" data-i18n="auto_192">تحليل (Analyzing)</option>
+                    <option value="تقييم" data-i18n="auto_193">تقييم (Evaluating)</option>
+                    <option value="ابتكار" data-i18n="auto_194">ابتكار (Creating)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-grid-columns" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div class="form-group">
+                  <label for="quizCount" data-i18n="auto_195">عدد الأسئلة المطلوب</label>
+                  <select id="quizCount" class="form-control">
+                    <option value="5" data-i18n="auto_196">5 أسئلة</option>
+                    <option value="10" selected="" data-i18n="auto_197">10 أسئلة</option>
+                    <option value="15" data-i18n="auto_198">15 سؤالاً</option>
+                    <option value="20" data-i18n="auto_199">20 سؤالاً</option>
+                    <option value="25" data-i18n="auto_200">25 سؤالاً</option>
+                    <option value="30" data-i18n="auto_201">30 سؤالاً</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="quizLanguage" data-i18n="auto_202">لغة ورقة الاختبار</label>
+                  <select id="quizLanguage" class="form-control">
+                    <option value="ar" data-i18n="auto_203">اللغة العربية</option>
+                    <option value="en">English Language</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label style="font-weight:700; margin-bottom:8px; display:block;" data-i18n="auto_204">أنواع الأسئلة المطلوب توليدها</label>
+                <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:8px;">
+                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                    <input type="checkbox" id="qTypeMcq" checked="">
+                    <span data-i18n="auto_205">اختيار من متعدد (MCQ)</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                    <input type="checkbox" id="qTypeTF" checked="">
+                    <span data-i18n="auto_206">صح أم خطأ (T / F)</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                    <input type="checkbox" id="qTypeBlank" checked="">
+                    <span data-i18n="auto_207">إكمال الفراغ (Fill in the Blank)</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                    <input type="checkbox" id="qTypeMatch" checked="">
+                    <span data-i18n="auto_208">سؤال المطابقة (Matching)</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                    <input type="checkbox" id="qTypeShort" checked="">
+                    <span data-i18n="auto_209">إجابة قصيرة (Short Answer)</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                    <input type="checkbox" id="qTypeEssay">
+                    <span data-i18n="auto_210">سؤال مقالي (Essay)</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                    <input type="checkbox" id="qTypeOrder">
+                    <span data-i18n="auto_211">سؤال الترتيب (Ordering)</span>
+                  </label>
+                  <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer;">
+                    <input type="checkbox" id="qTypeClassify">
+                    <span data-i18n="auto_212">سؤال التصنيف (Classification)</span>
+                  </label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-primary" style="background: linear-gradient(145deg, var(--gold), var(--gold-light)); color:#2b2205; font-weight: 800; width: 100%;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #2b2205; margin-inline-end: 6px;">
+                  <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"></path>
+                </svg>
+                <span data-i18n="auto_213">توليد ورقة الاختبار الذكية ⚡</span>
+              </button>
+            </form>
+          </div>
+
+          <div class="card panel" style="text-align: right; direction: rtl;">
+            <div class="panel-head" style="flex-wrap: wrap; gap: 8px;">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <path d="M14 2v6h6"></path>
+                  </svg></span>
+                <div data-i18n="auto_214">معاينة ورقة الاختبار والمخرجات</div>
+              </div>
+
+              <!-- Quick Export & Options Toolbar -->
+              <div style="display: none; gap: 6px; flex-wrap: wrap; align-items: center;" id="quizActionsToolbar">
+                <button onclick="shuffleQuizQuestions()" class="action-btn" style="padding:4px 10px; font-size:11px; width:auto; background:var(--bg-alt); color:var(--text-1);" data-i18n="auto_215">🔀
+                  خلط الأسئلة</button>
+                <button onclick="shuffleQuizAnswers()" class="action-btn" style="padding:4px 10px; font-size:11px; width:auto; background:var(--bg-alt); color:var(--text-1);" data-i18n="auto_216">🔄
+                  خلط الإجابات</button>
+                <select onchange="createQuizVersion(this.value)" class="form-control" style="width:100px; padding:2px 8px; font-size:11px; height:auto; display:inline-block;" id="quizVersionSelect">
+                  <option value="A" data-i18n="auto_217">نموذج A</option>
+                  <option value="B" data-i18n="auto_218">نموذج B</option>
+                  <option value="C" data-i18n="auto_219">نموذج C</option>
+                </select>
+                <button onclick="saveQuizToBank()" class="action-btn" style="padding:4px 10px; font-size:11px; width:auto; background:rgba(217,119,6,0.1); color:var(--gold); border:1px solid var(--gold);" data-i18n="auto_220">💾
+                  حفظ لبنك الأسئلة</button>
+                <button onclick="exportQuizToWord()" class="action-btn" style="padding:4px 10px; font-size:11px; width:auto; background:var(--info); color:#fff;" data-i18n="auto_221">📝 تصدير
+                  Word</button>
+                <button onclick="window.print()" class="action-btn" style="padding:4px 10px; font-size:11px; width:auto; background:var(--success); color:#fff;" data-i18n="auto_222">🖨️ طباعة
+                  / PDF</button>
+              </div>
+            </div>
+
+            <div id="quizOutputPlaceholder" style="text-align: center; padding: 40px 20px; color: var(--text-3); font-size: 13.5px; border: 1px dashed var(--border); border-radius: var(--radius-md);" data-i18n="auto_223">
+              قم بتعبئة الخيارات والنقر على توليد لمعاينة ورقة الاختبار هنا
+            </div>
+
+            <!-- Quick stats and estimated solving time -->
+            <div id="quizMetadataPanel" style="display: none; padding: 12px; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--border); font-size: 12px; gap: 15px; justify-content: space-around; flex-wrap: wrap; direction: rtl;">
+              <div><span data-i18n="auto_224">⏱️ زمن الحل المقدر:</span><strong id="quizEstTime" data-i18n="auto_225">0 دقيقة</strong></div>
+              <div><span data-i18n="auto_226">📊 توزيع الصعوبة:</span><strong id="quizDiffDist" data-i18n="auto_227">سهل: 0%، متوسط: 0%، صعب: 0%</strong></div>
+              <div><span data-i18n="auto_228">🏷️ تصنيف بلوم:</span><strong id="quizBloomTag" data-i18n="auto_229">تذكر</strong></div>
+            </div>
+
+            <div id="quizOutputCard" class="quiz-output-card" style="display: none; padding: 0; background:none; border:none; box-shadow:none;">
+              <!-- Quiz sheet template -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lesson Plans Tab -->
+      <div id="planTab" class="tab-content">
+        <div class="materials-header">
+          <h2 data-i18n="auto_230">مولّد خطط الدروس اليومية والأسبوعية</h2>
+          <p data-i18n="auto_231">جهّز خطة درس نموذجية لمادة العلوم بضغطة زر</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <path d="M14 2v6h6"></path>
+                  </svg></span>
+                <div data-i18n="auto_232">إعداد خطة الدرس</div>
+              </div>
+            </div>
+            <form class="upload-form" onsubmit="event.preventDefault(); generateLessonPlan();">
+              <div class="form-group">
+                <label for="planTopic" data-i18n="auto_233">موضوع الدرس</label>
+                <input type="text" id="planTopic" class="form-control" required="" placeholder="مثال: الخلية الحيوانية والنباتية" data-i18n-ph="auto_234">
+              </div>
+              <div class="form-group">
+                <label for="planClass" data-i18n="auto_235">الصف الدراسي</label>
+                <select id="planClass" class="form-control">
+                  <option value="9-A" data-i18n="auto_236">الصف التاسع</option>
+                  <option value="10-A" data-i18n="auto_237">الصف العاشر</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="planDuration" data-i18n="auto_238">مدة الحصة</label>
+                <select id="planDuration" class="form-control" onchange="handlePlanDurationChange(this.value)">
+                  <option value="40" data-i18n="auto_239">40 دقيقة</option>
+                  <option value="45" selected="" data-i18n="auto_240">45 دقيقة</option>
+                  <option value="custom" data-i18n="auto_241">مدة مخصصة...</option>
+                </select>
+              </div>
+              <div class="form-group" id="customDurationGroup" style="display:none;">
+                <label for="planCustomDuration" data-i18n="auto_242">أدخل المدة بالدقائق</label>
+                <input type="number" id="planCustomDuration" class="form-control" min="5" max="300" placeholder="مثال: 50" data-i18n-ph="auto_243">
+              </div>
+              <button type="submit" class="btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 5v14M5 12h14"></path>
+                </svg>
+                <span data-i18n="auto_244">توليد خطة الدرس</span>
+              </button>
+            </form>
+          </div>
+
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M9 11l3 3L22 4"></path>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                  </svg></span>
+                <div data-i18n="auto_245">خطة الدرس المولّدة</div>
+              </div>
+            </div>
+            <div id="planOutput" style="background:var(--bg-alt); padding: 18px; border-radius: 12px; font-size:13px; line-height: 1.6; max-height:400px; overflow-y:auto;" data-i18n="auto_246">
+              سيظهر هنا تحضير الدرس بالتفصيل بعد الضغط على زر التوليد.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Presentation Slides Tab -->
+      <div id="slidesTab" class="tab-content">
+        <div class="materials-header">
+          <h2 data-i18n="auto_247">منشئ العروض التقديمية التفاعلية</h2>
+          <p data-i18n="auto_248">قم بتوليد شرائح عرض احترافية لموضوعات العلوم وعرضها فوراً</p>
+        </div>
+        <div class="grid-2">
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="3" width="18" height="14" rx="2"></rect>
+                    <path d="M8 21h8M12 17v4"></path>
+                  </svg></span>
+                <div data-i18n="auto_249">إنشاء عرض جديد</div>
+              </div>
+            </div>
+            <form class="upload-form" onsubmit="event.preventDefault(); generateSlides();">
+              <div class="form-group">
+                <label data-i18n="auto_250">عنوان أو موضوع العرض</label>
+                <input type="text" id="slideTopic" class="form-control" required="" placeholder="مثال: البناء الضوئي أو الجدول الدوري" data-i18n-ph="auto_251">
+              </div>
+              <div class="form-group">
+                <label data-i18n="auto_252">عدد الشرائح</label>
+                <select id="slideCount" class="form-control">
+                  <option value="5" selected="" data-i18n="auto_253">5 شرائح</option>
+                  <option value="8" data-i18n="auto_254">8 شرائح</option>
+                  <option value="10" data-i18n="auto_255">10 شرائح</option>
+                  <option value="12" data-i18n="auto_256">12 شرائح</option>
+                  <option value="15" data-i18n="auto_257">15 شريحة</option>
+                </select>
+              </div>
+              <button type="submit" class="btn-primary" data-i18n="auto_258">توليد الشرائح</button>
+            </form>
+          </div>
+
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                    <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                  </svg></span>
+                <div data-i18n="auto_259">معاينة العرض التقديمي</div>
+              </div>
+            </div>
+            <div id="slidesPreviewArea" style="display:none; text-align:center;">
+              <div id="slidesContainer" style="background:#1e1e2f; color:#fff; min-height:220px; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:30px; position:relative; margin-bottom:12px; box-shadow:var(--shadow-md);">
+                <div id="slideContent" style="width:100%; direction:rtl; text-align:center;"></div>
+              </div>
+              <div style="display:flex; justify-content:center; gap:10px; align-items:center;">
+                <button class="action-btn" onclick="prevSlide()">&lt;</button>
+                <span id="slideIndicator" style="font-weight:700; font-size:13px;">1 / 3</span>
+                <button class="action-btn" onclick="nextSlide()">&gt;</button>
+              </div>
+            </div>
+            <div id="slidesPlaceholder" style="background:var(--bg-alt); padding: 30px; border-radius: 12px; text-align:center; color:var(--text-3); font-size:13px;" data-i18n="auto_260">
+              اضغط على زر التوليد لعرض الشرائح هنا.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Smart Reports Tab -->
+      <div id="reportsTab" class="tab-content">
+        <div class="materials-header">
+          <h2 data-i18n="auto_261">التقارير الذكية وأوراق التقييم</h2>
+          <p data-i18n="auto_262">توليد تقارير أداء دورية وبطاقات درجات تفصيلية للطلاب</p>
+        </div>
+        <div class="card panel" style="margin-bottom:20px;">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <line x1="20" y1="8" x2="20" y2="14"></line>
+                  <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg></span>
+              <div id="reportsClassTitle" data-i18n="auto_263">توليد تقارير الصف</div>
+            </div>
+            <select id="reportsClassSelect" class="form-control" style="width:120px; padding:6px 12px;" onchange="switchReportsClass(this.value)">
+              <option value="9-A" data-i18n="auto_264">صف 9-A</option>
+              <option value="9-B" data-i18n="auto_265">صف 9-B</option>
+              <option value="10-A" data-i18n="auto_266">صف 10-A</option>
+              <option value="10-B" data-i18n="auto_267">صف 10-B</option>
+            </select>
+          </div>
+          <div class="table-container">
+            <table class="app-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th data-i18n="auto_268">اسم الطالب</th>
+                  <th data-i18n="auto_269">متوسط الدرجات</th>
+                  <th data-i18n="auto_270">حالة الحضور</th>
+                  <th data-i18n="auto_271">الإجراء</th>
+                </tr>
+              </thead>
+              <tbody id="reportsTableBody">
+                <!-- Dynamically rendered -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Chat Tab -->
+      <div id="aiTab" class="tab-content">
+        <div class="materials-header">
+          <h2 data-i18n="auto_272">مساعد العلوم بالذكاء الاصطناعي</h2>
+          <p data-i18n="auto_273">اسأل المساعد الذكي عن شرح المفاهيم العلمية أو توليد خطط الدروس والأنشطة</p>
+        </div>
+        <div class="card panel" style="display:flex; flex-direction:column; height: 500px; padding:0; overflow:hidden;">
+          <div style="padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; background:var(--bg-alt);">
+            <div class="ai-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;">
+                <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"></path>
+              </svg></div>
+            <div>
+              <div style="font-weight:800; font-size:14px;">Science AI Assistant</div>
+              <div style="font-size:11px; color:var(--success);" data-i18n="auto_274">● متصل الآن ومستعد للمساعدة</div>
+            </div>
+          </div>
+          <div id="chatMessages" style="flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:14px; background:rgba(255,255,255,0.01);">
+            <!-- Dynamic chat bubbles -->
+            <div class="ai-chat-bubble system" data-i18n="auto_275">
+              أهلاً بك أستاذ إسماعيل! أنا مساعد العلوم الذكي. كيف يمكنني مساعدتك اليوم في تحضير دروسك أو تخطيط تجاربك؟
+            </div>
+          </div>
+          <form onsubmit="event.preventDefault(); sendChatMessage();" style="display:flex; padding:16px; border-top:1px solid var(--border); background:var(--bg-alt); gap:10px;">
+            <input type="text" id="chatInput" class="form-control" placeholder="اكتب سؤالك هنا... مثال: كيف أشرح قانون نيوتن الثالث؟" required="" style="flex:1;" data-i18n-ph="auto_276">
+            <button type="submit" class="btn-primary" style="padding: 10px 20px;" data-i18n="auto_277">إرسال</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Calendar Tab -->
+      <div id="calendarTab" class="tab-content">
+        <div class="materials-header">
+          <h2 data-i18n="auto_278">جدول وتقويم المعلم التفاعلي</h2>
+          <p data-i18n="auto_279">نظّم جدول الحصص، موعد الاختبارات، والأنشطة المدرسية</p>
+        </div>
+        <div class="grid-2">
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                    <path d="M16 2v4M8 2v4M3 10h18"></path>
+                  </svg></span>
+                <div data-i18n="auto_280">أحداث شهر يوليو 2026</div>
+              </div>
+            </div>
+            <div class="calendar-grid-header" style="display:grid; grid-template-columns:repeat(7,1fr); text-align:center; font-weight:700; font-size:12px; margin-bottom:8px; color:var(--text-3);">
+              <div data-i18n="auto_281">الأحد</div>
+              <div data-i18n="auto_282">الاثنين</div>
+              <div data-i18n="auto_283">الثلاثاء</div>
+              <div data-i18n="auto_284">الأربعاء</div>
+              <div data-i18n="auto_285">الخميس</div>
+              <div data-i18n="auto_286">الجمعة</div>
+              <div data-i18n="auto_287">السبت</div>
+            </div>
+            <div id="calendarDaysGrid" style="display:grid; grid-template-columns:repeat(7,1fr); gap:6px; text-align:center;">
+              <!-- Dynamically rendered days -->
+            </div>
+          </div>
+
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 5v14M5 12h14"></path>
+                  </svg></span>
+                <div data-i18n="auto_288">إضافة موعد أو حدث جديد</div>
+              </div>
+            </div>
+            <form class="upload-form" onsubmit="event.preventDefault(); addCalendarEvent();">
+              <div class="form-group">
+                <label data-i18n="auto_289">اسم الحدث / الاختبار</label>
+                <input type="text" id="calEventTitle" class="form-control" required="" placeholder="مثال: اختبار الكيمياء العملي" data-i18n-ph="auto_290">
+              </div>
+              <div class="form-group">
+                <label data-i18n="auto_291">تاريخ الحدث</label>
+                <input type="date" id="calEventDate" class="form-control" required="" value="2026-07-26">
+              </div>
+              <div class="form-group">
+                <label data-i18n="auto_292">نوع الحدث</label>
+                <select id="calEventType" class="form-control">
+                  <option value="exam" data-i18n="auto_293">اختبار</option>
+                  <option value="session" data-i18n="auto_294">حصة دراسية</option>
+                  <option value="meeting" data-i18n="auto_295">اجتماع</option>
+                </select>
+              </div>
+              <button type="submit" class="btn-primary" data-i18n="auto_296">حفظ الحدث</button>
+            </form>
+            <hr style="margin:16px 0; border:none; border-top:1px solid var(--border);">
+            <h4 style="font-weight:700; font-size:13px; margin-bottom:8px;" data-i18n="auto_297">قائمة المواعيد القادمة:</h4>
+            <div id="calendarEventsList" style="display:flex; flex-direction:column; gap:8px; max-height:160px; overflow-y:auto;">
+              <!-- Events will render here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications Tab -->
+      <div id="notifTab" class="tab-content">
+        <div class="materials-header">
+          <h2 data-i18n="auto_298">مركز الإشعارات والتنبيهات</h2>
+          <p data-i18n="auto_299">تابع آخر مستجدات أداء طلابك وجدول أعمالك اليومي</p>
+        </div>
+        <div class="card panel">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg></span>
+              <div data-i18n="auto_300">تنبيهات النظام النشطة</div>
+            </div>
+            <button class="action-btn" onclick="clearAllNotifications()" style="width:auto; padding:6px 12px; font-size:12px;" data-i18n="auto_301">مسح الكل</button>
+          </div>
+          <div id="notificationsList" style="display:flex; flex-direction:column; gap:10px;">
+            <!-- Dynamically loaded notifications -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div id="settingsTab" class="tab-content">
+        <div class="materials-header">
+          <h2 data-i18n="auto_302">إعدادات النظام والملف الشخصي</h2>
+          <p data-i18n="auto_303">تخصيص لوحة التحكم والتحكم ببيانات المعلم والمدرسة</p>
+        </div>
+        <div class="grid-2">
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                  </svg></span>
+                <div data-i18n="auto_304">بيانات المعلم والمدرسة</div>
+              </div>
+            </div>
+            <form class="upload-form" onsubmit="event.preventDefault(); saveTeacherSettings();">
+              <div class="form-group">
+                <label data-i18n="auto_305">اسم المعلم</label>
+                <input type="text" id="setTeacherName" class="form-control" required="" value="إسماعيل محبوبة">
+              </div>
+              <div class="form-group">
+                <label data-i18n="auto_306">المدرسة</label>
+                <input type="text" id="setSchoolName" class="form-control" required="" value="مدرسة معيذر">
+              </div>
+              <div class="form-group">
+                <label data-i18n="auto_307">التخصص الدراسي</label>
+                <input type="text" id="setSpecialty" class="form-control" required="" value="معلّم العلوم">
+              </div>
+              <div class="form-group">
+                <label data-i18n="auto_308">مفتاح Gemini API للتوليد اللا نهائي (اختياري)</label>
+                <input type="password" id="setGeminiApiKey" class="form-control" placeholder="AIzaSy..." value="">
+              </div>
+              <button type="submit" class="btn-primary" data-i18n="auto_309">حفظ الإعدادات</button>
+            </form>
+          </div>
+
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg></span>
+                <div data-i18n="auto_310">هوية وألوان المدرسة (School Theme Presets)</div>
+              </div>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-2); margin-bottom:12px;" data-i18n="auto_311">اختر اللون الذي يمثل هوية مدرستك
+              الرسمية لصبغ المنصة بالكامل:</p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="color-preset-btn" onclick="setSchoolTheme('#8A1538', '#A8264D', '#6B0F2A')" style="background:#8A1538; width:34px; height:34px; border:2px solid transparent; border-radius:50%; cursor:pointer; box-shadow:var(--shadow-sm);" title="العنابي (العاصمي)" data-i18n-title="auto_312"></button>
+              <button class="color-preset-btn" onclick="setSchoolTheme('#1e3a8a', '#3b82f6', '#172554')" style="background:#1e3a8a; width:34px; height:34px; border:2px solid transparent; border-radius:50%; cursor:pointer; box-shadow:var(--shadow-sm);" title="الأزرق الملكي" data-i18n-title="auto_313"></button>
+              <button class="color-preset-btn" onclick="setSchoolTheme('#14532d', '#22c55e', '#052e16')" style="background:#14532d; width:34px; height:34px; border:2px solid transparent; border-radius:50%; cursor:pointer; box-shadow:var(--shadow-sm);" title="الأخضر التعليمي" data-i18n-title="auto_314"></button>
+              <button class="color-preset-btn" onclick="setSchoolTheme('#7c2d12', '#ea580c', '#431407')" style="background:#7c2d12; width:34px; height:34px; border:2px solid transparent; border-radius:50%; cursor:pointer; box-shadow:var(--shadow-sm);" title="البرتقالي الدافئ" data-i18n-title="auto_315"></button>
+              <button class="color-preset-btn" onclick="setSchoolTheme('#581c87', '#a855f7', '#3b0764')" style="background:#581c87; width:34px; height:34px; border:2px solid transparent; border-radius:50%; cursor:pointer; box-shadow:var(--shadow-sm);" title="البنفسجي الإبداعي" data-i18n-title="auto_316"></button>
+            </div>
+          </div>
+
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    <path d="M21 12H3M9 3v18"></path>
+                  </svg></span>
+                <div data-i18n="auto_317">تخصيص تخطيط المنصة والجانبية</div>
+              </div>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-2); margin-bottom:14px;" data-i18n="auto_318">حدد الألواح التي تود إظهارها في لوحة
+              التحكم وتفضيلات الشريط الجانبي:</p>
+
+            <div class="form-group" style="margin-bottom:16px;">
+              <label style="font-weight:700; margin-bottom:8px; display:block;" data-i18n="auto_319">إظهار وإخفاء ألواح التحكم
+                الرئيسية:</label>
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+                  <input type="checkbox" id="toggleHeatmap" checked="" onchange="toggleDashboardPanel('heatmapPanel', this.checked)">
+                  <span data-i18n="auto_320">خريطة الحضور الحرارية والدرجات</span>
+                </label>
+                <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+                  <input type="checkbox" id="toggleClasses" checked="" onchange="toggleDashboardPanel('classesPanel', this.checked)">
+                  <span data-i18n="auto_321">حصص اليوم والاختبارات القادمة</span>
+                </label>
+                <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+                  <input type="checkbox" id="toggleAISuggestions" checked="" onchange="toggleDashboardPanel('aiSuggestionsPanel', this.checked)">
+                  <span data-i18n="auto_322">اقتراحات المساعد الذكي AI</span>
+                </label>
+                <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+                  <input type="checkbox" id="toggleActivity" checked="" onchange="toggleDashboardPanel('activityTimelinePanel', this.checked)">
+                  <span data-i18n="auto_323">سجل النشاط الأخير للمنصة</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="grid-2" style="grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:0;">
+              <div class="form-group">
+                <label for="sidebarAlignSelect" style="font-weight:700;" data-i18n="auto_324">موقع القائمة الجانبية</label>
+                <select id="sidebarAlignSelect" onchange="updateSidebarAlignment(this.value)" class="form-control" style="padding:8px 12px; font-size:12.5px;">
+                  <option value="right" data-i18n="auto_325">اليمين (الافتراضي للعربية)</option>
+                  <option value="left" data-i18n="auto_326">اليسار (النمط الغربي)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="sidebarStyleSelect" style="font-weight:700;" data-i18n="auto_327">حجم ونمط القائمة</label>
+                <select id="sidebarStyleSelect" onchange="updateSidebarStyle(this.value)" class="form-control" style="padding:8px 12px; font-size:12.5px;">
+                  <option value="normal" data-i18n="auto_328">عريض (أيقونات + أسماء)</option>
+                  <option value="slim" data-i18n="auto_329">نحيف / مضغوط (أيقونات فقط)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic" style="background:rgba(239, 68, 68, 0.1); color:var(--danger);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16"></path>
+                  </svg></span>
+                <div style="color:var(--danger);" data-i18n="auto_330">منطقة الخطر وإعادة التهيئة</div>
+              </div>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-2); line-height:1.6; margin-bottom:14px;" data-i18n="auto_331">
+              تنبيه: يمكنك إعادة تهيئة النظام بالكامل وحذف كافة الطلاب المضافين والملفات المرفوعة ليعود الموقع لحالته
+              الأصلية. لا يمكن التراجع عن هذا الإجراء.
+            </p>
+            <button class="btn-primary" onclick="resetDatabaseFull()" style="background:linear-gradient(145deg, var(--danger), #c22929);" data-i18n="auto_332">إعادة تهيئة البيانات بالكامل</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Star Board Tab -->
+      <div id="starboardTab" class="tab-content">
+        <div class="materials-header">
+          <h2 data-i18n="auto_333">لوحة النجوم والتميز 🌟</h2>
+          <p data-i18n="auto_334">كافئ طلابك المتميزين وعزز التنافس الإيجابي في مدرسة معيذر</p>
+        </div>
+
+        <div class="grid-2">
+          <!-- Reward Form -->
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic" style="background:rgba(201, 162, 39, 0.1); color:var(--gold);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                  </svg></span>
+                <div data-i18n="auto_335">منح نجوم ووسام تقديري</div>
+              </div>
+            </div>
+            <form class="upload-form" id="rewardStarForm" onsubmit="event.preventDefault(); handleRewardStars();">
+              <div class="form-group">
+                <label for="starStudentSelect" data-i18n="auto_336">اختر الطالب</label>
+                <select id="starStudentSelect" class="form-control" required="">
+                  <!-- Dynamically filled with all students -->
+                </select>
+              </div>
+              <div class="grid-2" style="grid-template-columns: 1fr 1fr; margin-bottom:0; gap: 12px;">
+                <div class="form-group">
+                  <label for="starCountSelect" data-i18n="auto_337">عدد النجوم</label>
+                  <select id="starCountSelect" class="form-control">
+                    <option value="1" data-i18n="auto_338">⭐ نجمة واحدة</option>
+                    <option value="2" data-i18n="auto_339">⭐⭐ نجمتان</option>
+                    <option value="3" data-i18n="auto_340">⭐⭐⭐ 3 نجوم</option>
+                    <option value="4" data-i18n="auto_341">⭐⭐⭐⭐ 4 نجوم</option>
+                    <option value="5" data-i18n="auto_342">⭐⭐⭐⭐⭐ 5 نجوم (تميز استثنائي)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="starReasonSelect" data-i18n="auto_343">سبب التكريم</label>
+                  <select id="starReasonSelect" class="form-control" onchange="handleStarReasonChange(this.value)">
+                    <option value="مشاركة ممتازة في الحصة" data-i18n="auto_344">مشاركة ممتازة في الحصة</option>
+                    <option value="التفوق في التقييمات" data-i18n="auto_345">التفوق في التقييمات والواجبات</option>
+                    <option value="إجراء تجربة علمية مميزة" data-i18n="auto_346">إجراء تجربة علمية مميزة</option>
+                    <option value="السلوك المثالي والمساعدة" data-i18n="auto_347">السلوك المثالي والمساعدة</option>
+                    <option value="custom" data-i18n="auto_348">سبب مخصص...</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group" id="customReasonGroup" style="display:none;">
+                <label for="starCustomReason" data-i18n="auto_349">السبب المخصص</label>
+                <input type="text" id="starCustomReason" class="form-control" placeholder="اكتب السبب هنا..." data-i18n-ph="auto_350">
+              </div>
+              <div class="form-group">
+                <label for="starNotes" data-i18n="auto_351">ملاحظات المعلم</label>
+                <input type="text" id="starNotes" class="form-control" placeholder="ملاحظة إضافية تظهر في الشهادة..." data-i18n-ph="auto_352">
+              </div>
+              <button type="submit" class="btn-primary" style="background: linear-gradient(145deg, var(--gold), var(--gold-light)); color:#2b2205;">
+                <span data-i18n="auto_353">منح النجوم والوسام 🏆</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Leaderboard Card -->
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <span class="ic" style="background:rgba(138, 21, 56, 0.1); color:var(--maroon);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg></span>
+                <div data-i18n="auto_354">لوحة متصدري النجوم</div>
+              </div>
+              <div class="pill-tab" id="leaderboardTabToggle">
+                <span class="on" onclick="switchLeaderboardView('weekly')" data-i18n="auto_355">أسبوعي</span>
+                <span onclick="switchLeaderboardView('monthly')" data-i18n="auto_356">شهري</span>
+              </div>
+            </div>
+            <div class="row-list" id="leaderboardList" style="max-height: 380px; overflow-y: auto;">
+              <!-- Dynamic Leaderboard rows -->
+            </div>
+          </div>
+        </div>
+
+        <div class="materials-header" style="margin-top: 30px; margin-bottom: 16px;">
+          <h3 data-i18n="auto_357">بطاقات التميز وشهادات الطلاب 🏆</h3>
+        </div>
+
+        <div class="grid-4" id="starCardsGrid">
+          <!-- Dynamically generated student star cards -->
+        </div>
+      </div>
+
+      <!-- Smart Grade Analyzer Tab -->
+      <div id="analyzerTab" class="tab-content">
+        <div class="materials-header">
+          <h2 data-i18n="auto_358">محلل الدرجات والخطط العلاجية الذكي 📊</h2>
+          <p data-i18n="auto_359">تصنيف تلقائي لمستويات الطلاب، إحصاءات بيانية متكاملة، وخطة علاجية ذكية لكل طالب ضعيف</p>
+        </div>
+
+        <!-- Grade analysis charts -->
+        <div class="grid-2">
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title" data-i18n="auto_360">مخطط توزيع أداء الطلاب (Performance Distribution)</div>
+            </div>
+            <div style="height:250px;"><canvas id="gradeDistributionChart"></canvas></div>
+          </div>
+          <div class="card panel">
+            <div class="panel-head">
+              <div class="panel-title" data-i18n="auto_361">مقارنة متوسط أداء الصفوف الدراسية</div>
+            </div>
+            <div style="height:250px;"><canvas id="gradeClassComparisonChart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Tier metrics summary row -->
+        <div class="grid-4" style="grid-template-columns: repeat(6, 1fr) !important; margin-top:20px; gap: 8px;">
+          <div class="card stat" style="padding:12px; text-align:center;">
+            <div style="font-size: 20px; font-weight:800; color:var(--success);" id="countExcellent">0</div>
+            <div style="font-size: 11px; color:var(--text-3); font-weight:700;" data-i18n="auto_362">ممتاز (90+)</div>
+          </div>
+          <div class="card stat" style="padding:12px; text-align:center;">
+            <div style="font-size: 20px; font-weight:800; color:#8bd12e;" id="countVeryGood">0</div>
+            <div style="font-size: 11px; color:var(--text-3); font-weight:700;" data-i18n="auto_363">جيد جداً (80-89)</div>
+          </div>
+          <div class="card stat" style="padding:12px; text-align:center;">
+            <div style="font-size: 20px; font-weight:800; color:#b1c423;" id="countGood">0</div>
+            <div style="font-size: 11px; color:var(--text-3); font-weight:700;" data-i18n="auto_364">جيد (70-79)</div>
+          </div>
+          <div class="card stat" style="padding:12px; text-align:center;">
+            <div style="font-size: 20px; font-weight:800; color:var(--gold);" id="countAverage">0</div>
+            <div style="font-size: 11px; color:var(--text-3); font-weight:700;" data-i18n="auto_365">مقبول (60-69)</div>
+          </div>
+          <div class="card stat" style="padding:12px; text-align:center;">
+            <div style="font-size: 20px; font-weight:800; color:var(--warning);" id="countWeak">0</div>
+            <div style="font-size: 11px; color:var(--text-3); font-weight:700;" data-i18n="auto_366">ضعيف (50-59)</div>
+          </div>
+          <div class="card stat" style="padding:12px; text-align:center;">
+            <div style="font-size: 20px; font-weight:800; color:var(--danger);" id="countVeryWeak">0</div>
+            <div style="font-size: 11px; color:var(--text-3); font-weight:700;" data-i18n="auto_367">ضعيف جداً (&lt;50)</div>
+          </div>
+        </div>
+
+        <!-- AI Classification tiers description cards -->
+        <div class="card panel" style="margin-top: 20px;">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span class="ic" style="background:rgba(201, 162, 39, 0.1); color:var(--gold);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 16v-4m0-4h.01"></path>
+                </svg></span>
+              <div data-i18n="auto_368">التصنيف والتحليل البيداغوجي للمستويات الدراسية</div>
+            </div>
+          </div>
+          <div id="tiersAnalysisContainer" style="display:flex; flex-direction:column; gap:12px;">
+            <!-- Generates rich pedagogy cards for each tier with strengths, weaknesses, suggested strategies and objectives -->
+          </div>
+        </div>
+
+        <!-- Smart Remedial Plan Section -->
+        <div class="card panel" style="margin-top:20px;">
+          <div class="panel-head">
+            <div class="panel-title">
+              <span class="ic" style="background:rgba(239, 68, 68, 0.1); color:var(--danger);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg></span>
+              <div data-i18n="auto_369">الخطة العلاجية الذكية الفردية للطلاب الضعاف (Remedial Plan)</div>
+            </div>
+          </div>
+          <div class="form-group" style="max-width:300px; margin-bottom:16px;">
+            <label for="weakStudentsSelect" data-i18n="auto_370">اختر الطالب لمراجعة أو تعديل خطته العلاجية:</label>
+            <select id="weakStudentsSelect" class="form-control" onchange="loadRemedialPlanForStudent(this.value)">
+              <!-- Loaded with students below 60% average -->
+            </select>
+          </div>
+
+          <div id="remedialPlanContent" style="display:none; background:var(--bg-alt); padding:20px; border-radius:16px; border:1px solid var(--border);">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+              <h4 id="remStudentName" style="font-size:16px; font-weight:800;" data-i18n="auto_371">طالب: -</h4>
+              <button class="btn-primary" style="padding:6px 12px; font-size:12.5px; width:auto;" onclick="saveCurrentRemedialPlan()">
+                <span data-i18n="auto_372">حفظ تعديلات الخطة 💾</span>
+              </button>
+            </div>
+
+            <div class="grid-2" style="gap:14px;">
+              <div class="form-group">
+                <label data-i18n="auto_373">الأهداف الأسبوعية (Weekly Goals)</label>
+                <textarea id="remWeeklyGoals" class="form-control" rows="3" style="font-size:13px; line-height:1.5;"></textarea>
+              </div>
+              <div class="form-group">
+                <label data-i18n="auto_374">الأهداف الشهرية (Monthly Goals)</label>
+                <textarea id="remMonthlyGoals" class="form-control" rows="3" style="font-size:13px; line-height:1.5;"></textarea>
+              </div>
+            </div>
+
+            <div class="grid-2" style="gap:14px; margin-top:10px;">
+              <div class="form-group">
+                <label data-i18n="auto_375">الأنشطة العلاجية والواجبات المنزلية</label>
+                <textarea id="remActivities" class="form-control" rows="3" style="font-size:13px; line-height:1.5;"></textarea>
+              </div>
+              <div class="form-group">
+                <label data-i18n="auto_376">توصيات موجهة لولي الأمر والمنزل</label>
+                <textarea id="remParentRecs" class="form-control" rows="3" style="font-size:13px; line-height:1.5;"></textarea>
+              </div>
+            </div>
+
+            <div class="grid-2" style="gap:14px; margin-top:10px;">
+              <div class="form-group">
+                <label data-i18n="auto_377">توصيات المعلم والأنشطة الصفية</label>
+                <textarea id="remTeacherRecs" class="form-control" rows="3" style="font-size:13px; line-height:1.5;"></textarea>
+              </div>
+              <div class="form-group">
+                <label data-i18n="auto_378">جدول التقييم ومواعيد المتابعة</label>
+                <textarea id="remSchedule" class="form-control" rows="3" style="font-size:13px; line-height:1.5;"></textarea>
+              </div>
+            </div>
+
+            <!-- Tracker checklist -->
+            <div style="margin-top:16px; border-top:1px solid var(--border-strong); padding-top:14px;">
+              <label style="font-weight:800; display:block; margin-bottom:8px;" data-i18n="auto_379">مؤشر تقدم الطالب ومتابعة الأهداف
+                العلاجية:</label>
+              <div style="display:flex; flex-direction:column; gap:8px;" id="remTrackerList">
+                <!-- Loaded with checkboxes -->
+              </div>
+            </div>
+          </div>
+          <div id="noWeakStudentsMsg" style="text-align:center; padding:30px; color:var(--text-3); font-size:13.5px;" data-i18n="auto_380">
+            لا يوجد طلاب بمعدلات ضعيفة (أقل من 60%) في هذا الصف. أحسنتم! 🎉
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal: Report Card Modal -->
+  <div class="modal-overlay" id="reportCardModal">
+    <div class="modal-box" style="max-width:540px;">
+      <div class="modal-head">
+        <h3 data-i18n="auto_381">بطاقة أداء الطالب الشهرية</h3>
+        <button class="modal-close" onclick="closeModal('reportCardModal')">×</button>
+      </div>
+      <div id="reportCardPrintArea" style="background:#fff; color:#000; padding:24px; border:1px solid #222; border-radius:8px; direction:rtl; text-align:right; font-family:'Cairo',sans-serif;">
+        <h3 style="text-align:center; border-bottom:2px solid #222; padding-bottom:8px; margin-bottom:16px;" data-i18n="auto_382">مدرسة معيذر
+          الابتدائية للبنين — بطاقة تقييم أداء</h3>
+        <div style="display:flex; justify-content:between; margin-bottom:16px; font-size:13px; border-bottom:1px dashed #222; padding-bottom:10px;">
+          <div style="flex:1;"><strong data-i18n="auto_383">اسم الطالب:</strong> <span id="repStudentName">-</span></div>
+          <div style="flex:1;"><strong data-i18n="auto_384">الصف:</strong> <span id="repStudentClass">-</span></div>
+        </div>
+        <table style="width:100%; border-collapse:collapse; margin-bottom:16px; font-size:13px; text-align:center;">
+          <thead>
+            <tr style="background:#f2f2f2;">
+              <th style="border:1px solid #222; padding:8px;" data-i18n="auto_385">المادة / التقييم</th>
+              <th style="border:1px solid #222; padding:8px;" data-i18n="auto_386">الدرجة</th>
+              <th style="border:1px solid #222; padding:8px;" data-i18n="auto_387">التقدير</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border:1px solid #222; padding:8px; font-weight:700;" data-i18n="auto_388">العلوم العامة (نظري)</td>
+              <td style="border:1px solid #222; padding:8px;" id="repStudentGrade1">-</td>
+              <td style="border:1px solid #222; padding:8px;" id="repGradeEval1">-</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid #222; padding:8px; font-weight:700;" data-i18n="auto_389">النشاط والمشاركة</td>
+              <td style="border:1px solid #222; padding:8px;" id="repStudentGrade2">-</td>
+              <td style="border:1px solid #222; padding:8px;" id="repGradeEval2">-</td>
+            </tr>
+            <tr>
+              <td style="border:1px solid #222; padding:8px; font-weight:700;" data-i18n="auto_390">الاختبار العملي</td>
+              <td style="border:1px solid #222; padding:8px;" id="repStudentGrade3">-</td>
+              <td style="border:1px solid #222; padding:8px;" id="repGradeEval3">-</td>
+            </tr>
+            <tr style="background:#f9f9f9; font-weight:bold;">
+              <td style="border:1px solid #222; padding:8px;" data-i18n="auto_391">المعدل العام</td>
+              <td style="border:1px solid #222; padding:8px;" id="repStudentAvg">-</td>
+              <td style="border:1px solid #222; padding:8px;" id="repStudentEvalAvg">-</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="font-size:13px; line-height:1.6; border-top:1px dashed #222; padding-top:10px;">
+          <strong data-i18n="auto_392">حالة حضور الطالب:</strong> <span id="repStudentAttendance">-</span><br>
+          <strong data-i18n="auto_393">ملاحظة معلم العلوم:</strong> <span id="repStudentComment">-</span>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:end; margin-top:20px; gap:10px;">
+        <button class="btn-primary" onclick="window.print()" data-i18n="auto_394">طباعة التقرير</button>
+        <button class="btn-primary" onclick="closeModal('reportCardModal')" style="background:var(--bg-alt); color:var(--text-1); border:1px solid var(--border);" data-i18n="auto_395">إغلاق</button>
+      </div>
+    </div>
+    <!-- Modal: Date Picker -->
+    <div class="modal-overlay" id="datePickerModal">
+      <div class="modal-box" style="max-width:380px;">
+        <div class="modal-head">
+          <h3 data-i18n="auto_396">التقويم التفاعلي — اختر موعداً</h3>
+          <button class="modal-close" onclick="closeModal('datePickerModal')">×</button>
+        </div>
+        <form onsubmit="event.preventDefault(); handleDatePickerSubmit();" class="upload-form">
+          <div class="form-group">
+            <label for="customDatePicker" data-i18n="auto_397">حدد التاريخ اليومي للمنصة</label>
+            <input type="date" id="customDatePicker" class="form-control" required="" style="font-family:var(--font-mono);">
+          </div>
+          <div style="font-size:12px; color:var(--text-3); margin-bottom:14px; line-height:1.5;" data-i18n="auto_398">
+            ملاحظة: اختيار تاريخ جديد سيقوم بتحديث عدّاد الحصص اليومي وجداول الحضور والتقويم ديناميكياً ليطابق اليوم
+            المحدد.
+          </div>
+          <button type="submit" class="btn-primary" data-i18n="auto_399">تحديث تاريخ المنصة</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Add Student -->
+    <div class="modal-overlay" id="addStudentModal">
+      <div class="modal-box" style="max-width: 780px; width: 90%; max-height: 90vh; overflow-y: auto;">
+        <div class="modal-head">
+          <h3 data-i18n="auto_400">➕ إضافة طالب جديد</h3>
+          <button class="modal-close" onclick="closeModal('addStudentModal')">×</button>
+        </div>
+
+        <div id="addStudentDraftAlert" style="display:none; background: rgba(201,162,39,0.1); border: 1px solid var(--gold); padding: 10px; border-radius: 8px; font-size: 12px; margin-bottom: 15px; color: var(--gold); text-align: right;" data-i18n="auto_401">
+          💡 تم استعادة مسودة غير محفوظة مسبقاً.
+        </div>
+
+        <form id="addStudentForm" onsubmit="event.preventDefault(); handleAddStudentSubmit();" class="upload-form" style="text-align: right; direction: rtl;">
+
+          <!-- Photo Upload & Quick Stats -->
+          <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+            <div style="position: relative; width: 100px; height: 100px; border-radius: 50%; border: 2px dashed var(--border); overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--bg-alt);">
+              <img id="studentPhotoPreview" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+              <span id="studentPhotoPlaceholder" style="font-size: 30px; color: var(--text-3);">👤</span>
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+              <label style="font-weight: 700; margin-bottom: 6px; display: block;" data-i18n="auto_402">صورة الطالب</label>
+              <input type="file" id="sPhotoInput" accept="image/*" onchange="previewStudentPhoto(event)" class="form-control" style="font-size: 12px;">
+              <input type="hidden" id="sPhotoBase64" value="">
+              <small style="color: var(--text-3); font-size: 11px;" data-i18n="auto_403">الحد الأقصى للحجم: 1 ميجابايت (JPG, PNG)</small>
+            </div>
+          </div>
+
+          <div class="form-grid-columns" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 16px;">
+            <!-- Full Name -->
+            <div class="form-group">
+              <label for="sName"><span data-i18n="auto_404">اسم الطالب رباعي</span><span style="color:var(--danger)">*</span></label>
+              <input type="text" id="sName" class="form-control" required="" placeholder="مثال: أحمد عبد الله الكواري" oninput="validateStudentField('sName')" data-i18n-ph="auto_405">
+              <span class="validation-msg" id="sNameVal" style="color: var(--danger); font-size: 11px; display: none;" data-i18n="auto_406">يجب إدخال الاسم الرباعي بشكل صحيح (3 كلمات
+                على الأقل).</span>
+            </div>
+
+            <!-- Student ID -->
+            <div class="form-group">
+              <label for="sCode"><span data-i18n="auto_407">رقم الطالب الأكاديمي (Student ID)</span><span style="color:var(--danger)">*</span></label>
+              <input type="text" id="sCode" class="form-control" required="" placeholder="مثال: 20260001" oninput="validateStudentField('sCode')" data-i18n-ph="auto_408">
+              <span class="validation-msg" id="sCodeVal" style="color: var(--danger); font-size: 11px; display: none;" data-i18n="auto_409">يجب إدخال رقم أكاديمي مكون من 8
+                أرقام.</span>
+            </div>
+
+            <!-- National ID -->
+            <div class="form-group">
+              <label for="sNationalId"><span data-i18n="auto_410">الرقم الشخصي القطري (QID)</span><span style="color:var(--danger)">*</span></label>
+              <input type="text" id="sNationalId" class="form-control" required="" placeholder="مثال: 31512345678" oninput="validateStudentField('sNationalId')" data-i18n-ph="auto_411">
+              <span class="validation-msg" id="sNationalIdVal" style="color: var(--danger); font-size: 11px; display: none;" data-i18n="auto_412">يجب إدخال الرقم الشخصي القطري المكون من 11
+                رقماً.</span>
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+              <label for="sGender" data-i18n="auto_413">الجنس</label>
+              <select id="sGender" class="form-control" onchange="saveStudentDraft()">
+                <option value="بنين" data-i18n="auto_414">بنين</option>
+                <option value="بنات" data-i18n="auto_415">بنات</option>
+              </select>
+            </div>
+
+            <!-- DOB -->
+            <div class="form-group">
+              <label for="sDob"><span data-i18n="auto_416">تاريخ الميلاد</span><span style="color:var(--danger)">*</span></label>
+              <input type="date" id="sDob" class="form-control" required="" onchange="validateStudentField('sDob')">
+              <span class="validation-msg" id="sDobVal" style="color: var(--danger); font-size: 11px; display: none;" data-i18n="auto_417">تاريخ الميلاد غير صالح.</span>
+            </div>
+
+            <!-- Grade -->
+            <div class="form-group">
+              <label for="sGrade" data-i18n="auto_418">المرحلة الدراسية</label>
+              <select id="sGrade" class="form-control" onchange="saveStudentDraft()">
+                <option value="9" data-i18n="auto_419">الصف التاسع</option>
+                <option value="10" data-i18n="auto_420">الصف العاشر</option>
+                <option value="7" data-i18n="auto_421">الصف السابع</option>
+                <option value="8" data-i18n="auto_422">الصف الثامن</option>
+              </select>
+            </div>
+
+            <!-- Class -->
+            <div class="form-group">
+              <label for="sClass"><span data-i18n="auto_423">الصف الدراسي</span><span style="color:var(--danger)">*</span></label>
+              <select id="sClass" class="form-control" onchange="saveStudentDraft()">
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <!-- Section -->
+            <div class="form-group">
+              <label for="sSection"><span data-i18n="auto_424">الشعبة</span><span style="color:var(--danger)">*</span></label>
+              <input type="text" id="sSection" class="form-control" required="" placeholder="مثال: أ أو A" oninput="validateStudentField('sSection')" data-i18n-ph="auto_425">
+              <span class="validation-msg" id="sSectionVal" style="color: var(--danger); font-size: 11px; display: none;" data-i18n="auto_426">الشعبة مطلوبة.</span>
+            </div>
+          </div>
+
+          <!-- Parent Information -->
+          <h4 style="border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-top: 24px; margin-bottom: 16px; font-weight: 800; color: var(--gold);" data-i18n="auto_427">
+            👨‍👩‍👦 معلومات ولي الأمر</h4>
+
+          <div class="form-grid-columns" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 16px;">
+            <!-- Parent Name -->
+            <div class="form-group">
+              <label for="sParentName"><span data-i18n="auto_428">اسم ولي الأمر</span><span style="color:var(--danger)">*</span></label>
+              <input type="text" id="sParentName" class="form-control" required="" placeholder="اسم ولي الأمر ثلاثي" oninput="validateStudentField('sParentName')" data-i18n-ph="auto_429">
+              <span class="validation-msg" id="sParentNameVal" style="color: var(--danger); font-size: 11px; display: none;" data-i18n="auto_430">اسم ولي الأمر مطلوب.</span>
+            </div>
+
+            <!-- Parent Phone -->
+            <div class="form-group">
+              <label for="sParentPhone"><span data-i18n="auto_431">رقم جوال ولي الأمر</span><span style="color:var(--danger)">*</span></label>
+              <input type="text" id="sParentPhone" class="form-control" required="" placeholder="مثال: 55123456" oninput="validateStudentField('sParentPhone')" data-i18n-ph="auto_432">
+              <span class="validation-msg" id="sParentPhoneVal" style="color: var(--danger); font-size: 11px; display: none;" data-i18n="auto_433">يجب إدخال رقم هاتف صالح (8 أرقام).</span>
+            </div>
+
+            <!-- Parent Email -->
+            <div class="form-group">
+              <label for="sParentEmail" data-i18n="auto_434">بريد ولي الأمر الإلكتروني</label>
+              <input type="email" id="sParentEmail" class="form-control" placeholder="example@domain.com" oninput="validateStudentField('sParentEmail')">
+              <span class="validation-msg" id="sParentEmailVal" style="color: var(--danger); font-size: 11px; display: none;" data-i18n="auto_435">صيغة البريد الإلكتروني غير صالحة.</span>
+            </div>
+
+            <!-- Address -->
+            <div class="form-group">
+              <label for="sAddress" data-i18n="auto_436">العنوان السكني</label>
+              <input type="text" id="sAddress" class="form-control" placeholder="المنطقة، الشارع، رقم المنزل" oninput="saveStudentDraft()" data-i18n-ph="auto_437">
+            </div>
+          </div>
+
+          <!-- Academic and Medical Notes -->
+          <h4 style="border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-top: 24px; margin-bottom: 16px; font-weight: 800; color: var(--gold);" data-i18n="auto_438">
+            📝 معلومات إضافية وحالة الطالب</h4>
+
+          <div class="form-grid-columns" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 16px;">
+            <!-- Enrollment Date -->
+            <div class="form-group">
+              <label for="sEnrollDate" data-i18n="auto_439">تاريخ التسجيل</label>
+              <input type="date" id="sEnrollDate" class="form-control" onchange="saveStudentDraft()">
+            </div>
+
+            <!-- Status -->
+            <div class="form-group">
+              <label for="sStatus" data-i18n="auto_440">حالة القيد</label>
+              <select id="sStatus" class="form-control" onchange="saveStudentDraft()">
+                <option value="نشط" data-i18n="auto_441">نشط / Active</option>
+                <option value="غير نشط" data-i18n="auto_442">غير نشط / Inactive</option>
+                <option value="خريج" data-i18n="auto_443">خريج / Graduated</option>
+                <option value="منقول" data-i18n="auto_444">منقول / Transferred</option>
+              </select>
+            </div>
+
+            <!-- Special Needs -->
+            <div class="form-group">
+              <label for="sSpecialNeeds" data-i18n="auto_445">حالة ذوي الاحتياجات الخاصة</label>
+              <select id="sSpecialNeeds" class="form-control" onchange="saveStudentDraft()">
+                <option value="لا يوجد" data-i18n="auto_446">لا يوجد</option>
+                <option value="صعوبات تعلم" data-i18n="auto_447">صعوبات تعلم</option>
+                <option value="حركي" data-i18n="auto_448">احتياج حركي</option>
+                <option value="سمعي / بصري" data-i18n="auto_449">احتياج سمعي / بصري</option>
+                <option value="أخرى" data-i18n="auto_450">أخرى (سجل في الملاحظات)</option>
+              </select>
+            </div>
+
+            <!-- Medical Notes -->
+            <div class="form-group">
+              <label for="sMedical" data-i18n="auto_451">ملاحظات طبية / حساسية</label>
+              <input type="text" id="sMedical" class="form-control" placeholder="مثال: حساسية من البنسلين أو لا يوجد" oninput="saveStudentDraft()" data-i18n-ph="auto_452">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="sNotes" data-i18n="auto_453">ملاحظات عامة</label>
+            <textarea id="sNotes" class="form-control" rows="3" placeholder="ملاحظات أكاديمية أو سلوكية إضافية عن الطالب..." oninput="saveStudentDraft()" data-i18n-ph="auto_454"></textarea>
+          </div>
+
+          <!-- Buttons Group -->
+          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px;">
+            <button type="submit" class="btn-primary" style="width: auto; padding: 10px 24px;" data-i18n="auto_455">حفظ الطالب</button>
+            <button type="button" class="action-btn" onclick="resetStudentForm()" style="width: auto; padding: 10px 20px; background: var(--bg-alt);" data-i18n="auto_456">إعادة تعيين</button>
+            <button type="button" class="action-btn btn-delete" onclick="cancelStudentForm()" style="width: auto; padding: 10px 20px;" data-i18n="auto_457">إلغاء</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Upload Roster Wizard -->
+    <div class="modal-overlay" id="rosterUploadModal">
+      <div class="modal-box" style="max-width: 800px; width: 95%; max-height: 90vh; overflow-y: auto;">
+        <div class="modal-head">
+          <h3 data-i18n="auto_458">📥 معالج استيراد الطلاب (Import Wizard)</h3>
+          <button class="modal-close" onclick="closeRosterWizard()">×</button>
+        </div>
+
+        <!-- Wizard Stepper Indicators -->
+        <div class="wizard-stepper" style="display:flex; justify-content:space-between; margin-bottom:24px; direction:rtl; padding:0 10px;">
+          <div class="step-indicator active" id="stepInd1" data-i18n="auto_459">1. رفع الملف</div>
+          <div class="step-indicator" id="stepInd2" data-i18n="auto_460">2. معاينة البيانات</div>
+          <div class="step-indicator" id="stepInd3" data-i18n="auto_461">3. مطابقة الأعمدة</div>
+          <div class="step-indicator" id="stepInd4" data-i18n="auto_462">4. التحقق والتدقيق</div>
+          <div class="step-indicator" id="stepInd5" data-i18n="auto_463">5. الاستيراد والملخص</div>
+        </div>
+
+        <!-- Step 1: Upload File -->
+        <div class="wizard-step-content active" id="wizardStep1">
+          <div class="form-group" style="text-align:right; direction:rtl;">
+            <label for="wizardRClass" style="font-weight:700; margin-bottom:8px; display:block;" data-i18n="auto_464">الصف الدراسي المستهدف
+              للاستيراد</label>
+            <select id="wizardRClass" class="form-control" style="max-width:300px;">
+              <!-- Filled dynamically in app.js -->
+            </select>
+          </div>
+          <div class="form-group">
+            <div class="dropzone" id="wizardDropzone" style="border: 2px dashed var(--border); padding: 40px 20px; border-radius:12px; text-align:center; cursor:pointer; background:var(--bg-alt); position:relative;" onclick="triggerWizardFileSelect()">
+              <span style="font-size:40px; display:block; margin-bottom:12px;">📊</span>
+              <p style="font-weight:700; font-size:14px; margin-bottom:4px; color:var(--text-1);" data-i18n="auto_465">اسحب وأفلت ملف Excel
+                (XLSX, XLS) أو ملف CSV هنا</p>
+              <p style="font-size:12px; color:var(--text-3);" data-i18n="auto_466">أو انقر للتصفح من جهازك</p>
+              <input type="file" id="wizardFileInput" accept=".xlsx,.xls,.csv" style="display:none;" onchange="handleWizardFileSelected(event)">
+            </div>
+            <div id="wizardSelectedFileInfo" style="display:none; align-items:center; gap:8px; margin-top:12px; background:rgba(16,185,129,0.08); border:1px solid var(--success); padding:10px; border-radius:8px; color:var(--success); direction:rtl; justify-content:center;">
+              <span data-i18n="auto_467">✅ الملف المحدد:</span>
+              <strong id="wizardSelectedFileName">students.xlsx</strong>
+              <button class="action-btn btn-delete" onclick="clearWizardFile(event)" style="padding:2px 8px; font-size:11px; width:auto; border-radius:4px;" data-i18n="auto_468">إلغاء</button>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+            <button class="btn-primary" onclick="goToWizardStep2()" id="btnWizardGoToStep2" disabled="" style="width:auto; padding:10px 24px;" data-i18n="auto_469">التالي: معاينة البيانات ←</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Preview Data -->
+        <div class="wizard-step-content" id="wizardStep2" style="display:none;">
+          <div style="text-align:right; direction:rtl; margin-bottom:12px;">
+            <h4 style="font-weight:800; color:var(--gold);" data-i18n="auto_470">معاينة أسطر الملف الأولى:</h4>
+            <p style="font-size:12px; color:var(--text-3);" data-i18n="auto_471">تأكد من قراءة البيانات بشكل صحيح قبل الانتقال للمطابقة.</p>
+          </div>
+          <div class="table-container" style="max-height:260px; overflow-y:auto; border:1px solid var(--border); border-radius:8px;">
+            <table class="app-table" id="wizardPreviewTable" style="font-size:12px; direction:rtl; text-align:right;">
+              <!-- Filled in app.js -->
+            </table>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:20px;">
+            <button class="action-btn" onclick="goBackToWizardStep(1)" style="width:auto; padding:10px 20px; background:var(--bg-alt);" data-i18n="auto_472">→ السابق</button>
+            <button class="btn-primary" onclick="goToWizardStep3()" style="width:auto; padding:10px 24px;" data-i18n="auto_473">التالي:
+              مطابقة الأعمدة ←</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Map Columns Automatically -->
+        <div class="wizard-step-content" id="wizardStep3" style="display:none;">
+          <div style="text-align:right; direction:rtl; margin-bottom:15px;">
+            <h4 style="font-weight:800; color:var(--gold);" data-i18n="auto_474">مطابقة الحقول البرمجية مع أعمدة الملف:</h4>
+            <p style="font-size:12px; color:var(--text-3);" data-i18n="auto_475">تم التعرف تلقائياً على الأعمدة المشابهة. يمكنك تصحيح
+              المطابقة يدوياً.</p>
+          </div>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:14px; direction:rtl; text-align:right;">
+            <div class="form-group">
+              <label style="font-weight:700; font-size:13px;" data-i18n="auto_476">اسم الطالب (كامل)</label>
+              <select id="mapName" class="form-control mapping-select"></select>
+            </div>
+            <div class="form-group">
+              <label style="font-weight:700; font-size:13px;" data-i18n="auto_477">الرقم الأكاديمي (Student ID)</label>
+              <select id="mapCode" class="form-control mapping-select"></select>
+            </div>
+            <div class="form-group">
+              <label style="font-weight:700; font-size:13px;" data-i18n="auto_478">الرقم الشخصي القطري (QID)</label>
+              <select id="mapNationalId" class="form-control mapping-select"></select>
+            </div>
+            <div class="form-group">
+              <label style="font-weight:700; font-size:13px;" data-i18n="auto_479">اسم ولي الأمر</label>
+              <select id="mapParentName" class="form-control mapping-select"></select>
+            </div>
+            <div class="form-group">
+              <label style="font-weight:700; font-size:13px;" data-i18n="auto_480">رقم هاتف ولي الأمر</label>
+              <select id="mapParentPhone" class="form-control mapping-select"></select>
+            </div>
+            <div class="form-group">
+              <label style="font-weight:700; font-size:13px;" data-i18n="auto_481">الشعبة (اختياري)</label>
+              <select id="mapSection" class="form-control mapping-select"></select>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:20px;">
+            <button class="action-btn" onclick="goBackToWizardStep(2)" style="width:auto; padding:10px 20px; background:var(--bg-alt);" data-i18n="auto_482">→ السابق</button>
+            <button class="btn-primary" onclick="goToWizardStep4()" style="width:auto; padding:10px 24px;" data-i18n="auto_483">التالي:
+              التحقق والتدقيق ←</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Validate Errors -->
+        <div class="wizard-step-content" id="wizardStep4" style="display:none;">
+          <div style="text-align:right; direction:rtl; margin-bottom:12px;">
+            <h4 style="font-weight:800; color:var(--gold);" data-i18n="auto_484">تقرير التدقيق وصحة البيانات:</h4>
+            <p style="font-size:12px; color:var(--text-3);" data-i18n="auto_485">راجع الأخطاء أو التكرارات المكتشفة أدناه قبل الحفظ النهائي.
+            </p>
+          </div>
+          <div class="table-container" style="max-height:260px; overflow-y:auto; border:1px solid var(--border); border-radius:8px;">
+            <table class="app-table" id="wizardValidationTable" style="font-size:12px; direction:rtl; text-align:right;">
+              <!-- Populated in JS with status rows -->
+            </table>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:20px;">
+            <button class="action-btn" onclick="goBackToWizardStep(3)" style="width:auto; padding:10px 20px; background:var(--bg-alt);" data-i18n="auto_486">→ السابق</button>
+            <button class="btn-primary" onclick="goToWizardStep5()" id="btnWizardGoToStep5" style="width:auto; padding:10px 24px; background:var(--success);" data-i18n="auto_487">التالي: تأكيد الاستيراد ←</button>
+          </div>
+        </div>
+
+        <!-- Step 5: Summary & Import -->
+        <div class="wizard-step-content" id="wizardStep5" style="display:none; text-align:center; direction:rtl; padding:20px;">
+          <span style="font-size:50px;">📈</span>
+          <h4 style="font-weight:800; font-size:18px; margin-top:12px; margin-bottom:16px; color:var(--gold);" data-i18n="auto_488">جاهز
+            لاستيراد البيانات لقاعدة البيانات</h4>
+          <p style="font-size:13.5px; color:var(--text-2); max-width:500px; margin:0 auto 20px auto; line-height:1.6;" data-i18n="auto_489">
+            يرجى مراجعة ملخص الأسطر المكتشفة أدناه والتأكيد لإتمام إدراج الطلاب وتنسيبهم للصف المحدد.
+          </p>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap:12px; max-width:600px; margin:0 auto 24px auto;">
+            <div class="card stat" style="padding:12px; border:1px solid var(--border); border-radius:8px; background:var(--bg-alt);">
+              <div style="font-size:24px; font-weight:900; color:var(--text-1);" id="sumTotal">0</div>
+              <div style="font-size:11px; color:var(--text-3); font-weight:700;" data-i18n="auto_490">إجمالي الأسطر</div>
+            </div>
+            <div class="card stat" style="padding:12px; border:1px solid var(--border); border-radius:8px; background:var(--bg-alt);">
+              <div style="font-size:24px; font-weight:900; color:var(--success);" id="sumSuccess">0</div>
+              <div style="font-size:11px; color:var(--text-3); font-weight:700;" data-i18n="auto_491">سيتم استيرادهم</div>
+            </div>
+            <div class="card stat" style="padding:12px; border:1px solid var(--border); border-radius:8px; background:var(--bg-alt);">
+              <div style="font-size:24px; font-weight:900; color:var(--warning);" id="sumDuplicates">0</div>
+              <div style="font-size:11px; color:var(--text-3); font-weight:700;" data-i18n="auto_492">مكررون (سيتم تجاوزهم)</div>
+            </div>
+            <div class="card stat" style="padding:12px; border:1px solid var(--border); border-radius:8px; background:var(--bg-alt);">
+              <div style="font-size:24px; font-weight:900; color:var(--danger);" id="sumErrors">0</div>
+              <div style="font-size:11px; color:var(--text-3); font-weight:700;" data-i18n="auto_493">أخطاء (سيتم تجاوزهم)</div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; margin-top:20px; border-top:1px solid var(--border); padding-top:16px;">
+            <button class="action-btn" onclick="goBackToWizardStep(4)" style="width:auto; padding:10px 20px; background:var(--bg-alt);" data-i18n="auto_494">→ السابق</button>
+            <button class="btn-primary" onclick="commitWizardImport()" style="width:auto; padding:10px 30px; background: linear-gradient(145deg, var(--success), #10b981); color:#fff; font-weight:800;" data-i18n="auto_495">تأكيد
+              وحفظ الطلاب 📥</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Modal: Add Question to Bank -->
+    <div class="modal-overlay" id="addQuestionModal">
+      <div class="modal-box" style="max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+        <div class="modal-head">
+          <h3 id="qbModalTitle" data-i18n="auto_496">➕ إضافة سؤال جديد للبنك</h3>
+          <button class="modal-close" onclick="closeModal('addQuestionModal')">×</button>
+        </div>
+        <form id="addQuestionForm" onsubmit="event.preventDefault(); handleAddQuestionSubmit();" class="upload-form" style="text-align: right; direction: rtl;">
+          <input type="hidden" id="qbEditId" value="">
+
+          <div class="form-grid-columns" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <div class="form-group">
+              <label for="qbTopic" data-i18n="auto_497">الحقيبة التعليمية</label>
+              <select id="qbTopic" class="form-control">
+                <option value="cell" data-i18n="auto_498">الخلية الحية ووظائفها</option>
+                <option value="atoms" data-i18n="auto_499">الذرة والعناصر الكيميائية</option>
+                <option value="reactions" data-i18n="auto_500">التفاعلات الكيميائية</option>
+                <option value="motion" data-i18n="auto_501">قوانين الحركة والسرعة</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="qbType" data-i18n="auto_502">نوع السؤال</label>
+              <select id="qbType" class="form-control" onchange="handleQbQuestionTypeChange(this.value)">
+                <option value="mcq" data-i18n="auto_503">اختيار من متعدد (MCQ)</option>
+                <option value="tf" data-i18n="auto_504">صح أم خطأ (T / F)</option>
+                <option value="blank" data-i18n="auto_505">إكمال الفراغ</option>
+                <option value="short" data-i18n="auto_506">إجابة قصيرة</option>
+                <option value="essay" data-i18n="auto_507">سؤال مقالي</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="qbText" data-i18n="auto_508">نص السؤال</label>
+            <textarea id="qbText" class="form-control" rows="3" required="" placeholder="أدخل نص السؤال العلمي هنا..." data-i18n-ph="auto_509"></textarea>
+          </div>
+
+          <!-- Dynamic Options / Answers Box -->
+          <div id="qbOptionsBox" style="margin-bottom:12px;">
+            <label style="font-weight:700; margin-bottom:6px; display:block;" data-i18n="auto_510">خيارات الإجابة</label>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+              <input type="text" id="qbOptA" class="form-control" placeholder="خيار أ" value="" data-i18n-ph="auto_511">
+              <input type="text" id="qbOptB" class="form-control" placeholder="خيار ب" value="" data-i18n-ph="auto_512">
+              <input type="text" id="qbOptC" class="form-control" placeholder="خيار ج" value="" data-i18n-ph="auto_513">
+              <input type="text" id="qbOptD" class="form-control" placeholder="خيار د" value="" data-i18n-ph="auto_514">
+            </div>
+            <div class="form-group" style="margin-top:10px;">
+              <label for="qbCorrectMcq" data-i18n="auto_515">الخيار الصحيح</label>
+              <select id="qbCorrectMcq" class="form-control">
+                <option value="0" data-i18n="auto_516">خيار أ (A)</option>
+                <option value="1" data-i18n="auto_517">خيار ب (B)</option>
+                <option value="2" data-i18n="auto_518">خيار ج (C)</option>
+                <option value="3" data-i18n="auto_519">خيار د (D)</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="qbCorrectAnswerBox" style="display:none; margin-bottom:12px;">
+            <div class="form-group">
+              <label for="qbCorrectAnswer" data-i18n="auto_520">الإجابة النموذجية</label>
+              <input type="text" id="qbCorrectAnswer" class="form-control" placeholder="الإجابة الصحيحة أو الكلمة الناقصة..." data-i18n-ph="auto_521">
+            </div>
+          </div>
+
+          <div class="form-grid-columns" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <div class="form-group">
+              <label for="qbDifficulty" data-i18n="auto_522">مستوى الصعوبة</label>
+              <select id="qbDifficulty" class="form-control">
+                <option value="easy" data-i18n="auto_523">سهل</option>
+                <option value="medium" data-i18n="auto_524">متوسط</option>
+                <option value="hard" data-i18n="auto_525">صعب</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="qbBloomLevel" data-i18n="auto_526">تصنيف بلوم</label>
+              <select id="qbBloomLevel" class="form-control">
+                <option value="تذكر" data-i18n="auto_527">تذكر</option>
+                <option value="فهم" data-i18n="auto_528">فهم</option>
+                <option value="تطبيق" data-i18n="auto_529">تطبيق</option>
+                <option value="تحليل" data-i18n="auto_530">تحليل</option>
+                <option value="تقييم" data-i18n="auto_531">تقييم</option>
+                <option value="ابتكار" data-i18n="auto_532">ابتكار</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="qbTags" data-i18n="auto_533">الوسوم (مفصولة بفاصلة)</label>
+            <input type="text" id="qbTags" class="form-control" placeholder="أحياء, خلية, طاقة" data-i18n-ph="auto_534">
+          </div>
+
+          <div class="form-group">
+            <label for="qbExplanation" data-i18n="auto_535">التبرير العلمي للإجابة</label>
+            <textarea id="qbExplanation" class="form-control" rows="2" placeholder="لماذا الإجابة صحيحة..." data-i18n-ph="auto_536"></textarea>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 12px;">
+            <button type="submit" class="btn-primary" style="width: auto; padding: 8px 24px;" data-i18n="auto_537">حفظ السؤال</button>
+            <button type="button" class="action-btn btn-delete" onclick="closeModal('addQuestionModal')" style="width: auto; padding: 8px 20px;" data-i18n="auto_538">إلغاء</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <button class="fab" title="AI Assistant">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"></path>
+      </svg>
+    </button>
+
+    <script src="app.js"></script>
+
+
+</div></body></html>
